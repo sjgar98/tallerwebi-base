@@ -1,26 +1,35 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.Nivel;
+import com.tallerwebi.ServicioNivel;
+import com.tallerwebi.ServicioNivelImpl;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
+    private ServicioNivel servicioNivel = new ServicioNivelImpl();
 
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
+        Nivel prueba = new Nivel(0,0,5,"Este es el primer nivel","Monedas",true);
+        servicioNivel.agregarNivel(prueba);
+        System.out.println(servicioNivel.buscarDescripcionNivel(0));
     }
 
     @RequestMapping("/login")
@@ -78,6 +87,25 @@ public class ControladorLogin {
     }
 
 
+    //Controladores
+
+    @GetMapping("/seleccionarNivel/{opcionId}")
+    @ResponseBody
+    public String obtenerDescripcion(@PathVariable Integer opcionId) {
+        String descripcion = "Se selecciono el nivel" + opcionId;
+
+        if(servicioNivel.buscarDescripcionNivel(opcionId) != null){
+            descripcion = servicioNivel.buscarDescripcionNivel(opcionId);
+            return descripcion;
+        } else if (servicioNivel.buscarDescripcionNivel(opcionId) == null){
+            descripcion = "Nivel Vacio";
+            return  descripcion;
+        }
+
+
+        return descripcion;
+    }
+
     @RequestMapping(path = "/ajustes", method = RequestMethod.GET)
     public ModelAndView verAjustes() {
         return new ModelAndView("ajustes");
@@ -85,7 +113,16 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/seleccion-nivel", method = RequestMethod.GET)
     public ModelAndView verSeleccionNivel() {
+
         return new ModelAndView("seleccion-nivel");
+    }
+
+    public ServicioNivel getServicioNivel() {
+        return servicioNivel;
+    }
+
+    public void setServicioNivel(ServicioNivel servicioNivel) {
+        this.servicioNivel = servicioNivel;
     }
 }
 
