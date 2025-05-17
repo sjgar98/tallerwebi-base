@@ -27,9 +27,14 @@ public class ControladorLogin {
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
-        Nivel prueba = new Nivel(0,0,5,"Este es el primer nivel","Monedas",true);
+        //prueba para los niveles
+        Nivel prueba = new Nivel(1,0,5,"Este es el primer nivel","Monedas",true);
+        Nivel prueba2 = new Nivel(2,0,5,"Este es el segundo nivel","Monedas",true);
+        Nivel prueba3 = new Nivel(3,0,5,"Este es el tercer nivel","Monedas",true);
         servicioNivel.agregarNivel(prueba);
-        System.out.println(servicioNivel.buscarDescripcionNivel(0));
+        servicioNivel.agregarNivel(prueba2);
+        servicioNivel.agregarNivel(prueba3);
+        System.out.println(servicioNivel.buscarNivelPorId(0));
     }
 
     @RequestMapping("/login")
@@ -94,10 +99,13 @@ public class ControladorLogin {
     public String obtenerDescripcion(@PathVariable Integer opcionId) {
         String descripcion = "Se selecciono el nivel" + opcionId;
 
-        if(servicioNivel.buscarDescripcionNivel(opcionId) != null){
-            descripcion = servicioNivel.buscarDescripcionNivel(opcionId);
+        if(servicioNivel.buscarNivelPorId(opcionId) != null){
+            descripcion = servicioNivel.buscarNivelPorId(opcionId).getDescripcion();
+
+            servicioNivel.seleccionarNivel(servicioNivel.buscarNivelPorId(opcionId));
+            System.out.println(servicioNivel.devolverNivelSeleccionado().toString());
             return descripcion;
-        } else if (servicioNivel.buscarDescripcionNivel(opcionId) == null){
+        } else if (servicioNivel.buscarNivelPorId(opcionId) == null){
             descripcion = "Nivel Vacio";
             return  descripcion;
         }

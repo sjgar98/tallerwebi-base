@@ -8,14 +8,41 @@ import javax.transaction.Transactional;
 @Transactional
 public class ServicioNivelImpl implements ServicioNivel {
 
-    @Override
-    public String buscarDescripcionNivel(Integer id){
+    Nivel nivelSeleccionado = null;
 
-        return niveles.get(id).getDescripcion();
+    @Override
+    public Nivel buscarNivelPorId(Integer id){
+
+        if(id > niveles.size()){
+            return null;
+        }
+
+        for(int i = 0; i < niveles.size();i++){
+            if(niveles.get(i).getId() == id){
+                return niveles.get(i);
+            }
+        }
+
+        return  null;
     }
+
+    @Override
+    public void seleccionarNivel(Nivel nivel) {
+
+        if(niveles.contains(nivel)){
+            nivelSeleccionado = nivel;
+        }
+
+    }
+
 
     @Override
     public void agregarNivel(Nivel nivel) {
         niveles.add(nivel);
+    }
+
+    @Override
+    public Nivel devolverNivelSeleccionado() {
+        return this.nivelSeleccionado;
     }
 }

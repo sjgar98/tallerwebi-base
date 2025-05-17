@@ -1,5 +1,7 @@
 package com.tallerwebi;
 
+import java.util.Objects;
+
 public class Nivel {
 
     //Variables
@@ -74,5 +76,37 @@ public class Nivel {
 
     public void setSeleccionado(Boolean seleccionado) {
         this.seleccionado = seleccionado;
+    }
+
+    //
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Nivel nivel = (Nivel) o;
+        return Objects.equals(id, nivel.id) &&
+                Objects.equals(nivel_minimo_personaje, nivel.nivel_minimo_personaje) &&
+                Objects.equals(nivel_maximo_enemigo, nivel.nivel_maximo_enemigo) &&
+                Objects.equals(descripcion, nivel.descripcion) &&
+                Objects.equals(recompensas, nivel.recompensas) &&
+                Objects.equals(seleccionado, nivel.seleccionado);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nivel_minimo_personaje, nivel_maximo_enemigo, descripcion, recompensas, seleccionado);
+    }
+
+    @Override
+    public String toString() {
+        return "Nivel{" +
+                "id=" + id +
+                ", nivel_minimo_personaje=" + nivel_minimo_personaje +
+                ", nivel_maximo_enemigo=" + nivel_maximo_enemigo +
+                ", descripcion='" + descripcion + '\'' +
+                ", recompensas='" + recompensas + '\'' +
+                ", seleccionado=" + seleccionado +
+                '}';
     }
 }

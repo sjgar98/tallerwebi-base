@@ -17,13 +17,13 @@
                   <div class="list-group">
 
 
-                          <button type="button" class="list-group-item list-group-item-action text-start" aria-current="true" data-id="0">
+                          <button type="button" class="list-group-item list-group-item-action text-start" aria-current="true" data-id="1">
                               Nivel 1.
                           </button>
                           <button type="button" class="list-group-item list-group-item-action text-start" data-id="2">Nivel 2.</button>
-                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="3">Nivel 3. 🔒</button>
-                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="4">Nivel 4. 🔒</button>
-                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="5" >Nivel 5. 🔒</button>
+                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="3">Nivel 3. </button>
+                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="4">Nivel 4. </button>
+                          <button type="button" class="list-group-item list-group-item-action text-start disabled" data-id="5" >Nivel 5. </button>
 
 
 
@@ -42,6 +42,7 @@
   </div>
 
   <script>
+      // el script esta aca xq no se como linkearlo aparte por ahora
       const botones = document.querySelectorAll(".list-group-item");
     const descripcionDiv = document.getElementById("descNivel");
     let opcionActiva = null;
@@ -56,7 +57,7 @@
         this.classList.add("active");
         opcionActiva = this;
 
-        fetch(`/spring/seleccionarNivel/${opcionId}`) // Endpoint en tu Controller
+        fetch(`/spring/seleccionarNivel/${opcionId}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
@@ -66,7 +67,7 @@
           })
           .then((descripcion) => {
             // La variable 'data' ahora se llama 'descripcion' y contiene el string
-            descripcionDiv.textContent = "Descripción: " + descripcion;
+            descripcionDiv.textContent += "Descripción: " + descripcion;
           })
           .catch((error) => {
             console.error("Error al obtener la descripción:", error);

@@ -7,9 +7,12 @@ import java.util.ArrayList;
 @Service
 public interface ServicioNivel {
 
-    ArrayList<Nivel> niveles = new ArrayList<>();
 
-    public String buscarDescripcionNivel(Integer id);
+     ArrayList<Nivel> niveles = new ArrayList<>();
 
-    public void agregarNivel(Nivel nivel);
+
+     Nivel buscarNivelPorId(Integer id);
+     void seleccionarNivel(Nivel nivel);
+     void agregarNivel(Nivel nivel);
+     Nivel devolverNivelSeleccionado();
 }
