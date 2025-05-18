@@ -23,7 +23,7 @@ public class ControladorHome {
     @GetMapping()
     public ModelAndView getHome(HttpServletRequest request) {
         ModelMap model = new ModelMap();
-        model.addAttribute("anuncios", this.servicioJugador.getAnuncios().reversed());
+        model.addAttribute("anuncios", this.servicioJugador.getAnuncios());
         model.addAttribute("jugador", this.servicioJugador.getJugadorActual());
         return new ModelAndView("home", model);
     }
