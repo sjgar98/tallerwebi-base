@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tienda</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/tienda.css}" />
+</head>
+<body>
+<div class="container">
+    <h1>Tienda del Juego</h1>
+
+    <div class="grid">
+        <div class="producto" th:each="producto : ${productos}">
+            <div class="img-wrapper">
+                <img th:src="@{${producto.rutaImagen}}" alt="Imagen del producto">
+            </div>
+            <h3 th:text="${producto.nombre}">Nombre</h3>
+            <p>Precio: <span class="precio" th:text="'$' + ${producto.precio}">0.00</span></p>
+            <button class="btn">Agregar al carrito</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
