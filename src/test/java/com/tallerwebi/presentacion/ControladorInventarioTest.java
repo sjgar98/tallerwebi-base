@@ -1,7 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Jugador;
-import com.tallerwebi.dominio.ServicioHome;
 import com.tallerwebi.dominio.ServicioJugador;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,27 +13,25 @@ import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ControladorHomeTest {
-    private ControladorHome controladorHome;
+public class ControladorInventarioTest {
+    private ControladorInventario controladorInventario;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
-    private ServicioHome servicioHomeMock;
     private ServicioJugador servicioJugadorMock;
 
     @BeforeEach
     public void init() {
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
-        servicioHomeMock = mock(ServicioHome.class);
         servicioJugadorMock = mock(ServicioJugador.class);
-        controladorHome = new ControladorHome(servicioHomeMock, servicioJugadorMock);
+        controladorInventario = new ControladorInventario(servicioJugadorMock);
     }
 
     @Test
     public void devuelveModelAndView() {
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(servicioJugadorMock.getJugadorActual()).thenReturn(new Jugador());
-        ModelAndView modelAndView = controladorHome.getHome(requestMock);
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("home"));
+        ModelAndView modelAndView = controladorInventario.getInventario(requestMock);
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("inventario"));
     }
 }

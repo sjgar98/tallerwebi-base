@@ -23,9 +23,7 @@ public class ControladorInventario {
     @GetMapping()
     public ModelAndView getInventario(HttpServletRequest request) {
         ModelMap model = new ModelMap();
-
         model.addAttribute("objetos", this.servicioJugador.getJugadorActual().getObjetos());
-
         return new ModelAndView("inventario", model);
     }
 }
