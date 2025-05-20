@@ -1,8 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.Nivel;
-import com.tallerwebi.ServicioNivel;
-import com.tallerwebi.ServicioNivelImpl;
+import com.tallerwebi.*;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,19 +21,11 @@ import java.util.Map;
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
-    private ServicioNivel servicioNivel = new ServicioNivelImpl();
 
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
-        //prueba para los niveles
-        Nivel prueba = new Nivel(1,0,5,"Este es el primer nivel","Monedas",true);
-        Nivel prueba2 = new Nivel(2,0,5,"Este es el segundo nivel","Monedas",true);
-        Nivel prueba3 = new Nivel(3,0,5,"Este es el tercer nivel","Monedas",true);
-        servicioNivel.agregarNivel(prueba);
-        servicioNivel.agregarNivel(prueba2);
-        servicioNivel.agregarNivel(prueba3);
-        System.out.println(servicioNivel.buscarNivelPorId(0));
+
     }
 
     @RequestMapping("/login")
@@ -91,46 +82,5 @@ public class ControladorLogin {
         return new ModelAndView("redirect:/login");
     }
 
-
-    //Controladores
-
-    @GetMapping("/seleccionarNivel/{opcionId}")
-    @ResponseBody
-    public String obtenerDescripcion(@PathVariable Integer opcionId) {
-        String descripcion = "Se selecciono el nivel" + opcionId;
-
-        if(servicioNivel.buscarNivelPorId(opcionId) != null){
-            descripcion = servicioNivel.buscarNivelPorId(opcionId).getDescripcion();
-
-            servicioNivel.seleccionarNivel(servicioNivel.buscarNivelPorId(opcionId));
-            System.out.println(servicioNivel.devolverNivelSeleccionado().toString());
-            return descripcion;
-        } else if (servicioNivel.buscarNivelPorId(opcionId) == null){
-            descripcion = "Nivel Vacio";
-            return  descripcion;
-        }
-
-
-        return descripcion;
-    }
-
-    @RequestMapping(path = "/ajustes", method = RequestMethod.GET)
-    public ModelAndView verAjustes() {
-        return new ModelAndView("ajustes");
-    }
-
-    @RequestMapping(path = "/seleccion-nivel", method = RequestMethod.GET)
-    public ModelAndView verSeleccionNivel() {
-
-        return new ModelAndView("seleccion-nivel");
-    }
-
-    public ServicioNivel getServicioNivel() {
-        return servicioNivel;
-    }
-
-    public void setServicioNivel(ServicioNivel servicioNivel) {
-        this.servicioNivel = servicioNivel;
-    }
 }
 

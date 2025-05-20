@@ -10,7 +10,6 @@ public class Nivel {
     private  Integer nivel_maximo_enemigo;
     private String descripcion;
     private String recompensas;
-
     private Boolean seleccionado;
 
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Ajustes</title>
@@ -10,39 +10,39 @@
   <h1>Ajustes</h1>
 
   <div class="container-xl mt-3 p-3 w-50 mx-auto">
-    <form>
+    <form th:action="@{/ajustes/guardarAjustes}" method="post">
         <span class="fw-bold">Graficos</span>
 
         <div class="mb-3">
-            <label for="exampleColorInput" class="form-label">Color de Fondo</label>
-            <input type="color" class="form-control form-control-color" id="exampleColorInput" value="#563d7c" title="Choose your color">
+            <label for="colorFondo" class="form-label">Color de Fondo</label>
+            <input type="color" name="colorFondo" class="form-control form-control-color" id="colorFondo" value="#00FF2A" title="Choose your color">
 
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-                <label class="form-check-label" for="flexSwitchCheckDefault">Pantalla Complea</label>
+                <input class="form-check-input" type="checkbox" role="switch" id="pantallaCompleta" name="pantallaCompleta">
+                <label class="form-check-label" for="pantallaCompleta">Pantalla Complea</label>
             </div>
         </div>
         <span class="fw-bold">Volumen</span>
         <div class="mb-3">
-            <label for="customRange1" class="form-label">Volumen general</label>
-            <input type="range" class="form-range" id="customRange1">
-            <label for="customRange2" class="form-label">Musica</label>
-            <input type="range" class="form-range" id="customRange2">
-            <label for="customRange3" class="form-label">Efectos</label>
-            <input type="range" class="form-range" id="customRange3">
+            <label for="vol_general" class="form-label">Volumen general</label>
+            <input type="range" class="form-range" id="vol_general" name="vol_general"  min="0" max="100" value="100">
+            <label for="vol_musica" class="form-label">Musica</label>
+            <input type="range" class="form-range" id="vol_musica" name="vol_musica"   min="0" max="100" value="100">
+            <label for="vol_efectos" class="form-label">Efectos</label>
+            <input type="range" class="form-range" id="vol_efectos" name="vol_efectos"   min="0" max="100" value="100">
 
         </div>
         <span class="fw-bold">Juego</span>
         <div class="mb-3">
             <label for="idioma" class="form-label">Seleccionar Idioma</label>
-            <select class="form-select mb-3" aria-label="Default select example" id="idioma">
+            <select class="form-select mb-3" aria-label="Default select example" id="idioma" name="idioma">
                 <option value="1">Español</option>
                 <option value="2">Ingles</option>
 
             </select>
 
             <label for="dificultades" class="form-label">Dificultad</label>
-            <select class="form-select mb-3" aria-label="Default select example" id="dificultades">
+            <select class="form-select mb-3" aria-label="Default select example" id="dificultades" name="dificultades">
                 <option value="1">Facil</option>
                 <option value="2">Normal</option>
                 <option value="3">Dificil</option>
@@ -58,9 +58,73 @@
             <button type="button" class="btn btn-danger">Informar Error</button>
             <button type="button" class="btn btn-dark">Reestablecer Ajustes Predeterminados</button>
         </div>
-
+        <button type="submit" class="btn btn-info">Guardar</button>
     </form>
   </div>
+    <div class="container-xl mt-3 p-3 w-50 mx-auto">
+        <button type="button" class="btn btn-info" id="verLosAjustes">Pruebas</button>
+    </div>
+
+
+  <script>
+
+
+      const prueba = document.getElementById('verLosAjustes');
+
+    function aplicarAlForm() {
+    fetch(`/spring/ajustes/verAjustesDelUsuario`)
+  .then(res => {
+      if (!res.ok) {
+          throw new Error("Error al cargar ajustes: " + res.status);
+      }
+      return res.json();
+  })
+  .then(ajustes => {
+
+       document.getElementById("colorFondo").value = ajustes.color_fondo_hexadecimal;
+        document.getElementById("vol_general").value = ajustes.volumen_general;
+         document.getElementById("vol_musica").value = ajustes.volumen_musica;
+          document.getElementById("vol_efectos").value = ajustes.volumen_efectos;
+           document.getElementById("idioma").value = 2;
+            document.getElementById("dificultades").value = ajustes.dificultad;
+      console.log("Ajustes cargados:", ajustes);
+  })
+  .catch(error => {
+      console.error("Ocurrió un error al traer los ajustes:", error);
+  });
+
+ }
+
+
+
+ function cargarAjustes() {
+    fetch(`/spring/ajustes/verAjustesDelUsuario`)
+  .then(res => {
+      if (!res.ok) {
+          throw new Error("Error al cargar ajustes: " + res.status);
+      }
+      return res.json();
+  })
+  .then(ajustes => {
+      console.log("Ajustes cargados:", ajustes);
+  })
+  .catch(error => {
+      console.error("Ocurrió un error al traer los ajustes:", error);
+  });
+
+ }
+
+
+ prueba.addEventListener('click', () => {
+     console.log("Elemento clickeado");
+     cargarAjustes();
+ });
+
+aplicarAlForm();
+
+
+
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

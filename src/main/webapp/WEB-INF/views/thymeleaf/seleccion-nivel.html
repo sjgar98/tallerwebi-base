@@ -42,10 +42,11 @@
   </div>
 
   <script>
-      // el script esta aca xq no se como linkearlo aparte por ahora
+
       const botones = document.querySelectorAll(".list-group-item");
     const descripcionDiv = document.getElementById("descNivel");
     let opcionActiva = null;
+
 
     botones.forEach((boton) => {
       boton.addEventListener("click", function () {
@@ -57,17 +58,17 @@
         this.classList.add("active");
         opcionActiva = this;
 
-        fetch(`/spring/seleccionarNivel/${opcionId}`)
+        fetch(`/spring/seleccion-nivel/seleccionarNivel/${opcionId}`)
           .then((response) => {
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
 
             }
-            return response.text(); // Espera un texto plano
+            return response.text();
           })
           .then((descripcion) => {
-            // La variable 'data' ahora se llama 'descripcion' y contiene el string
-            descripcionDiv.textContent += "Descripción: " + descripcion;
+
+            descripcionDiv.textContent = "Descripción: " + descripcion;
           })
           .catch((error) => {
             console.error("Error al obtener la descripción:", error);
