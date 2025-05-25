@@ -1,17 +1,18 @@
-package com.tallerwebi;
+package com.tallerwebi.servicios;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
-@Service
+
 public interface ServicioNivel {
 
 
      ArrayList<Nivel> niveles = new ArrayList<>();
 
 
+     ArrayList<Nivel> devolverTodosLosNiveles();
      Nivel buscarNivelPorId(Integer id);
      void seleccionarNivel(Nivel nivel, Integer nivelJugador);
      void agregarNivel(Nivel nivel);

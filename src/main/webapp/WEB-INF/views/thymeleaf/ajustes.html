@@ -61,30 +61,25 @@
         <button type="submit" class="btn btn-info">Guardar</button>
     </form>
   </div>
-    <div class="container-xl mt-3 p-3 w-50 mx-auto">
-        <button type="button" class="btn btn-info" id="verLosAjustes">Pruebas</button>
-    </div>
+
 
 
   <script>
 
 
-      const prueba = document.getElementById('verLosAjustes');
-
     function aplicarAlForm() {
     fetch(`/spring/ajustes/verAjustesDelUsuario`)
-  .then(res => {
+   .then(res => {
       if (!res.ok) {
           throw new Error("Error al cargar ajustes: " + res.status);
       }
       return res.json();
-  })
-  .then(ajustes => {
-
-       document.getElementById("colorFondo").value = ajustes.color_fondo_hexadecimal;
-        document.getElementById("vol_general").value = ajustes.volumen_general;
-         document.getElementById("vol_musica").value = ajustes.volumen_musica;
-          document.getElementById("vol_efectos").value = ajustes.volumen_efectos;
+    })
+     .then(ajustes => {
+      document.getElementById("colorFondo").value = ajustes.colorFondoHexadecimal;
+        document.getElementById("vol_general").value = ajustes.volumenGeneral;
+         document.getElementById("vol_musica").value = ajustes.volumenMusica;
+          document.getElementById("vol_efectos").value = ajustes.volumenEfectos;
            document.getElementById("idioma").value = 2;
             document.getElementById("dificultades").value = ajustes.dificultad;
       console.log("Ajustes cargados:", ajustes);
@@ -94,31 +89,6 @@
   });
 
  }
-
-
-
- function cargarAjustes() {
-    fetch(`/spring/ajustes/verAjustesDelUsuario`)
-  .then(res => {
-      if (!res.ok) {
-          throw new Error("Error al cargar ajustes: " + res.status);
-      }
-      return res.json();
-  })
-  .then(ajustes => {
-      console.log("Ajustes cargados:", ajustes);
-  })
-  .catch(error => {
-      console.error("Ocurrió un error al traer los ajustes:", error);
-  });
-
- }
-
-
- prueba.addEventListener('click', () => {
-     console.log("Elemento clickeado");
-     cargarAjustes();
- });
 
 aplicarAlForm();
 

@@ -1,16 +1,19 @@
-package com.tallerwebi;
+package com.tallerwebi.servicios;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.transaction.Transactional;
-import java.awt.*;
 
 @Service
 @Transactional
 public class ServicioAjustesImpl implements ServicioAjustes{
 
     Ajustes ajustesUsuario = null;
+
+    public ServicioAjustesImpl(){
+        guardarAjustes("#00FF2A",30,50,13,2);
+        System.out.println(devolverAjustes().toString());
+    }
 
     @Override
     public void guardarAjustes(String color, Integer vg, Integer vm, Integer ve, Integer dificultad) {
@@ -23,6 +26,14 @@ public class ServicioAjustesImpl implements ServicioAjustes{
     @Override
     public Ajustes devolverAjustes() {
         return this.ajustesUsuario;
+    }
+
+    @Override
+    public Ajustes devolverPredeterminado() {
+        Ajustes auxiliar_prueba = new Ajustes("#00FF2A",100,100,100,2);
+        this.ajustesUsuario = auxiliar_prueba;
+
+        return ajustesUsuario;
     }
 
 }

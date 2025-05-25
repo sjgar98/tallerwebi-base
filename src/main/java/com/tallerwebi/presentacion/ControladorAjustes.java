@@ -1,8 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.Ajustes;
-import com.tallerwebi.ServicioAjustes;
-import com.tallerwebi.ServicioAjustesImpl;
+import com.tallerwebi.servicios.Ajustes;
+import com.tallerwebi.servicios.ServicioAjustes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +13,15 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/ajustes")
 public class ControladorAjustes {
 
-    private final ServicioAjustes servicioAjustes = new ServicioAjustesImpl();
+    private final ServicioAjustes servicioAjustes;
+
     @Autowired
-    public ControladorAjustes(){
-        servicioAjustes.guardarAjustes("#00FF2A",30,50,13,2);
-        System.out.println(servicioAjustes.devolverAjustes().toString());
+    public ControladorAjustes(ServicioAjustes servicioAjustes){
+     this.servicioAjustes =  servicioAjustes;
     }
 
     @GetMapping()
-    public ModelAndView getSelecionNivel(HttpServletRequest request) {
+    public ModelAndView getAjustes(HttpServletRequest request) {
 
         return new ModelAndView("ajustes");
     }
@@ -33,8 +32,8 @@ public class ControladorAjustes {
 
         if(servicioAjustes.devolverAjustes() == null){
             System.out.println("Se llamo a al auxiliar");
-            Ajustes auxiliar_prueba = new Ajustes("#00FF2A",100,100,100,2);
-            return auxiliar_prueba;
+
+            return servicioAjustes.devolverPredeterminado();
         } else {
 
             System.out.println(servicioAjustes.devolverAjustes().toString());
@@ -51,10 +50,11 @@ public class ControladorAjustes {
                                         @RequestParam Integer idioma,
                                         @RequestParam Integer dificultades){
 
-        System.out.println("Se llamo a ESTE metodo");
         servicioAjustes.guardarAjustes(colorFondo, vol_general, vol_musica, vol_efectos, dificultades);
         System.out.println(servicioAjustes.devolverAjustes().toString());
 
         return "redirect:/ajustes";
     }
+
+
 }

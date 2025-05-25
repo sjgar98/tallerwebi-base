@@ -1,23 +1,26 @@
 package com.tallerwebi.tests;
 
-import com.tallerwebi.Nivel;
-import com.tallerwebi.ServicioNivel;
-import com.tallerwebi.ServicioNivelImpl;
+import com.tallerwebi.presentacion.ControladorNivel;
+import com.tallerwebi.servicios.Nivel;
+import com.tallerwebi.servicios.ServicioNivel;
+import com.tallerwebi.servicios.ServicioNivelImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.cache.support.NullValue;
+import org.mockito.Mockito;
+import org.springframework.ui.Model;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class SeleccionNivelTest {
 
-    ServicioNivel servicioNivel = new ServicioNivelImpl();
-
+    private ServicioNivel servicioNivel;
     @BeforeEach
+    public void init() {
+        servicioNivel = new ServicioNivelImpl();
+    }
 
     @Test
     public void queSePuedaCrearElNivel(){
@@ -49,6 +52,7 @@ public class SeleccionNivelTest {
         servicioNivel.seleccionarNivel(nuevoNivel, 3);
         assertNull(servicioNivel.devolverNivelSeleccionado());
     }
+
 
 
     private void whenGuardarNivel(Nivel nivel){

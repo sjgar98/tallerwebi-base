@@ -1,4 +1,4 @@
-package com.tallerwebi;
+package com.tallerwebi.servicios;
 
 import java.util.Objects;
 
@@ -6,19 +6,19 @@ public class Nivel {
 
     //Variables
     private  Integer id;
-    private  Integer nivel_minimo_personaje;
-    private  Integer nivel_maximo_enemigo;
+    private  Integer nivelMinimoPersonaje;
+    private  Integer nivelMaximoEnemigo;
     private String descripcion;
     private String recompensas;
     private Boolean seleccionado;
 
 
     //Constructor
-    public Nivel(Integer id, Integer nivel_min_personaje, Integer nivel_maximo_enemigo, String desc, String recompensas, Boolean selec){
+    public Nivel(Integer id, Integer nivel_min_personaje, Integer nivelMaximoEnemigo, String desc, String recompensas, Boolean selec){
 
         this.id = id;
-        this.nivel_minimo_personaje = nivel_min_personaje;
-        this.nivel_maximo_enemigo = nivel_maximo_enemigo;
+        this.nivelMinimoPersonaje = nivel_min_personaje;
+        this.nivelMaximoEnemigo = nivelMaximoEnemigo;
         this.descripcion = desc;
         this.recompensas = recompensas;
 
@@ -37,12 +37,12 @@ public class Nivel {
         return id;
     }
 
-    public Integer getNivel_maximo_enemigo() {
-        return nivel_maximo_enemigo;
+    public Integer getNivelMaximoEnemigo() {
+        return nivelMaximoEnemigo;
     }
 
-    public Integer getNivel_minimo_personaje() {
-        return nivel_minimo_personaje;
+    public Integer getNivelMinimoPersonaje() {
+        return nivelMinimoPersonaje;
     }
 
     public String getDescripcion() {
@@ -61,12 +61,12 @@ public class Nivel {
         this.id = id;
     }
 
-    public void setNivel_maximo_enemigo(Integer nivel_maximo_enemigo) {
-        this.nivel_maximo_enemigo = nivel_maximo_enemigo;
+    public void setNivelMaximoEnemigo(Integer nivelMaximoEnemigo) {
+        this.nivelMaximoEnemigo = nivelMaximoEnemigo;
     }
 
-    public void setNivel_minimo_personaje(Integer nivel_minimo_personaje) {
-        this.nivel_minimo_personaje = nivel_minimo_personaje;
+    public void setNivelMinimoPersonaje(Integer nivelMinimoPersonaje) {
+        this.nivelMinimoPersonaje = nivelMinimoPersonaje;
     }
 
     public void setRecompensas(String recompensas) {
@@ -85,8 +85,8 @@ public class Nivel {
         if (o == null || getClass() != o.getClass()) return false;
         Nivel nivel = (Nivel) o;
         return Objects.equals(id, nivel.id) &&
-                Objects.equals(nivel_minimo_personaje, nivel.nivel_minimo_personaje) &&
-                Objects.equals(nivel_maximo_enemigo, nivel.nivel_maximo_enemigo) &&
+                Objects.equals(nivelMinimoPersonaje, nivel.nivelMinimoPersonaje) &&
+                Objects.equals(nivelMaximoEnemigo, nivel.nivelMaximoEnemigo) &&
                 Objects.equals(descripcion, nivel.descripcion) &&
                 Objects.equals(recompensas, nivel.recompensas) &&
                 Objects.equals(seleccionado, nivel.seleccionado);
@@ -94,15 +94,15 @@ public class Nivel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nivel_minimo_personaje, nivel_maximo_enemigo, descripcion, recompensas, seleccionado);
+        return Objects.hash(id, nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, recompensas, seleccionado);
     }
 
     @Override
     public String toString() {
         return "Nivel{" +
                 "id=" + id +
-                ", nivel_minimo_personaje=" + nivel_minimo_personaje +
-                ", nivel_maximo_enemigo=" + nivel_maximo_enemigo +
+                ", nivel_minimo_personaje=" + nivelMinimoPersonaje +
+                ", nivel_maximo_enemigo=" + nivelMaximoEnemigo +
                 ", descripcion='" + descripcion + '\'' +
                 ", recompensas='" + recompensas + '\'' +
                 ", seleccionado=" + seleccionado +
