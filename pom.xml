@@ -179,7 +179,7 @@
                         <port>8080</port>
                     </httpConnector>
                     <webApp>
-                       <contextPath>/</contextPath>
+                        <contextPath>/</contextPath>
                     </webApp>
                 </configuration>
             </plugin>

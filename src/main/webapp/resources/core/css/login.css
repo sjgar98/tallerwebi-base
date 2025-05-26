@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('imagenes/fondoimagen.png'); /* Asegurate de usar la ruta correcta */
+    background-image: url('imagenes/fondoimagen.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -12,10 +12,9 @@ body {
     align-items: center;
 }
 
-/* Caja de login semitransparente con blur estilo vidrio */
 .login-box {
     padding: 30px;
-    background-color: rgba(0, 0, 0, 0.5); /* Oscuro semitransparente */
+    background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 15px;
@@ -25,7 +24,6 @@ body {
     text-align: center;
 }
 
-/* Estilo de inputs */
 .form-control {
     margin-bottom: 20px;
     padding: 10px;
@@ -36,14 +34,12 @@ body {
     color: #333;
 }
 
-/* Título de login */
 .login-box h3 {
     font-size: 24px;
     margin-bottom: 20px;
     letter-spacing: 1px;
 }
 
-/* Botón verde brillante */
 .btn-primary {
     background-color: #22c55e;
     border: none;
@@ -58,7 +54,6 @@ body {
     background-color: #16a34a;
 }
 
-/* Barra de navegación */
 .navbar-custom {
     background-color: #372a2b;
 }
@@ -68,7 +63,6 @@ body {
     font-size: 1.3rem;
 }
 
-/* Enlace de registro */
 .btn-primary {
     color: #ccc;
     font-size: 14px;
@@ -78,5 +72,3 @@ body {
 .btn-primary:hover {
     text-decoration: underline;
 }
-
-
