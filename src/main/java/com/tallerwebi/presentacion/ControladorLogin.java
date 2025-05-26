@@ -1,17 +1,21 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.*;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class ControladorLogin {
@@ -21,6 +25,7 @@ public class ControladorLogin {
     @Autowired
     public ControladorLogin(ServicioLogin servicioLogin){
         this.servicioLogin = servicioLogin;
+
     }
 
     @RequestMapping("/login")
@@ -67,14 +72,11 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-    @RequestMapping(path = "/home", method = RequestMethod.GET)
-    public ModelAndView irAHome() {
-        return new ModelAndView("home");
-    }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
 }
 

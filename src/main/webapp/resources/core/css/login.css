@@ -12,7 +12,6 @@ body {
     align-items: center;
 }
 
-
 .login-box {
     padding: 30px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -25,7 +24,6 @@ body {
     text-align: center;
 }
 
-
 .form-control {
     margin-bottom: 20px;
     padding: 10px;
@@ -36,13 +34,11 @@ body {
     color: #333;
 }
 
-
 .login-box h3 {
     font-size: 24px;
     margin-bottom: 20px;
     letter-spacing: 1px;
 }
-
 
 .btn-primary {
     background-color: #22c55e;
@@ -58,7 +54,6 @@ body {
     background-color: #16a34a;
 }
 
-
 .navbar-custom {
     background-color: #372a2b;
 }
@@ -67,7 +62,6 @@ body {
     font-weight: bold;
     font-size: 1.3rem;
 }
-
 
 .btn-primary {
     color: #ccc;
@@ -78,6 +72,3 @@ body {
 .btn-primary:hover {
     text-decoration: underline;
 }
-
-
-
