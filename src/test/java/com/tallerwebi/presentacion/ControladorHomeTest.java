@@ -34,7 +34,15 @@ public class ControladorHomeTest {
     public void devuelveModelAndView() {
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(servicioJugadorMock.getJugadorActual(1L)).thenReturn(new Jugador());
+        when(sessionMock.getAttribute("userId")).thenReturn(1L);
         ModelAndView modelAndView = controladorHome.getHome(requestMock);
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("home"));
+    }
+
+    @Test
+    public void redireccionaALogin() {
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        ModelAndView modelAndView = controladorHome.getHome(requestMock);
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
 }
