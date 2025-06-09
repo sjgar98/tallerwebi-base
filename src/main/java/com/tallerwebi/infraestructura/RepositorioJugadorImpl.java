@@ -1,16 +1,13 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.Jugador;
-import com.tallerwebi.dominio.Objeto;
-import com.tallerwebi.dominio.ObjetoInventario;
-import com.tallerwebi.dominio.RepositorioJugador;
-import com.tallerwebi.dominio.enums.SubtipoObjeto;
-import com.tallerwebi.dominio.enums.TipoObjeto;
+import com.tallerwebi.dominio.entidad.Jugador;
+import com.tallerwebi.dominio.entidad.Objeto;
+import com.tallerwebi.dominio.entidad.ObjetoInventario;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.ArrayList;
+import java.util.List;
 
 @Repository("repositorioJugador")
 public class RepositorioJugadorImpl implements RepositorioJugador {
@@ -22,26 +19,18 @@ public class RepositorioJugadorImpl implements RepositorioJugador {
     }
 
     @Override
-    public Jugador buscar(Long jugadorId) {
-        Jugador jugador = new Jugador();
-        jugador.setNombre("MockPlayer");
+    public Jugador buscar(Long userId) {
+        return (Jugador) sessionFactory.getCurrentSession().createCriteria(Jugador.class)
+                .createAlias("usuario", "u")
+                .add(Restrictions.eq("u.id", userId)).uniqueResult();
+    }
 
-        Objeto objetoMock = new Objeto();
-        objetoMock.setNombre("Pocion de Curacion");
-        objetoMock.setTipo(TipoObjeto.CONSUMIBLE);
-        objetoMock.setSubtipo(SubtipoObjeto.POCION);
-        objetoMock.setRango(2);
-        objetoMock.setValor(1000L);
-
-        ObjetoInventario objetoInventarioMock = new ObjetoInventario();
-        objetoInventarioMock.setObjeto(objetoMock);
-        objetoInventarioMock.setCantidad(3);
-
-        ArrayList<ObjetoInventario> inventarioMock = new ArrayList<>();
-        inventarioMock.add(objetoInventarioMock);
-
-        jugador.setObjetos(inventarioMock);
-        return jugador;
+    @Override
+    public List<ObjetoInventario> buscarObjetosInventario(Long jugadorId) {
+        return (List<ObjetoInventario>) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
+                .createAlias("jugador", "j")
+                .add(Restrictions.eq("j.id", jugadorId))
+                .list();
     }
 
     @Override

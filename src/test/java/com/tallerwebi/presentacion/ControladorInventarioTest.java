@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.Jugador;
+import com.tallerwebi.dominio.entidad.Jugador;
 import com.tallerwebi.dominio.ServicioJugador;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class ControladorInventarioTest {
     @Test
     public void devuelveModelAndView() {
         when(requestMock.getSession()).thenReturn(sessionMock);
-        when(servicioJugadorMock.getJugadorActual()).thenReturn(new Jugador());
+        when(servicioJugadorMock.getJugadorActual(1L)).thenReturn(new Jugador());
         ModelAndView modelAndView = controladorInventario.getInventario(requestMock);
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("inventario"));
     }
