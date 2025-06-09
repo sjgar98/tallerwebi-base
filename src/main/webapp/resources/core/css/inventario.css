@@ -26,7 +26,12 @@ main {
 .panel-inventario {
     grid-area: inventario;
     background: green;
-    margin: 1rem;
+    margin: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    padding: 1em;
+    gap: 8px;
 }
 
 .panel-stats {
@@ -36,13 +41,39 @@ main {
 }
 
 .slot {
-    height: 56px;
-    width: 56px;
+    height: 60px;
+    width: 60px;
     border: 2px solid black;
     box-sizing: content-box;
     position: relative;
-    cursor: pointer;
     user-select: none;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+}
+.slot:not(.slot-empty) {
+    cursor: pointer;
+}
+
+.slot-tooltip {
+    text-align: left;
+}
+.slot-tooltip .slot-tooltip__nombre {
+    color: gold;
+    font-size: 1.25em;
+    margin-bottom: 0;
+}
+.slot-tooltip .slot-tooltip__tipo {
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__descripcion {
+    color: lightgray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__valor {
+    text-align: right;
+    color: gold;
+    font-weight: bold;
 }
 
 .slot-qty {
@@ -56,13 +87,13 @@ main {
 }
 
 .rango-1 {
-    border-color: green;
+    border: 2px solid green;
 }
 
 .rango-2 {
-    border-color: blue;
+    border: 2px solid blue;
 }
 
 .rango-3 {
-    border-color: yellow;
+    border: 2px solid yellow;
 }

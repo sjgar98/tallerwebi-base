@@ -1,21 +1,15 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.*;
 import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class ControladorLogin {
@@ -42,6 +36,7 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
+            request.getSession().setAttribute("userId", usuarioBuscado.getId());
             request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
             return new ModelAndView("redirect:/home");
         } else {
@@ -72,11 +67,13 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
-
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public ModelAndView inicio() {
-        return new ModelAndView("redirect:/login");
+    public ModelAndView inicio(HttpServletRequest request) {
+        var userId = request.getSession().getAttribute("userId");
+        if (userId != null) {
+            return new ModelAndView("redirect:/home");
+        } else {
+            return new ModelAndView("redirect:/login");
+        }
     }
-
 }
-
