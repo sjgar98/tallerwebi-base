@@ -8,5 +8,5 @@ import java.util.List;
 public interface ServicioJugador {
     void crearNuevoJugador(Long userId, String nombre);
     Jugador getJugadorActual(Long userId);
-    List<ObjetoInventario> getObjetosJugadorActual(Long userId);
+    List<ObjetoInventario> getObjetosJugador(Jugador jugador);
 }

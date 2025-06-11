@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.entidad.Anuncio;
 import com.tallerwebi.dominio.entidad.Jugador;
 import com.tallerwebi.dominio.ServicioHome;
 import com.tallerwebi.dominio.ServicioJugador;
@@ -9,7 +10,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,24 +29,41 @@ public class ControladorHomeTest {
     public void init() {
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
+        when(requestMock.getSession()).thenReturn(sessionMock);
         servicioHomeMock = mock(ServicioHome.class);
         servicioJugadorMock = mock(ServicioJugador.class);
         controladorHome = new ControladorHome(servicioHomeMock, servicioJugadorMock);
     }
 
     @Test
-    public void devuelveModelAndView() {
-        when(requestMock.getSession()).thenReturn(sessionMock);
-        when(servicioJugadorMock.getJugadorActual(1L)).thenReturn(new Jugador());
+    public void debieraMostrarHomeUsuarioLoggeado() {
+        givenUsuarioEstaLoggeado();
+        ModelAndView resultado = whenAccedoAPantallaHome();
+        thenDebieraVerHomeConAnunciosYEstadisticas(resultado);
+    }
+    private void givenUsuarioEstaLoggeado() {
         when(sessionMock.getAttribute("userId")).thenReturn(1L);
-        ModelAndView modelAndView = controladorHome.getHome(requestMock);
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("home"));
+        when(servicioJugadorMock.getJugadorActual(1L)).thenReturn(new Jugador().setNombre("MockPlayer"));
+        when(servicioHomeMock.getAnuncios()).thenReturn(List.of(new Anuncio().setTitle("MockAnuncio")));
+    }
+    private ModelAndView whenAccedoAPantallaHome() {
+        return controladorHome.getHome(requestMock);
+    }
+    private void thenDebieraVerHomeConAnunciosYEstadisticas(ModelAndView resultado) {
+        assertThat(resultado.getViewName(), equalToIgnoringCase("home"));
+        assertThat( ((Jugador) resultado.getModel().get("jugador")).getNombre(), equalTo("MockPlayer") );
     }
 
     @Test
-    public void redireccionaALogin() {
-        when(requestMock.getSession()).thenReturn(sessionMock);
-        ModelAndView modelAndView = controladorHome.getHome(requestMock);
-        assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
+    public void debieraRedireccionarALoginSinSesion() {
+        givenUsuarioNoEstaLoggeado();
+        ModelAndView resultado = whenAccedoAPantallaHome();
+        thenDebieraRedireccionarALogin(resultado);
+    }
+    private void givenUsuarioNoEstaLoggeado() {
+        when(sessionMock.getAttribute("userId")).thenReturn(null);
+    }
+    private void thenDebieraRedireccionarALogin(ModelAndView resultado) {
+        assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
 }
