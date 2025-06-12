@@ -105,6 +105,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
         // Remover de la colección y borrar
         jugador.getObjetos().remove(oi);
         this.sessionFactory.getCurrentSession().delete(oi);
+    }
 
     @Override
     public void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId) {
