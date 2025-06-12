@@ -28,6 +28,30 @@ public class Jugador {
     private Integer ataque = 5;
     private Integer defensa = 5;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ObjetoInventario> objetos = List.of();
+    @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ObjetoInventario> objetos = new java.util.ArrayList<>();
+
+    public Jugador(double v) {
+    }
+
+    public Jugador() {
+
+    }
+
+
+    public boolean puedeComprar(Long precio) {
+        return dinero >= precio;
+    }
+
+    public void debitar(Long monto) {
+        if (puedeComprar(monto)) {
+            dinero -= monto;
+        } else {
+            throw new IllegalArgumentException("Saldo insuficiente");
+        }
+    }
+
+    public void agregarObjeto(ObjetoInventario objeto) {
+        objetos.add(objeto);
+    }
 }

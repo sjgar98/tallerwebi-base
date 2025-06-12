@@ -4,11 +4,18 @@
     <title>Tienda</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/tienda.css}" />
+    <link rel="stylesheet" th:href="@{/css/inventario.css}" />
 </head>
 <body>
 <div class="container">
     <h1>Tienda del Juego</h1>
 
+    <h2>Saldo actual: <span th:text="'$' + ${saldo}">500</span></h2>
+
+    <p th:if="${mensaje}" th:text="${mensaje}" style="color: green;"></p>
+
+
+    <h2>Productos</h2>
     <div class="grid">
         <div class="producto" th:each="producto : ${productos}">
             <div class="img-wrapper">
@@ -16,9 +23,45 @@
             </div>
             <h3 th:text="${producto.nombre}">Nombre</h3>
             <p>Precio: <span class="precio" th:text="'$' + ${producto.precio}">0.00</span></p>
-            <button class="btn">Agregar al carrito</button>
+            <a th:href="@{/comprar(nombreProducto=${producto.nombre})}" class="btn">Comprar</a>
         </div>
     </div>
+
+
+
+
+
+    <div class="panel-inventario">
+        <a th:each="objeto: ${inventario}"
+           th:href="@{/vender(objetoId=${objeto.id})}"
+           class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
+           data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+           th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+           tabindex="0"
+        >
+            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+            <span class="slot-qty" th:text="${objeto.cantidad}"></span>
+        </a>
+        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="slot slot-empty"></div>
+    </div>
+
 </div>
+
+</div>
+
+
+<script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script> <!-- bundle incluye tooltip -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+    });
+</script>
+
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -13,30 +13,30 @@
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" th:href="@{/css/inventario.css}"/>
 
-  </head>
-  <body>
-    <main role="main" class="container layout-inventario">
-      <div class="panel-equipo"></div>
-      <div class="panel-stats"></div>
-      <div class="panel-inventario">
+</head>
+<body>
+<main role="main" class="container layout-inventario">
+    <div class="panel-equipo"></div>
+    <div class="panel-stats"></div>
+    <div class="panel-inventario">
         <div th:each="objeto: ${objetos}"
              class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
              th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
              tabindex="0"
         >
-          <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
-          <span class="slot-qty" th:text="${objeto.cantidad}"></span>
+            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+            <span class="slot-qty" th:text="${objeto.cantidad}"></span>
         </div>
         <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="slot slot-empty"></div>
-      </div>
-    </main>
+    </div>
+</main>
 
-    <script type="text/javascript" th:src="@{webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
-    <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-    <script>
-      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    </script>
-  </body>
+<script type="text/javascript" th:src="@{webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+</script>
+</body>
 </html>
