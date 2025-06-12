@@ -128,6 +128,7 @@
             <version>${playwright.version}</version>
             <scope>test</scope>
         </dependency>
+
         <!-- compile only, deployed container will provide this -->
         <!--
         <dependency>
