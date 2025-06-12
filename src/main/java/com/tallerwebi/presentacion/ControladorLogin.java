@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
@@ -15,11 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ControladorLogin {
 
     private ServicioLogin servicioLogin;
+    private ServicioJugador servicioJugador;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin){
+    public ControladorLogin(ServicioLogin servicioLogin, ServicioJugador servicioJugador){
         this.servicioLogin = servicioLogin;
-
+        this.servicioJugador = servicioJugador;
     }
 
     @RequestMapping("/login")
@@ -50,6 +52,7 @@ public class ControladorLogin {
         ModelMap model = new ModelMap();
         try{
             servicioLogin.registrar(usuario);
+            servicioJugador.crearNuevoJugador(usuario.getId(), usuario.getNombreUsuario());
         } catch (UsuarioExistente e){
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);

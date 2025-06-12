@@ -45,9 +45,8 @@ public class ServicioJugadorImpl implements ServicioJugador {
     }
 
     @Override
-    public List<ObjetoInventario> getObjetosJugadorActual(Long userId) {
-        Jugador jugadorActual = this.getJugadorActual(userId);
-        return this.repositorioJugador.buscarObjetosInventario(jugadorActual.getId());
+    public List<ObjetoInventario> getObjetosJugador(Jugador jugador) {
+        return this.repositorioJugador.buscarObjetosInventario(jugador.getId());
     }
 
     @Override

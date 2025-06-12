@@ -29,41 +29,9 @@ public class ControladorHome {
         var userId = request.getSession().getAttribute("userId");
         if (userId != null) {
             Jugador jugadorActual = this.servicioJugador.getJugadorActual((Long) userId);
-            if (jugadorActual != null) {
-                model.addAttribute("anuncios", this.servicioHome.getAnuncios());
-                model.addAttribute("jugador", jugadorActual);
-                return new ModelAndView("home", model);
-            } else {
-                return new ModelAndView("redirect:/home/new");
-            }
-        } else {
-            return new ModelAndView("redirect:/login");
-        }
-    }
-
-    @GetMapping("/new")
-    public ModelAndView getHomeNewPlayer(HttpServletRequest request) {
-        var userId = request.getSession().getAttribute("userId");
-        if (userId != null) {
-            ModelMap model = new ModelMap();
-            model.put("body", new NuevoJugadorDto());
-            return new ModelAndView("home-new", model);
-        } else {
-            return new ModelAndView("redirect:/login");
-        }
-    }
-
-    @PostMapping("/new")
-    public ModelAndView postHomeNewPlayer(HttpServletRequest request, @ModelAttribute("body") NuevoJugadorDto body) {
-        var userId = request.getSession().getAttribute("userId");
-        if (userId != null) {
-            String nombre = body.getNombre();
-            if (nombre != null) {
-                this.servicioJugador.crearNuevoJugador((Long) userId, nombre);
-                return new ModelAndView("redirect:/home");
-            } else {
-                return new ModelAndView("redirect:/home/new");
-            }
+            model.addAttribute("anuncios", this.servicioHome.getAnuncios());
+            model.addAttribute("jugador", jugadorActual);
+            return new ModelAndView("home", model);
         } else {
             return new ModelAndView("redirect:/login");
         }

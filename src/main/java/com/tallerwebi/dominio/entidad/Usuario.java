@@ -18,6 +18,9 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    private String nombreUsuario;
+    private String nombre;
+    private String apellido;
 
     public Usuario(){
 
@@ -48,5 +51,4 @@ public class Usuario {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }
