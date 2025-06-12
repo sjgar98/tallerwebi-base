@@ -35,7 +35,7 @@ public class Objeto {
     public String getTooltip(Boolean withSellPrice) {
         return
             "<div class=\"slot-tooltip\">" +
-                "<h1 class=\"slot-tooltip__nombre\">" + this.getNombre() + "</h5>" +
+                "<h5 class=\"slot-tooltip__nombre\">" + this.getNombre() + "</h5>" +
                 "<div class=\"slot-tooltip__tipo\">" + this.getTipo().getNombre() + "</div>" +
                 (
                     !this.getDescripcion().isEmpty()

@@ -50,6 +50,9 @@ main {
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.5);
 }
+
+
+
 .slot:not(.slot-empty) {
     cursor: pointer;
 }
