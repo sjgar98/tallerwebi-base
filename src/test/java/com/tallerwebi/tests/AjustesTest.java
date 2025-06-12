@@ -1,9 +1,9 @@
 package com.tallerwebi.tests;
 
 
-import com.tallerwebi.servicios.Ajustes;
-import com.tallerwebi.servicios.ServicioAjustes;
-import com.tallerwebi.servicios.ServicioAjustesImpl;
+import com.tallerwebi.dominio.entidad.Ajustes;
+import com.tallerwebi.dominio.ServicioAjustes;
+import com.tallerwebi.dominio.ServicioAjustesImpl;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

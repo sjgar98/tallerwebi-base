@@ -5,6 +5,8 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Accessors(chain = true)
@@ -45,4 +47,26 @@ public class Objeto {
                 "<div class=\"slot-tooltip__valor\">" + (withSellPrice ? (Long) (this.getValor() / 2) : this.getValor()) + "g</div>" +
             "</div>";
     }
+
+    @OneToMany(mappedBy = "objeto")
+    private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Objeto{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", tipo=" + (tipo != null ? tipo.getNombre() : "null") +
+                ", rango=" + rango +
+                ", valor=" + valor +
+                ", imagenSrc='" + imagenSrc + '\'' +
+                ", equipable=" + equipable +
+                ", vidaMaxima=" + vidaMaxima +
+                ", ataque=" + ataque +
+                ", defensa=" + defensa +
+                '}';
+
+    }
+
 }

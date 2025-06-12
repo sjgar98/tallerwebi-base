@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.servicios.Ajustes;
-import com.tallerwebi.servicios.ServicioAjustes;
+import com.tallerwebi.dominio.entidad.Ajustes;
+import com.tallerwebi.dominio.ServicioAjustes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +22,21 @@ public class ControladorAjustes {
 
     @GetMapping()
     public ModelAndView getAjustes(HttpServletRequest request) {
+        var userId = request.getSession().getAttribute("userId");
+        if(userId!= null){
+            return new ModelAndView("ajustes");
+        } else {
+            return new ModelAndView("redirect:/login");
+        }
 
-        return new ModelAndView("ajustes");
+
     }
 
     @GetMapping("/verAjustesDelUsuario")
     @ResponseBody
     public Ajustes verAjustesGuardados(){
+
+
 
         if(servicioAjustes.devolverAjustes() == null){
             System.out.println("Se llamo a al auxiliar");

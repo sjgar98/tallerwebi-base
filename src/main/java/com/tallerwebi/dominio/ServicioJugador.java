@@ -9,4 +9,6 @@ public interface ServicioJugador {
     void crearNuevoJugador(Long userId, String nombre);
     Jugador getJugadorActual(Long userId);
     List<ObjetoInventario> getObjetosJugadorActual(Long userId);
+    void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId);
+    void agregarOroAlJugador(Long userId, Long oro);
 }
