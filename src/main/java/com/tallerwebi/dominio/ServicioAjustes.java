@@ -1,5 +1,7 @@
-package com.tallerwebi.servicios;
+package com.tallerwebi.dominio;
 
+
+import com.tallerwebi.dominio.entidad.Ajustes;
 
 public interface ServicioAjustes {
 

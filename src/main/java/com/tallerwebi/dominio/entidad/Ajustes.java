@@ -1,16 +1,27 @@
-package com.tallerwebi.servicios;
+package com.tallerwebi.dominio.entidad;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.Objects;
 
+
+@Entity
+@Getter
+@Setter
 public class Ajustes {
 
-    //Variables
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String colorFondoHexadecimal;
     private  Integer volumenGeneral;
     private  Integer volumenMusica;
     private  Integer volumenEfectos;
     private  Integer dificultad;
+
 
     //Constructor
     public Ajustes(String color, Integer vg, Integer vm, Integer ve, Integer dificultad){
@@ -24,46 +35,10 @@ public class Ajustes {
     }
 
 
-    //Getters y Setters
-    public String getcolorFondoHexadecimal() {
-        return colorFondoHexadecimal;
-    }
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    public Integer getDificultad() {
-        return dificultad;
-    }
-
-    public Integer getVolumenEfectos() {
-        return volumenEfectos;
-    }
-
-    public Integer getVolumenGeneral() {
-        return volumenGeneral;
-    }
-
-    public Integer getVolumenMusica() {
-        return volumenMusica;
-    }
-
-    public void setcolorFondoHexadecimal(String colorFondoHexadecimal) {
-        this.colorFondoHexadecimal = colorFondoHexadecimal;
-    }
-
-    public void setDificultad(Integer dificultad) {
-        this.dificultad = dificultad;
-    }
-
-    public void setVolumenEfectos(Integer volumenEfectos) {
-        this.volumenEfectos = volumenEfectos;
-    }
-
-    public void setVolumenGeneral(Integer volumenGeneral) {
-        this.volumenGeneral = volumenGeneral;
-    }
-
-    public void setVolumenMusica(Integer volumenMusica) {
-        this.volumenMusica = volumenMusica;
-    }
 
     // hashCode
     @Override

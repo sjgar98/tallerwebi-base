@@ -1,5 +1,6 @@
-package com.tallerwebi.servicios;
+package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.entidad.Ajustes;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

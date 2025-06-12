@@ -11,9 +11,8 @@ public interface ServicioJugador {
     Jugador getJugadorActual(Long userId);
     List<ObjetoInventario> getObjetosJugador(Jugador jugador);
 
-
     void agregarObjeto(Jugador jugador, Objeto objeto);
-
-
     void venderObjeto(Jugador jugador, Long objetoInventarioId);
+    void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId);
+    void agregarOroAlJugador(Long userId, Long oro);
 }

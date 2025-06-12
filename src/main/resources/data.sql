@@ -10,6 +10,20 @@ INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, co
 
 INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, equipable, ataque) VALUES (4, 'Daga', 'Ataque: 2', 1, 1, 1000, 'potion-1.jpg', TRUE, 2);
 
+INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (1,1,5,'Mazmorra', FALSE);
+INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (2,3,8,'Bosque', FALSE);
+INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (3,5,10,'Castillo', FALSE);
+
+INSERT INTO Enemigo(id, nombre, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (1,'Slime', 75, 75, 5, 5,'Slime.jpg');
+INSERT INTO Enemigo(id, nombre, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (2,'Esqueleto', 115, 115, 7, 5,'esqueleto.png');
+INSERT INTO Enemigo(id, nombre, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (3,'Bandido', 120, 120, 8, 6,'bandido.png');
 
 INSERT INTO Anuncio(title, content) VALUES ('Release 0.0.1-ALPHA', 'Anuncio inicial mockeado');
 INSERT INTO Anuncio(title, content) VALUES ('Release 0.0.2-ALPHA', 'Segundo update mockeado, mostrar arriba de todo');
+
+
+INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES (1,1,1,1);
+INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES (2,1,4,1);
+INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES (3,2,3,1);
+INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES (4,2,1,2);
+INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES (5,3,4,3);

@@ -34,6 +34,17 @@ main {
     gap: 8px;
 }
 
+.panel-inventarioRecompensa {
+    grid-area: inventario;
+    background: yellow;
+    margin: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    padding: 1em;
+    gap: 8px;
+}
+
 .panel-stats {
     grid-area: stats;
     background: yellow;

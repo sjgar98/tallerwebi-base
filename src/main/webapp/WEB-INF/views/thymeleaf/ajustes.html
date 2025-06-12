@@ -68,7 +68,7 @@
 
 
     function aplicarAlForm() {
-    fetch(`/spring/ajustes/verAjustesDelUsuario`)
+    fetch(`/ajustes/verAjustesDelUsuario`)
    .then(res => {
       if (!res.ok) {
           throw new Error("Error al cargar ajustes: " + res.status);

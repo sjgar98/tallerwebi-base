@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("servicioJugador")
+@Service
 @Transactional
 public class ServicioJugadorImpl implements ServicioJugador {
     private final RepositorioUsuario repositorioUsuario;
@@ -52,7 +52,6 @@ public class ServicioJugadorImpl implements ServicioJugador {
     public List<ObjetoInventario> getObjetosJugador(Jugador jugador) {
         return this.repositorioJugador.buscarObjetosInventario(jugador.getId());
     }
-
 
     @Override
     public void agregarObjeto(Jugador jugador, Objeto objeto) {
@@ -106,5 +105,44 @@ public class ServicioJugadorImpl implements ServicioJugador {
         // Remover de la colección y borrar
         jugador.getObjetos().remove(oi);
         this.sessionFactory.getCurrentSession().delete(oi);
+
+    @Override
+    public void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId) {
+
+        Jugador jugadorActual = this.getJugadorActual(userId);
+        List<ObjetoInventario> inventarioJugador = this.repositorioJugador.buscarObjetosInventario(jugadorActual.getId());
+
+
+
+        for(int i = 0; i < objetos.size(); i++){
+
+            ObjetoInventario nuevoObjeto = objetos.get(i);
+            if (inventarioJugador.contains(nuevoObjeto)){
+               Integer index = inventarioJugador.indexOf(nuevoObjeto);
+
+               inventarioJugador.get(index).setCantidad(inventarioJugador.get(index).getCantidad() + 1);
+            } else{
+                inventarioJugador.add(nuevoObjeto);
+            }
+
+        }
+
+        for (int e = 0; e < inventarioJugador.size(); e++){
+
+            System.out.println(inventarioJugador.get(e).getObjeto().getDescripcion() + "cantidad" +  inventarioJugador.get(e).getCantidad());
+
+        }
+
+        jugadorActual.setObjetos(inventarioJugador);
+
+        this.repositorioJugador.modificar(jugadorActual);
+
+
+    }
+
+    @Override
+    public void agregarOroAlJugador(Long userId, Long oro) {
+        Jugador jugadorActual = this.getJugadorActual(userId);
+        jugadorActual.setDinero(jugadorActual.getDinero() + oro);
     }
 }
