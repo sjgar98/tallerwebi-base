@@ -11,7 +11,8 @@ public interface ServicioNivel {
 
 
      List<NivelIntermedio> obtenerNivelesIntermedios();
-     List<ObjetoInventario> obtenerObjetosDeUnNivel(Long id);
+     List<Objeto> obtenerObjetosDeUnNivel(Long id);
+     List<ObjetoInventario> obtenerObjetosInventario(Long id);
      List<Nivel> obtenerTodosLosNiveles();
      List<Enemigo> obtenerLosEnemigosDeUnNivel(Long id);
      List<NivelDTO> obtenerNivelesDTO(List<Nivel> niveles, Long opcionId);

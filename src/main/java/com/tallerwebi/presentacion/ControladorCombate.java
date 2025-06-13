@@ -47,7 +47,7 @@ public class ControladorCombate {
         if(userId!= null){
             combate.setJugador(this.servicioJugador.getJugadorActual((Long) userId));
             combate.setEnemigos(servicioNivel.obtenerEnemigosDto(servicioNivel.obtenerLosEnemigosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId())));
-            combate.setRecompensaObjetos(servicioNivel.obtenerObjetosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId()));
+            combate.setRecompensaObjetos(servicioNivel.obtenerObjetosInventario(servicioNivel.devolverNivelSeleccionado().getId()));
             combate.setRecompensaOro(100L);
 
 
@@ -104,7 +104,7 @@ public class ControladorCombate {
        if (userId!=null){
            ModelAndView mav = new ModelAndView("victoria");
 
-           mav.addObject("objetos",servicioNivel.obtenerObjetosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId()));
+           mav.addObject("objetos",servicioNivel.obtenerObjetosInventario(servicioNivel.devolverNivelSeleccionado().getId()));
            mav.addObject("recompensaOro", combate.getRecompensaOro());
 
 

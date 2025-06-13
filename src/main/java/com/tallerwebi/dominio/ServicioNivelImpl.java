@@ -34,7 +34,14 @@ public class ServicioNivelImpl implements ServicioNivel {
     }
 
     @Override
-    public List<ObjetoInventario> obtenerObjetosDeUnNivel(Long id) {
+    public List<Objeto> obtenerObjetosDeUnNivel(Long id) {
+
+        return repositorioNivel.devolverTodosLosObjetosDeUnNivel(id);
+
+    }
+
+    @Override
+    public List<ObjetoInventario> obtenerObjetosInventario(Long id) {
         List<ObjetoInventario> objetosNivel = repositorioNivel.devolverTodosLosObjetosDeUnNivel(id).stream()
                 .map(o -> new ObjetoInventario().setObjeto(o).setJugador(null))
                 .collect(Collectors.toList());
@@ -61,7 +68,7 @@ public class ServicioNivelImpl implements ServicioNivel {
                         n.getNivelMinimoPersonaje(),
                         n.getNivelMaximoEnemigo(),
                         n.getDescripcion(),
-                        opcionId != null && n.getId().equals(opcionId) // `true` si es el nivel seleccionado
+                        opcionId != null && n.getId().equals(opcionId)
                 ))
                 .collect(Collectors.toList());
 
