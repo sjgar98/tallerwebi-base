@@ -21,8 +21,10 @@ public class Objeto {
     private String descripcion = "";
     @ManyToOne
     private TipoObjeto tipo;
-    private Integer rango;
-    private Long valor;
+    private Integer rango = 1;
+    private Integer maxPorSlot = 99;
+    private Long valor = 0L;
+    private Boolean comprable;
     private String imagenSrc;
 
     // Equipables

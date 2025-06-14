@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.entidad.Jugador;
 import com.tallerwebi.dominio.entidad.Objeto;
 import com.tallerwebi.dominio.entidad.ObjetoInventario;
 import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
 import com.tallerwebi.infraestructura.RepositorioJugador;
 import com.tallerwebi.infraestructura.RepositorioObjetos;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
@@ -54,34 +55,57 @@ public class ServicioJugadorImpl implements ServicioJugador {
     }
 
     @Override
+    public ObjetoInventario getObjetoInventarioPorId(Long objetoInventarioId) {
+        return this.repositorioJugador.buscarObjetoInventarioPorId(objetoInventarioId);
+    }
+
+    @Override
     public void agregarObjeto(Jugador jugador, Objeto objeto) {
-
-        if (jugador.getId() == null) {
-            this.sessionFactory.getCurrentSession().save(jugador);
-        }
-
-
-        Jugador jugadorManaged = (Jugador) this.sessionFactory.getCurrentSession().merge(jugador);
-
-
-        List<ObjetoInventario> inventario = this.repositorioJugador.buscarObjetosInventario(jugadorManaged.getId());
-        ObjetoInventario existente = inventario.stream()
-                .filter(oi -> oi.getObjeto().getId().equals(objeto.getId()))
-                .findFirst()
-                .orElse(null);
-
-        if (existente != null) {
-            existente.setCantidad(existente.getCantidad() + 1);
-            this.sessionFactory.getCurrentSession().update(existente);
+        var objetosInventario = repositorioJugador.buscarObjetosInventarioPorObjeto(jugador, objeto);
+        var primerSlotConEspacio = objetosInventario.stream()
+                .filter(o -> o.getCantidad() + 1 <= objeto.getMaxPorSlot())
+                .findFirst().orElse(null);
+        if (primerSlotConEspacio != null) {
+            primerSlotConEspacio.setCantidad(primerSlotConEspacio.getCantidad() + 1);
+            repositorioJugador.modificarObjeto(primerSlotConEspacio);
         } else {
-            ObjetoInventario nuevo = new ObjetoInventario()
-                    .setObjeto(objeto)
-                    .setJugador(jugadorManaged)
-                    .setCantidad(1);
-            this.sessionFactory.getCurrentSession().save(nuevo);
-
-            jugadorManaged.agregarObjeto(nuevo);
+            ObjetoInventario slotNuevo = new ObjetoInventario().setJugador(jugador).setObjeto(objeto);
+            repositorioJugador.agregarObjeto(slotNuevo);
         }
+    }
+
+    @Override
+    public void agregarObjeto(Jugador jugador, Objeto objeto, Integer cantidad) {
+        Integer cantidadRestante = cantidad;
+        while (cantidadRestante > 0) {
+            this.agregarObjeto(jugador, objeto);
+            cantidadRestante--;
+        }
+    }
+
+    @Override
+    public void removerObjeto(Jugador jugador, ObjetoInventario objeto) {
+        objeto.setCantidad(objeto.getCantidad() - 1);
+        if (objeto.getCantidad() == 0) {
+            repositorioJugador.removerObjeto(objeto);
+        } else {
+            repositorioJugador.modificarObjeto(objeto);
+        }
+    }
+
+    @Override
+    public void agregarDinero(Jugador jugador, Long dinero) {
+        jugador.setDinero(jugador.getDinero() + dinero);
+        repositorioJugador.modificar(jugador);
+    }
+
+    @Override
+    public void removerDinero(Jugador jugador, Long dinero) {
+        if (jugador.getDinero() - dinero < 0) {
+            throw new DineroInsuficienteException("Dinero insuficiente para esta operacion");
+        }
+        jugador.setDinero(jugador.getDinero() - dinero);
+        repositorioJugador.modificar(jugador);
     }
 
     @Override

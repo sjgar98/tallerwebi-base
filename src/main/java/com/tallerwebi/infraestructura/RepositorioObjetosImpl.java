@@ -38,4 +38,11 @@ public class RepositorioObjetosImpl implements RepositorioObjetos {
                 .add(Restrictions.eq("t.nombre", "Consumible"))
                 .list();
     }
+
+    @Override
+    public List<Objeto> getObjetosComprables() {
+        return sessionFactory.getCurrentSession().createCriteria(Objeto.class)
+                .add(Restrictions.eq("comprable", true))
+                .list();
+    }
 }

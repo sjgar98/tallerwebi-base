@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioJugador;
+import com.tallerwebi.dominio.entidad.Constants;
 import com.tallerwebi.dominio.entidad.Jugador;
 import com.tallerwebi.dominio.entidad.ObjetoInventario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ControladorInventario {
             List<ObjetoInventario> objetosJugadorActual = this.servicioJugador.getObjetosJugador(jugadorActual);
             ModelMap model = new ModelMap();
             model.addAttribute("objetos", objetosJugadorActual);
-            model.addAttribute("emptySlots", 40 - objetosJugadorActual.size());
+            model.addAttribute("emptySlots", Constants.MAX_INVENTORY_SLOTS - objetosJugadorActual.size());
             return new ModelAndView("inventario", model);
         } else {
             return new ModelAndView("redirect:/login");
