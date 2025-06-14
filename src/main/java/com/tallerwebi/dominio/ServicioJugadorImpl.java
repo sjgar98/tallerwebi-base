@@ -108,36 +108,28 @@ public class ServicioJugadorImpl implements ServicioJugador {
     }
 
     @Override
-    public void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId) {
+    public void agregarObjetosAlJugador(List<Objeto> objetos, Long userId) {
 
-        Jugador jugadorActual = this.getJugadorActual(userId);
-        List<ObjetoInventario> inventarioJugador = this.repositorioJugador.buscarObjetosInventario(jugadorActual.getId());
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
 
+        List<ObjetoInventario> objetoRecompensa = objetos.stream()
+                .map(o -> new ObjetoInventario().setObjeto(o).setJugador(jugadorActual))
+                .collect(Collectors.toList());
 
 
         for(int i = 0; i < objetos.size(); i++){
 
-            ObjetoInventario nuevoObjeto = objetos.get(i);
-            if (inventarioJugador.contains(nuevoObjeto)){
-               Integer index = inventarioJugador.indexOf(nuevoObjeto);
+            ObjetoInventario nuevoObjeto = objetoRecompensa.get(i);
+            if (jugadorActual.getObjetos().contains(nuevoObjeto)){
+                Integer index = jugadorActual.getObjetos().indexOf(nuevoObjeto);
 
-               inventarioJugador.get(index).setCantidad(inventarioJugador.get(index).getCantidad() + 1);
+                jugadorActual.getObjetos().get(index).setCantidad(jugadorActual.getObjetos().get(index).getCantidad() + 1);
             } else{
-                inventarioJugador.add(nuevoObjeto);
+                jugadorActual.getObjetos().add(nuevoObjeto);
             }
 
         }
-
-        for (int e = 0; e < inventarioJugador.size(); e++){
-
-            System.out.println(inventarioJugador.get(e).getObjeto().getDescripcion() + "cantidad" +  inventarioJugador.get(e).getCantidad());
-
-        }
-
-        jugadorActual.setObjetos(inventarioJugador);
-
         this.repositorioJugador.modificar(jugadorActual);
-
 
     }
 

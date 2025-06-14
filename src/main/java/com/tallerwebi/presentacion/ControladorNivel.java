@@ -60,7 +60,7 @@ public class ControladorNivel {
         List<NivelDTO> niveles = servicioNivel.obtenerNivelesDTO(servicioNivel.obtenerTodosLosNiveles(), opcionId);
 
         modelAndView.addObject("niveles", niveles);
-        modelAndView.addObject("objetos",servicioNivel.obtenerObjetosDeUnNivel(opcionId));
+        modelAndView.addObject("objetos",servicioNivel.obtenerObjetosInventario(opcionId));
         modelAndView.addObject("enemigos", servicioNivel.obtenerLosEnemigosDeUnNivel(opcionId));
 
         servicioNivel.seleccionarNivel(opcionId);

@@ -13,6 +13,6 @@ public interface ServicioJugador {
 
     void agregarObjeto(Jugador jugador, Objeto objeto);
     void venderObjeto(Jugador jugador, Long objetoInventarioId);
-    void agregarObjetosAlJugador(List<ObjetoInventario> objetos, Long userId);
+    void agregarObjetosAlJugador(List<Objeto> objetos, Long userId);
     void agregarOroAlJugador(Long userId, Long oro);
 }
