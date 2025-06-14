@@ -26,6 +26,16 @@ public class RepositorioJugadorImpl implements RepositorioJugador {
     }
 
     @Override
+    public void guardar(Jugador jugador) {
+        this.sessionFactory.getCurrentSession().save(jugador);
+    }
+
+    @Override
+    public void modificar(Jugador jugador) {
+        this.sessionFactory.getCurrentSession().merge(jugador);
+    }
+
+    @Override
     public List<ObjetoInventario> buscarObjetosInventario(Long jugadorId) {
         return (List<ObjetoInventario>) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
                 .createAlias("jugador", "j")
@@ -34,12 +44,34 @@ public class RepositorioJugadorImpl implements RepositorioJugador {
     }
 
     @Override
-    public void guardar(Jugador jugador) {
-        this.sessionFactory.getCurrentSession().save(jugador);
+    public List<ObjetoInventario> buscarObjetosInventarioPorObjeto(Jugador jugador, Objeto objeto) {
+        return (List<ObjetoInventario>) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
+                .createAlias("jugador", "j")
+                .createAlias("objeto", "o")
+                .add(Restrictions.eq("j.id", jugador.getId()))
+                .add(Restrictions.eq("o.id", objeto.getId()))
+                .list();
     }
 
     @Override
-    public void modificar(Jugador jugador) {
-        this.sessionFactory.getCurrentSession().update(jugador);
+    public ObjetoInventario buscarObjetoInventarioPorId(Long objetoInventarioId) {
+        return (ObjetoInventario) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
+                .add(Restrictions.eq("id", objetoInventarioId))
+                .uniqueResult();
+    }
+
+    @Override
+    public void agregarObjeto(ObjetoInventario objeto) {
+        this.sessionFactory.getCurrentSession().save(objeto);
+    }
+
+    @Override
+    public void modificarObjeto(ObjetoInventario objeto) {
+        this.sessionFactory.getCurrentSession().merge(objeto);
+    }
+
+    @Override
+    public void removerObjeto(ObjetoInventario objeto) {
+        this.sessionFactory.getCurrentSession().remove(objeto);
     }
 }

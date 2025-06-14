@@ -2,11 +2,13 @@ package com.tallerwebi.dominio.entidad;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Accessors(chain = true)
 @Getter
 @Setter
 public class Usuario {

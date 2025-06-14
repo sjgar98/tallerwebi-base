@@ -8,4 +8,5 @@ public interface RepositorioObjetos {
     List<Objeto> getAllObjetos();
     Objeto getObjetoById(Long objetoId);
     List<Objeto> getObjetosIniciales();
+    List<Objeto> getObjetosComprables();
 }
