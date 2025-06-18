@@ -162,4 +162,54 @@ public class ServicioJugadorImpl implements ServicioJugador {
         Jugador jugadorActual = this.getJugadorActual(userId);
         jugadorActual.setDinero(jugadorActual.getDinero() + oro);
     }
+
+    @Override
+    public void sacarObjetosAlJugador(Objeto objetoAUsar, Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+
+
+        List<ObjetoInventario> objetosJugador = jugadorActual.getObjetos();
+
+        for(int i = 0; i < objetosJugador.size();i++){
+            if(objetosJugador.get(i).getObjeto().equals(objetoAUsar)){
+
+
+                if (objetosJugador.get(i).getCantidad() - 1 == 0){
+                    objetosJugador.remove(i);
+                } else{
+                    objetosJugador.get(i).setCantidad(objetosJugador.get(i).getCantidad() - 1);
+                }
+            }
+        }
+
+        jugadorActual.setObjetos(objetosJugador);
+
+
+
+        this.repositorioJugador.modificar(jugadorActual);
+
+    }
+
+    @Override
+    public List<ObjetoInventario> getObjetosConsumibles(Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+        List<ObjetoInventario> objetos = jugadorActual.getObjetos();
+        List<ObjetoInventario> consumibles = new java.util.ArrayList<>();
+        for (int i = 0; i < objetos.size(); i++){
+            if (objetos.get(i).getObjeto().getTipo().getNombre().equals("Consumible")){
+                consumibles.add(objetos.get(i));
+            }
+        }
+
+        return consumibles;
+    }
+
+    @Override
+    public void subirDeNivel(Integer experiencia, Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+
+        jugadorActual.recibirExperiencia(experiencia);
+
+        this.repositorioJugador.modificar(jugadorActual);
+    }
 }

@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 public class EnemigoDTO {
     private Long id;
     private String nombre;
-    private Integer nivel = 1;
+    private Integer nivel;
     // Combat Stats
     private Integer vidaActual;
     private Integer vidaMaxima;
@@ -24,9 +24,10 @@ public class EnemigoDTO {
 
     }
 
-    public EnemigoDTO(Long id, String nombre, Integer vidaActual, Integer vidaMaxima, Integer ataque, Integer defensa, String img) {
+    public EnemigoDTO(Long id, String nombre,Integer nivel, Integer vidaActual, Integer vidaMaxima, Integer ataque, Integer defensa, String img) {
 
         this.id = id;
+        this.nivel = nivel;
         this.nombre = nombre;
         this.vidaActual = vidaActual;
         this.vidaMaxima = vidaMaxima;
