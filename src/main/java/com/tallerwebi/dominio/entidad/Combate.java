@@ -13,7 +13,6 @@ import java.util.Objects;
 public class Combate {
     private Jugador jugador;
     private List<EnemigoDTO> enemigos;
-    private List<ObjetoInventario> recompensaObjetos;
     private Long recompensaOro;
 
 
@@ -39,10 +38,10 @@ public class Combate {
         return true;
     }
 
-    public void ataqueJugador(Jugador jugador, Integer index){
+    public void ataqueJugador(Integer index){
 
         EnemigoDTO enemigo = enemigos.get(index);
-        enemigo.setVidaActual(enemigo.getVidaActual() - (jugador.getAtaque() * 1000));
+        enemigo.setVidaActual(enemigo.getVidaActual() - (this.jugador.getAtaque() * 1000));
         if (enemigo.getVidaActual() < 0){
             enemigo.setVidaActual(0);
         }
@@ -52,10 +51,22 @@ public class Combate {
         System.out.println("Se ataco a " + enemigos.get(index).toString());
     }
 
-    public void ataqueEnemigo(Jugador jugador){
+    public void defensaJugador(){
+        for (EnemigoDTO enemigo : enemigos) {
+            if (enemigo.getVidaActual() > 0){
+                this.jugador.setVidaActual(jugador.getVidaActual() - (enemigo.getAtaque() / 2));
+            }
+
+        }
+    }
+
+    public void ataqueEnemigo(){
 
         for (EnemigoDTO enemigo : enemigos) {
-            jugador.setVidaActual(jugador.getVidaActual() - enemigo.getAtaque());
+            if (enemigo.getVidaActual() > 0){
+                this.jugador.setVidaActual(jugador.getVidaActual() - enemigo.getAtaque());
+            }
+
         }
 
     }

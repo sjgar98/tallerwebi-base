@@ -81,6 +81,7 @@ public class ServicioNivelImpl implements ServicioNivel {
                 .map(e -> new EnemigoDTO(
                         e.getId(),
                         e.getNombre(),
+                        e.getNivel(),
                         e.getVidaActual(),
                         e.getVidaMaxima(),
                         e.getAtaque(),

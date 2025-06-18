@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 
+import com.tallerwebi.dominio.ServicioCombate;
 import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioNivel;
 import com.tallerwebi.dominio.entidad.Combate;
@@ -23,16 +24,15 @@ public class ControladorCombate {
 
     private final ServicioNivel servicioNivel;
     private final ServicioJugador servicioJugador;
-
-    private Combate combate = new Combate();
+    private final ServicioCombate servicioCombate;
 
 
     @Autowired
-    public ControladorCombate(ServicioNivel servicioNivel, ServicioJugador servicioJugador) {
+    public ControladorCombate(ServicioNivel servicioNivel, ServicioJugador servicioJugador, ServicioCombate servicioCombate) {
 
         this.servicioNivel = servicioNivel;
         this.servicioJugador = servicioJugador;
-
+        this.servicioCombate = servicioCombate;
 
     }
 
@@ -45,24 +45,37 @@ public class ControladorCombate {
         var userId = request.getSession().getAttribute("userId");
 
         if(userId!= null){
-            combate.setJugador(this.servicioJugador.getJugadorActual((Long) userId));
-            combate.setEnemigos(servicioNivel.obtenerEnemigosDto(servicioNivel.obtenerLosEnemigosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId())));
-            combate.setRecompensaObjetos(servicioNivel.obtenerObjetosInventario(servicioNivel.devolverNivelSeleccionado().getId()));
-            combate.setRecompensaOro(100L);
+            servicioCombate.setCombate(request);
 
 
-            model.addAttribute("jugador", combate.getJugador());
+            model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
+            model.addAttribute("jugador", servicioCombate.getJugador());
             model.addAttribute("url", "personaje1.png");
-            model.addAttribute("enemigos", combate.getEnemigos());
+            model.addAttribute("enemigos", servicioCombate.getEnemigos());
 
             return new ModelAndView("combate");
         } else {
             return new ModelAndView("redirect:/login");
         }
 
-
+//
     }
 
+    @PostMapping("/usarObjeto")
+    public ModelAndView usarObjeto(@RequestParam("idObjeto") Long idObjeto, Model model){
+        System.out.println("Se uso el objeto: " + idObjeto);
+
+
+        servicioCombate.usarObjeto(idObjeto);
+
+
+        model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
+        model.addAttribute("jugador", servicioCombate.getJugador());
+        model.addAttribute("enemigos", servicioCombate.getEnemigos());
+        model.addAttribute("url", "personaje1.png");
+
+        return new ModelAndView("combate");
+    }
     @PostMapping("/accion")
     public ModelAndView procesarAccion(@RequestParam("enemigoIndex") int index,
                                        @RequestParam("accion") String accion,
@@ -71,27 +84,27 @@ public class ControladorCombate {
 
 
         if ("atacar".equals(accion)) {
-            combate.ataqueJugador(combate.getJugador(), index);
-            combate.ataqueEnemigo(combate.getJugador());
+            servicioCombate.ataqueJugador(index);
+            servicioCombate.ataqueEnemigo();
         } else if ("defenderse".equals(accion)) {
-
+            servicioCombate.defensaJugador();
         }
 
 
 
 
-        if(combate.estaVivo().equals(false)){
+        if(servicioCombate.estaVivo().equals(false)){
             return derrota(request);
         }
 
-        if (combate.gano().equals(true)){
+        if (servicioCombate.gano().equals(true)){
             return victoria(request);
         }
 
 
-
-        model.addAttribute("jugador", combate.getJugador());
-        model.addAttribute("enemigos", combate.getEnemigos());
+        model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
+        model.addAttribute("jugador", servicioCombate.getJugador());
+        model.addAttribute("enemigos", servicioCombate.getEnemigos());
         model.addAttribute("url", "personaje1.png");
 
         return new ModelAndView("combate");
@@ -105,7 +118,7 @@ public class ControladorCombate {
            ModelAndView mav = new ModelAndView("victoria");
 
            mav.addObject("objetos",servicioNivel.obtenerObjetosInventario(servicioNivel.devolverNivelSeleccionado().getId()));
-           mav.addObject("recompensaOro", combate.getRecompensaOro());
+           mav.addObject("recompensaOro", servicioCombate.getRecompensaOro());
 
 
            return mav;
@@ -139,7 +152,8 @@ public class ControladorCombate {
        var userId = request.getSession().getAttribute("userId");
 
        servicioJugador.agregarObjetosAlJugador(servicioNivel.obtenerObjetosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId()),(Long) userId);
-       servicioJugador.agregarOroAlJugador((Long) userId,combate.getRecompensaOro());
+       servicioJugador.agregarOroAlJugador((Long) userId,servicioCombate.getRecompensaOro());
+        servicioJugador.subirDeNivel(servicioCombate.calcularExperiencia(), (Long) userId);
 
        ModelAndView mav = new ModelAndView("redirect:/home");
 

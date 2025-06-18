@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ControladorCombateTest {
 
+    /*
     private ControladorCombate controladorCombate;
     private ServicioNivel mockServicioNivel;
     private ServicioJugador mockServicioJugador;

@@ -22,11 +22,11 @@ public class NivelIntermedio{
     private Nivel nivel;
 
     @ManyToOne
-    @JoinColumn(name = "objeto_id", nullable = false)
+    @JoinColumn(name = "objeto_id")
     private Objeto objeto;
 
     @ManyToOne
-    @JoinColumn(name = "enemigo_id", nullable = false)
+    @JoinColumn(name = "enemigo_id")
     private Enemigo enemigo;
 
     public NivelIntermedio() {}

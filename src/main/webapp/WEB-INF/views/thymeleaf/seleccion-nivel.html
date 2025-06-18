@@ -7,7 +7,9 @@
     <link rel="stylesheet" th:href="@{/css/inventario.css}"/>
 </head>
 <body>
-  <h1 class="container text-center pt-3">Sleccion de nivel</h1>
+  <h1 class="container text-center pt-3">Elige tu Aventura</h1>
+
+
 
 
 
@@ -25,28 +27,38 @@
                   </div>
 
               </div>
-              <div class="col panel-inventario d-flex flex-column" id="descNivel">
+              <div class="col bg-success p-3" id="descNivel">
 
-                  <div class="d-flex flex-row">
-                      <div th:each="objeto: ${objetos}"
-                           class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
-                           data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-                           th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
-                           tabindex="0"
-                      >
-                          <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
-                          <span class="slot-qty" th:text="${objeto.cantidad}"></span>
+
+                  <div class="d-flex flex-column">
+                      <h4>Enemigos a enfrentar: </h4>
+                      <div class="d-flex flex-row justify-content-center gap-3">
+                          <div  th:each="enemigo :${enemigos}">
+
+                              <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}"  data-bs-toggle="tooltip"
+                                   data-bs-placement="bottom"
+                                   th:title="${enemigo.nombre} + ' | Vida: ' + ${enemigo.vidaActual} + ' | Ataque: ' + ${enemigo.ataque} ">
+
+                          </div>
                       </div>
+
                   </div>
 
-                  <div class="d-flex flex-row gap-3">
-                      <div th:each="enemigo :${enemigos}"
-                      >
-                          <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}">
+                  <div class="d-flex flex-column">
+                      <h4>Recompensas del Nivel</h4>
+                      <div class="d-flex flex-row justify-content-center gap-3">
+                          <div th:each="objeto: ${objetos}"
+                               class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
+                               data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                               th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+                               tabindex="0"
+                          >
+                              <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+                              <span class="slot-qty" th:text="${objeto.cantidad}"></span>
+                          </div>
                       </div>
+
                   </div>
-
-
 
 
               </div>
@@ -56,12 +68,13 @@
 
       </div>
 
-     <div class="row">
+     <div class="d-flex flex-row">
+
          <div class="col mt-3">
              <a th:href="@{/home}" class="btn btn-primary px-4 py-3 fs-2">Home</a>
          </div>
 
-         <div class="col mt-3">
+         <div class="d-flex col mt-3 justify-content-end">
 
              <a th:href="@{/combate}" class="btn btn-primary px-4 py-3 fs-2">Combate</a>
 
@@ -80,19 +93,19 @@
   <script>
 
       function seleccionarNivel(botonClickeado) {
-     // Remover la clase 'active' de todos los botones de nivel
+
      const botonesNivel = document.querySelectorAll('.nivel-btn');
      botonesNivel.forEach(boton => {
          boton.classList.remove('active');
      });
 
-     // Agregar la clase 'active' al botón que fue clickeado
+
      botonClickeado.classList.add('active');
 
-     // Obtener el ID del nivel del atributo data-id
+
      const nivelId = botonClickeado.dataset.id;
 
-     // Redirigir a la URL del controlador con el ID del nivel
+
      window.location.href = '/seleccion-nivel/seleccionarNivel/' + nivelId;
  }
      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
