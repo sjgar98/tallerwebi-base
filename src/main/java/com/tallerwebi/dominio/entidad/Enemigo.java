@@ -17,7 +17,7 @@ public class Enemigo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    private Integer nivel = 1;
+    private Integer nivel;
 
     private Integer vidaActual;
     private Integer vidaMaxima;

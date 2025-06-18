@@ -1,9 +1,8 @@
 package com.tallerwebi.presentacion;
 
 
-
-import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.ServicioNivel;
+import com.tallerwebi.dominio.entidad.NivelDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/seleccion-nivel")

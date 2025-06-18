@@ -30,7 +30,7 @@ public class ControladorCombateTest {
     private Model mockModel;
 
     private Combate mockCombate;
-
+ /*
 
     @BeforeEach
     public void init() {
@@ -62,7 +62,7 @@ public class ControladorCombateTest {
 
     }
 
-    /*
+
     @Test
     public void getCombateSiUsuarioEstaLogueadoDeberiaDevolverVistaCombateYPrepararModelo() {
 

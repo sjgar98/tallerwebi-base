@@ -1,0 +1,16 @@
+.radio-label {
+      border: 2px solid transparent;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .form-check-input:checked + .radio-label {
+      border-color: #0d6efd;
+      background-color: #e7f1ff;
+    }
+
+    .form-check-input {
+      display: none;
+    }
