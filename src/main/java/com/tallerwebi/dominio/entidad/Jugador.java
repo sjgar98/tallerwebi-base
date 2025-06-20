@@ -19,7 +19,7 @@ public class Jugador {
     private Usuario usuario;
     // Base Stats
     private String nombre;
-    private Integer nivel = 1;
+    private Integer nivel = 15;
     private Integer expActual = 0;
     private Integer expSigNiv = 100;
     private Long dinero = 0L;
