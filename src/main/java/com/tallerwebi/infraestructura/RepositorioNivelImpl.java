@@ -73,8 +73,10 @@ public class RepositorioNivelImpl implements RepositorioNivel {
 
         objetos = session.createCriteria(NivelIntermedio.class)
                 .add(Restrictions.eq("nivel.id", id))
+                .add(Restrictions.isNotNull("objeto"))
                 .setProjection(Projections.property("objeto"))
                 .list();
+
 
         return objetos;
     }
@@ -86,8 +88,10 @@ public class RepositorioNivelImpl implements RepositorioNivel {
 
         enemigos = session.createCriteria(NivelIntermedio.class)
                 .add(Restrictions.eq("nivel.id", id))
+                .add(Restrictions.isNotNull("enemigo"))
                 .setProjection(Projections.property("enemigo"))
                 .list();
+
 
         return enemigos;
     }

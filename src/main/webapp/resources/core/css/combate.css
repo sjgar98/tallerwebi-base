@@ -1,0 +1,84 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, rgba(28, 28, 28, 0.85), rgba(28, 28, 28, 0.95)),
+              url('imagenes/fondo-combate.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: 'Cinzel', serif;
+  color: #D4AF37; /* Dorado viejo para texto */
+}
+
+.combat-panel-enemigo {
+  background-color: #2E2E2E; /* gris hierro */
+  padding: 24px;
+  border: 2px solid #A2834C; /* dorado quemado */
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  color: #E0D6B9; /* texto claro pero no blanco puro */
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: 'Cinzel', serif;
+}
+
+
+.combat-panel {
+  background-color: rgba(106, 27, 27, 0.9); /* rojo sangre */
+  padding: 20px;
+  border: 2px solid #D4AF37;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(230, 81, 0, 0.5); /* brillo naranja fuego */
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.boton-objeto {
+  background-color: #B71C1C;
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+  padding: 12px 24px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.boton-objeto:hover {
+  background-color: #E65100;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #E65100;
+}
+
+.input-accion{
+ background-color: #B71C1C;
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+  padding: 12px 24px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+
+
+
+.radio-label {
+      border: 2px solid transparent;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .form-check-input:checked + .radio-label {
+      border-color: #6A1B1B;
+      background-color: #E65100;
+    }
+
+    .form-check-input {
+      display: none;
+    }

@@ -162,4 +162,65 @@ public class ServicioJugadorImpl implements ServicioJugador {
         Jugador jugadorActual = this.getJugadorActual(userId);
         jugadorActual.setDinero(jugadorActual.getDinero() + oro);
     }
+
+    @Override
+    public void sacarObjetosAlJugador(Objeto objetoAUsar, Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+
+
+        List<ObjetoInventario> objetosJugador = jugadorActual.getObjetos();
+
+        for(int i = 0; i < objetosJugador.size();i++){
+            if(objetosJugador.get(i).getObjeto().equals(objetoAUsar)){
+
+
+                if (objetosJugador.get(i).getCantidad() - 1 == 0){
+                    objetosJugador.remove(i);
+                } else{
+                    objetosJugador.get(i).setCantidad(objetosJugador.get(i).getCantidad() - 1);
+                }
+            }
+        }
+
+        jugadorActual.setObjetos(objetosJugador);
+
+
+
+        this.repositorioJugador.modificar(jugadorActual);
+
+    }
+
+    @Override
+    public List<ObjetoInventario> getObjetosConsumibles(Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+        List<ObjetoInventario> objetos = jugadorActual.getObjetos();
+        List<ObjetoInventario> consumibles = new java.util.ArrayList<>();
+        for (int i = 0; i < objetos.size(); i++){
+            if (objetos.get(i).getObjeto().getTipo().getNombre().equals("Consumible")){
+                consumibles.add(objetos.get(i));
+            }
+        }
+
+        return consumibles;
+    }
+
+    @Override
+    public void subirDeNivel(Integer experiencia, Long userId) {
+        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
+
+        recibirExperiencia(jugadorActual, experiencia);
+
+        this.repositorioJugador.modificar(jugadorActual);
+    }
+
+    private void recibirExperiencia(Jugador jugador, Integer experiencia) {
+        jugador.setExpActual(jugador.getExpActual() + experiencia);
+        while (jugador.getExpActual() >= jugador.getExpSigNiv()) {
+            jugador.setExpActual(jugador.getExpActual() - jugador.getExpSigNiv());
+            jugador.setNivel(jugador.getNivel() + 1);
+            jugador.setAtaque(jugador.getAtaque() + 1);
+            jugador.setDefensa(jugador.getDefensa() + 1);
+            jugador.setExpSigNiv((int)(100 * Math.pow(jugador.getNivel(), 1.5)));
+        }
+    }
 }

@@ -19,7 +19,9 @@ public class Jugador {
     private Usuario usuario;
     // Base Stats
     private String nombre;
-    private Integer nivel = 1;
+    private Integer nivel = 15;
+    private Integer expActual = 0;
+    private Integer expSigNiv = 100;
     private Long dinero = 0L;
     // Combat Stats
     private Integer vidaActual = 200;
@@ -31,14 +33,6 @@ public class Jugador {
     @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ObjetoInventario> objetos = new java.util.ArrayList<>();
 
-    public Jugador(double v) {
-    }
-
-    public Jugador() {
-
-    }
-
-
     public boolean puedeComprar(Long precio) {
         return dinero >= precio;
     }
@@ -49,9 +43,5 @@ public class Jugador {
         } else {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
-    }
-
-    public void agregarObjeto(ObjetoInventario objeto) {
-        objetos.add(objeto);
     }
 }
