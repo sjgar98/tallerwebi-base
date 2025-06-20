@@ -3,14 +3,16 @@
 <head>
     <title>Tienda</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/tienda.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
     <link rel="stylesheet" th:href="@{/css/inventario.css}" />
+    <link rel="stylesheet" th:href="@{/css/tienda.css}" />
 </head>
 <body>
 <div class="container">
     <h1>Tienda del Juego</h1>
 
-    <h2>Saldo actual: <span th:text="'$' + ${saldo}">500</span></h2>
+    <h2>Saldo actual: <span th:text="${saldo} + 'g'">500</span></h2>
 
     <p th:if="${mensaje}" th:text="${mensaje}" style="color: green;"></p>
 
@@ -19,11 +21,11 @@
     <div class="grid">
         <div class="producto" th:each="producto : ${productos}">
             <div class="img-wrapper">
-                <img th:src="@{${producto.rutaImagen}}" alt="Imagen del producto">
+                <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${producto.imagenSrc})}" alt="Imagen del producto">
             </div>
             <h3 th:text="${producto.nombre}">Nombre</h3>
-            <p>Precio: <span class="precio" th:text="'$' + ${producto.precio}">0.00</span></p>
-            <a th:href="@{/comprar(nombreProducto=${producto.nombre})}" class="btn">Comprar</a>
+            <p>Precio: <span class="precio" th:text="${producto.valor} + 'g'">0.00</span></p>
+            <a th:href="@{/tienda/comprar(objetoId=${producto.id})}" class="btn">Comprar</a>
         </div>
     </div>
 
@@ -33,7 +35,7 @@
 
     <div class="panel-inventario">
         <a th:each="objeto: ${inventario}"
-           th:href="@{/vender(objetoId=${objeto.id})}"
+           th:href="@{/tienda/vender(objetoInventarioId=${objeto.id})}"
            class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
            th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
@@ -44,8 +46,6 @@
         </a>
         <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="slot slot-empty"></div>
     </div>
-
-</div>
 
 </div>
 

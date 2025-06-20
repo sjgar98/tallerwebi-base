@@ -4,11 +4,11 @@ INSERT INTO TipoObjeto(id, nombre) VALUES (3, 'Accesorio');
 INSERT INTO TipoObjeto(id, nombre) VALUES (4, 'Consumible');
 INSERT INTO TipoObjeto(id, nombre) VALUES (5, 'Basura');
 
-INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, consumible, recuperacionVida) VALUES (1, 'Pocion de Curacion Menor', 'Recupera <strong>25%</strong> vida', 4, 1, 120, 'potion-1.jpg', TRUE, 0.25);
-INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, consumible, recuperacionVida) VALUES (2, 'Pocion de Curacion', 'Recupera <strong>60%</strong> vida', 4, 2, 150, 'potion-2.jpg', TRUE, 0.6);
-INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, consumible, recuperacionVida) VALUES (3, 'Pocion de Curacion Mayor', 'Recupera <strong>100%</strong> vida', 4, 3, 300, 'potion-3.jpg', TRUE, 1);
-
-INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, valor, imagenSrc, equipable, ataque) VALUES (4, 'Daga', 'Ataque: 2', 1, 1, 1000, 'daga.jpg', TRUE, 2);
+INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, comprable, imagenSrc, consumible, recuperacionVida) VALUES (1, 'Pocion de Curacion Menor', 'Recupera <strong>25%</strong> vida', 4, 1, 3, 100, TRUE, 'potion-1.jpg', TRUE, 0.25);
+INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, comprable, imagenSrc, consumible, recuperacionVida) VALUES (2, 'Pocion de Curacion', 'Recupera <strong>60%</strong> vida', 4, 2, 3, 200, TRUE, 'potion-2.jpg', TRUE, 0.6);
+INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, comprable, imagenSrc, consumible, recuperacionVida) VALUES (3, 'Pocion de Curacion Mayor', 'Recupera <strong>100%</strong> vida', 4, 3, 3, 500, TRUE, 'potion-3.jpg', TRUE, 1);
+INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, comprable, imagenSrc, equipable, ataque) VALUES (4, 'Daga', 'Ataque: <strong>2</strong>', 1, 1, 1, 1000, TRUE, 'daga.jpg', TRUE, 2);
+INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, comprable, imagenSrc, equipable, ataque) VALUES (5, 'Espada', 'Ataque: <strong>6</strong>', 1, 1, 1, 4000, FALSE, 'espada.jpg', TRUE, 6);
 
 INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (1,1,3,'Mazmorra', FALSE);
 INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (2,2,5,'Bosque', FALSE);

@@ -33,14 +33,6 @@ public class Jugador {
     @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ObjetoInventario> objetos = new java.util.ArrayList<>();
 
-    public Jugador(double v) {
-    }
-
-    public Jugador() {
-
-    }
-
-
     public boolean puedeComprar(Long precio) {
         return dinero >= precio;
     }
@@ -51,25 +43,5 @@ public class Jugador {
         } else {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
-    }
-
-    public void agregarObjeto(ObjetoInventario objeto) {
-        objetos.add(objeto);
-    }
-
-    public void recibirExperiencia(Integer experiencia){
-        this.expActual += experiencia;
-
-        while (expActual >= expSigNiv) {
-            expActual -= expSigNiv;
-            nivel += 1;
-            ataque+= 1;
-            defensa+=1;
-            expSigNiv = calcularExpProximoNivel(nivel);
-        }
-    }
-
-    private Integer calcularExpProximoNivel(Integer nivel) {
-        return (int)(100 * Math.pow(nivel, 1.5));
     }
 }
