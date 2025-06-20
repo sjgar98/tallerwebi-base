@@ -35,7 +35,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
     @Override
     public void crearNuevoJugador(Long userId, String nombre) {
         Usuario usuario = this.repositorioUsuario.buscarPorId(userId);
-        Jugador nuevoJugador = new Jugador().setUsuario(usuario).setNombre(nombre);
+        Jugador nuevoJugador = new Jugador().setUsuario(usuario).setNombre(nombre).setDinero(500L);
         this.repositorioJugador.guardar(nuevoJugador);
         List<ObjetoInventario> objetosIniciales = this.repositorioObjetos.getObjetosIniciales().stream()
                 .map(o -> new ObjetoInventario().setObjeto(o).setJugador(nuevoJugador))
@@ -106,29 +106,6 @@ public class ServicioJugadorImpl implements ServicioJugador {
         }
         jugador.setDinero(jugador.getDinero() - dinero);
         repositorioJugador.modificar(jugador);
-    }
-
-    @Override
-    public void venderObjeto(Jugador jugador, Long objetoInventarioId) {
-        if (jugador.getId() == null) {
-            throw new IllegalStateException("Jugador no persistido");
-        }
-
-        // Obtener ObjetoInventario
-        ObjetoInventario oi = (ObjetoInventario) this.sessionFactory.getCurrentSession()
-                .get(ObjetoInventario.class, objetoInventarioId);
-
-        if (oi == null || !oi.getJugador().getId().equals(jugador.getId())) {
-            throw new IllegalArgumentException("Objeto no pertenece al jugador");
-        }
-
-        // Acreditar mitad del valor del objeto
-        Long ganancia = oi.getObjeto().getValor() / 2;
-        jugador.setDinero(jugador.getDinero() + ganancia);
-
-        // Remover de la colección y borrar
-        jugador.getObjetos().remove(oi);
-        this.sessionFactory.getCurrentSession().delete(oi);
     }
 
     @Override

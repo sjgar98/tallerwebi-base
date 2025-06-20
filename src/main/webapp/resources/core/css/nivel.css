@@ -2,7 +2,7 @@ body {
 margin: 0;
   padding: 0;
   background: linear-gradient(to right, rgba(26, 38, 57, 0.8), rgba(26, 38, 57, 0.8)),
-              url('imagenes/papel-antiguo-textura2.jpg');
+              url('/css/fondos/papel-antiguo-textura2.jpg');
   color: #BFA76F;
   font-family: 'Cinzel', serif;
   background-size: cover;

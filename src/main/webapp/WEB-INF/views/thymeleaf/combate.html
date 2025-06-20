@@ -22,7 +22,7 @@
 
                 <div class="d-flex flex-column bg-dark rounded p-2">
 
-                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${url})}" th:attr="alt=${jugador.nombre}">
+                    <img th:src="@{/img/personaje.png}" th:attr="alt=${jugador.nombre}">
 
                     <div>
                         <span th:text="${jugador.nombre}"></span>
@@ -42,7 +42,7 @@
 
                         <input class="form-check-input" type="radio" name="enemigoIndex" th:id="'enemigo-' + ${iterStat.index}" th:value="${iterStat.index}" hidden>
                         <label class="radio-label" th:for="'enemigo-' + ${iterStat.index}">
-                            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}">
+                            <img th:src="@{/img/enemigos/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}">
                         </label>
 
                         <div>
