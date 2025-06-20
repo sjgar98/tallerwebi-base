@@ -1,0 +1,71 @@
+body {
+  margin: 0;
+  padding: 0;
+background-color: #1E1A14;
+  color: white;
+  width: 100%;
+  height: 50em;
+}
+
+
+.slot {
+    height: 60px;
+    width: 60px;
+    border: 2px solid black;
+    box-sizing: content-box;
+    position: relative;
+    user-select: none;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+
+.slot:not(.slot-empty) {
+    cursor: pointer;
+}
+
+.slot-tooltip {
+    text-align: left;
+}
+.slot-tooltip .slot-tooltip__nombre {
+    color: gold;
+    font-size: 1.25em;
+    margin-bottom: 0;
+}
+.slot-tooltip .slot-tooltip__tipo {
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__descripcion {
+    color: lightgray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__valor {
+    text-align: right;
+    color: gold;
+    font-weight: bold;
+}
+
+.slot-qty {
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    color: white;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-weight: bold;
+}
+
+
+.recompensa-panel {
+  background-color: #7C5E2C;
+  color: #FFD700;
+  border: 2px solid #D4AF37;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  font-family: 'Cinzel', serif;
+  text-align: center;
+}
+
