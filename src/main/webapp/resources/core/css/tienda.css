@@ -3,6 +3,11 @@ body {
     background-color: #121212;
 }
 
+body {
+    background: url("/img/fondos/tienda.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
 .container {
     max-width: 1200px;
     margin: auto;
