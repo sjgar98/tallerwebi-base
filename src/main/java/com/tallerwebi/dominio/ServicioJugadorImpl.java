@@ -208,8 +208,19 @@ public class ServicioJugadorImpl implements ServicioJugador {
     public void subirDeNivel(Integer experiencia, Long userId) {
         Jugador jugadorActual = this.repositorioJugador.buscar(userId);
 
-        jugadorActual.recibirExperiencia(experiencia);
+        recibirExperiencia(jugadorActual, experiencia);
 
         this.repositorioJugador.modificar(jugadorActual);
+    }
+
+    private void recibirExperiencia(Jugador jugador, Integer experiencia) {
+        jugador.setExpActual(jugador.getExpActual() + experiencia);
+        while (jugador.getExpActual() >= jugador.getExpSigNiv()) {
+            jugador.setExpActual(jugador.getExpActual() - jugador.getExpSigNiv());
+            jugador.setNivel(jugador.getNivel() + 1);
+            jugador.setAtaque(jugador.getAtaque() + 1);
+            jugador.setDefensa(jugador.getDefensa() + 1);
+            jugador.setExpSigNiv((int)(100 * Math.pow(jugador.getNivel(), 1.5)));
+        }
     }
 }
