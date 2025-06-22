@@ -21,8 +21,6 @@ INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, sele
 INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (9,18,20,'Desierto', FALSE);
 INSERT INTO Nivel(id,nivelMinimoPersonaje, nivelMaximoEnemigo, descripcion, seleccionado) VALUES (10,20,25,'Fortaleza', FALSE);
 
-
-
 INSERT INTO Enemigo(id, nombre, nivel, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (1,'Slime', 1, 75, 75, 5, 5,'Slime.jpg');
 INSERT INTO Enemigo(id, nombre, nivel, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (2,'Esqueleto', 2, 115, 115, 7, 5,'esqueleto.png');
 INSERT INTO Enemigo(id, nombre, nivel, vidaActual, vidaMaxima, ataque, defensa,imagenSrc) VALUES (3,'Bandido',3, 120, 120, 8, 6,'bandido.png');

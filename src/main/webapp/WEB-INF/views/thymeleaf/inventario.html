@@ -15,22 +15,44 @@
 
 </head>
 <body>
-<main role="main" class="container layout-inventario">
-    <div class="panel-equipo"></div>
-    <div class="panel-stats"></div>
-    <div class="panel-inventario">
-        <div th:each="objeto: ${objetos}"
-             class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
-             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-             th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
-             tabindex="0"
-        >
-            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
-            <span class="slot-qty" th:text="${objeto.cantidad}"></span>
+<main role="main" class="container-fluid d-flex h-100 py-0 align-items-center">
+    <div class="row flex-grow-1">
+        <div class="col-3 ps-0">
+            <div class="panel panel-floating-bottom text-white">
+                <div class="panel-content">
+                    <div class="d-flex flex-column text-center">
+                        <strong>Ataque</strong>
+                        <span th:text="${jugador.ataque}"></span>
+                    </div>
+                    <div class="d-flex flex-column text-center">
+                        <strong>Defensa</strong>
+                        <span th:text="${jugador.defensa}"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="slot slot-empty"></div>
+        <div class="col-4 offset-5 pe-0">
+            <div class="panel panel-floating-bottom panel-flipped">
+                <div class="panel-content">
+                    <div class="inventario">
+                        <div th:each="objeto: ${objetos}"
+                             class="inventario-slot" th:classappend="${'rango-'+objeto.objeto.rango}"
+                             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                             th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+                             tabindex="0"
+                        >
+                            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+                            <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
+                        </div>
+                        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="inventario-slot inventario-slot__empty"></div>
+                    </div>
+                    <div class="text-gold text-center fw-bold" th:text="${jugador.dinero} + 'g'"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
+<a th:href="@{/home}" class="btn btn-primary btn-volver px-4 py-3 fs-2">Volver</a>
 
 <script type="text/javascript" th:src="@{webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
