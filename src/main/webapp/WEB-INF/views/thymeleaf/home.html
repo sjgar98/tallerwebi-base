@@ -15,73 +15,73 @@
 
   </head>
   <body>
-    <main role="main" class="container d-flex flex-column gap-5 h-100">
+    <main role="main" class="container-fluid d-flex h-100">
       <div class="row flex-grow-1">
-        <div class="col-4">
-          <div class="container panel-anuncios h-100 py-5">
-            <div class="row mb-3">
-              <div class="col-12">
-                <h1>Anuncios</h1>
-              </div>
-            </div>
-            <div class="row mb-3" th:each="anuncio: ${anuncios}">
-              <div class="col-12">
-                <h3 th:text="${anuncio.title}"></h3>
+        <div class="col-3 ps-0">
+          <div class="panel panel-floating-bottom text-white">
+            <div class="panel-content">
+              <h3 class="text-center">Anuncios</h3>
+              <div th:each="anuncio: ${anuncios}">
+                <h4 th:text="${anuncio.title}"></h4>
                 <div th:text="${anuncio.content}"></div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-4"></div>
-        <div class="col-4">
-          <div class="container panel-estadisticas d-flex flex-column h-100 py-5">
-            <div>
+        <div class="col-6 d-flex flex-column justify-content-around align-items-center h-100 home-options">
+          <a th:href="@{/seleccion-nivel}" class="btn btn-primary px-4 py-3 fs-2">Campaña</a>
+          <a th:href="@{/inventario}" class="btn btn-primary px-4 py-3 fs-2">Inventario</a>
+          <a th:href="@{/tienda}" class="btn btn-primary px-4 py-3 fs-2">Tienda</a>
+          <a th:href="@{/ajustes}" class="btn btn-primary px-4 py-3 fs-2">Opciones</a>
+        </div>
+        <div class="col-3 pe-0">
+          <div class="panel panel-floating-bottom panel-flipped text-white">
+            <div class="panel-content gap-1">
               <h4 th:text="${jugador.nombre}"></h4>
-            </div>
-            <div>
-              <strong>Nivel:</strong>
-              <span th:text="${jugador.nivel}"></span>
-            </div>
-            <div>
-              <strong>Experiencia Actual:</strong>
-              <span th:text="${jugador.expActual}"></span>
-            </div>
-            <div>
-              <strong>Siguiente Nivel:</strong>
-              <span th:text="${jugador.expSigNiv}"></span>
-            </div>
-            <div>
-              <strong>Vida:</strong>
-              <span th:text="${jugador.vidaMaxima}"></span>
-            </div>
-            <div>
-              <strong>Ataque:</strong>
-              <span th:text="${jugador.ataque}"></span>
-            </div>
-            <div>
-              <strong>Defensa:</strong>
-              <span th:text="${jugador.defensa}"></span>
-            </div>
-            <div>
-              <strong>Oro:</strong>
-              <span th:text="${jugador.dinero}"></span>
+              <table>
+                <tr>
+                  <td>
+                    <strong>Nivel:</strong>
+                  </td>
+                  <td>
+                    <span th:text="${jugador.nivel} + ' (Exp: ' + ${jugador.expActual} + ' / ' + ${jugador.expSigNiv} + ')'"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Vida:</strong>
+                  </td>
+                  <td>
+                    <span th:text="${jugador.vidaMaxima}"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Ataque:</strong>
+                  </td>
+                  <td>
+                    <span th:text="${jugador.ataque}"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Defensa:</strong>
+                  </td>
+                  <td>
+                    <span th:text="${jugador.defensa}"></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Oro:</strong>
+                  </td>
+                  <td>
+                    <span th:text="${jugador.dinero} +'g'"></span>
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row justify-content-around">
-        <div class="col-auto">
-          <a th:href="@{/seleccion-nivel}" class="btn btn-primary px-4 py-3 fs-2">Campaña</a>
-        </div>
-        <div class="col-auto">
-          <a th:href="@{/inventario}" class="btn btn-primary px-4 py-3 fs-2">Inventario</a>
-        </div>
-        <div class="col-auto">
-          <a th:href="@{/tienda}" class="btn btn-primary px-4 py-3 fs-2">Tienda</a>
-        </div>
-        <div class="col-auto">
-          <a th:href="@{/ajustes}" class="btn btn-primary px-4 py-3 fs-2">Opciones</a>
         </div>
       </div>
     </main>

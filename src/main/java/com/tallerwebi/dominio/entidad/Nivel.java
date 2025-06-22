@@ -29,9 +29,6 @@ public class Nivel {
     private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
 
 
-
-
-
     //Constructor
     public Nivel(Long id, Integer nivel_min_personaje, Integer nivelMaximoEnemigo, String desc, Boolean selec){
 
