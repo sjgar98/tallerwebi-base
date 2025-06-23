@@ -5,9 +5,12 @@ import com.tallerwebi.dominio.ServicioTienda;
 import com.tallerwebi.dominio.entidad.Jugador;
 import com.tallerwebi.dominio.entidad.Objeto;
 import com.tallerwebi.dominio.entidad.ObjetoInventario;
+import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -26,6 +29,7 @@ public class ControladorTiendaTest {
     private Jugador jugadorMock;
     private List<Objeto> productosDisponiblesMock;
     private List<ObjetoInventario> objetosInventarioMock;
+    private RedirectAttributes redirectAttributesMock;
 
     @BeforeEach
     public void init() {
@@ -42,6 +46,7 @@ public class ControladorTiendaTest {
         servicioTiendaMock = mock(ServicioTienda.class);
         servicioJugadorMock = mock(ServicioJugador.class);
         controlador = new ControladorTienda(servicioTiendaMock, servicioJugadorMock);
+        redirectAttributesMock = mock(RedirectAttributes.class);
     }
 
     @Test
@@ -78,7 +83,7 @@ public class ControladorTiendaTest {
         thenDebieraRedirigirATiendaAlComprar(resultado);
     }
     private ModelAndView whenComproProducto() {
-        return controlador.comprarProducto(1L, requestMock);
+        return controlador.comprarProducto(1L, requestMock, redirectAttributesMock);
     }
     private void thenDebieraRedirigirATiendaAlComprar(ModelAndView resultado) {
         verify(servicioJugadorMock).removerDinero(jugadorMock, 100L);
@@ -98,7 +103,7 @@ public class ControladorTiendaTest {
         when(servicioJugadorMock.getObjetoInventarioPorId(1L)).thenReturn(objetosInventarioMock.get(0));
     }
     private ModelAndView whenVendoProducto() {
-        return controlador.venderObjeto(1L, requestMock);
+        return controlador.venderObjeto(1L, requestMock, redirectAttributesMock);
     }
     private void thenDebieraRedirigirATiendaAlVender(ModelAndView resultado) {
         verify(servicioJugadorMock).removerObjeto(jugadorMock, jugadorMock.getObjetos().get(0));
@@ -112,4 +117,54 @@ public class ControladorTiendaTest {
         ModelAndView resultado = controlador.mostrarTienda(requestMock);
         assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
+
+    @Test
+    public void noDebePermitirComprarSiSaldoInsuficiente() {
+        givenUsuarioEstaLoggeado();
+        givenHayObjetosComprables();
+
+        // Simular que no hay saldo suficiente
+        doThrow(new DineroInsuficienteException("Saldo insuficiente"))
+                .when(servicioJugadorMock)
+                .removerDinero(any(), anyLong());
+
+
+        ModelAndView resultado = controlador.comprarProducto(1L, requestMock, redirectAttributesMock);
+
+        // Verificar que NO se agregó el objeto porque falló el removerDinero
+        verify(servicioJugadorMock, never()).agregarObjeto(any(), any());
+        verify(redirectAttributesMock).addFlashAttribute("error", "No tienes suficiente dinero para comprar este objeto.");
+
+        // Confirmar que redirige a tienda igual (esto puede variar según tu diseño)
+        assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/tienda"));
+    }
+
+
+    @Test
+    public void noDebePermitirVenderObjetoInexistente() {
+        givenUsuarioEstaLoggeado();
+        when(servicioJugadorMock.getObjetoInventarioPorId(1L)).thenReturn(null);
+
+        ModelAndView resultado = controlador.venderObjeto(1L, requestMock, redirectAttributesMock);
+
+        verify(servicioJugadorMock, never()).removerObjeto(any(), any());
+        verify(servicioJugadorMock, never()).agregarDinero(any(), anyLong());
+        assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/tienda"));
+    }
+
+    @Test
+    public void debeMostrarTiendaVaciaSiNoHayProductos() {
+        givenUsuarioEstaLoggeado();
+        when(servicioTiendaMock.obtenerProductosDisponibles()).thenReturn(List.of());
+
+        ModelAndView resultado = controlador.mostrarTienda(requestMock);
+
+        assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
+        assertThat(((List<?>) resultado.getModel().get("productos")).size(), equalTo(0));
+    }
+
+
+
+
+
 }

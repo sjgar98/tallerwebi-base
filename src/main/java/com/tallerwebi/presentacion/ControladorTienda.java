@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,7 +45,7 @@ public class ControladorTienda {
     }
 
     @GetMapping("comprar")
-    public ModelAndView comprarProducto(@RequestParam Long objetoId, HttpServletRequest request) {
+    public ModelAndView comprarProducto(@RequestParam Long objetoId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         var userId = request.getSession().getAttribute("userId");
         if (userId != null) {
             try {
@@ -53,7 +54,9 @@ public class ControladorTienda {
                 servicioJugador.removerDinero(jugador, objetoAComprar.getValor());
                 servicioJugador.agregarObjeto(jugador, objetoAComprar);
             } catch (DineroInsuficienteException e) {
+                redirectAttributes.addFlashAttribute("error", "No tienes suficiente dinero para comprar este objeto.");
             } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Ocurrió un error inesperado.");
             }
             return new ModelAndView("redirect:/tienda");
         } else {
@@ -62,7 +65,7 @@ public class ControladorTienda {
     }
 
     @GetMapping("vender")
-    public ModelAndView venderObjeto(@RequestParam Long objetoInventarioId, HttpServletRequest request) {
+    public ModelAndView venderObjeto(@RequestParam Long objetoInventarioId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         var userId = request.getSession().getAttribute("userId");
         if (userId != null) {
             try {
@@ -72,7 +75,9 @@ public class ControladorTienda {
                 servicioJugador.removerObjeto(jugador, objetoAVender);
                 servicioJugador.agregarDinero(jugador, oroARecibir);
             } catch (DineroInsuficienteException e) {
+                redirectAttributes.addFlashAttribute("error", "No tienes suficiente dinero para vender este objeto.");
             } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Ocurrió un error inesperado.");
             }
             return new ModelAndView("redirect:/tienda");
         } else {
