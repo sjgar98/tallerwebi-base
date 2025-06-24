@@ -1,0 +1,77 @@
+/* Contenedor principal */
+.container-xl {
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Título principal */
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    font-weight: bold;
+    font-size: 2.5rem;
+    color: #0d6efd;
+}
+
+/* Secciones de título */
+.fw-bold {
+    display: block;
+    font-size: 1.3rem;
+    margin-top: 20px;
+    color: #212529;
+}
+
+/* Rango de volumen */
+input[type="range"] {
+    accent-color: #0d6efd;
+}
+
+/* Selector de color */
+input[type="color"] {
+    width: 100%;
+    height: 3rem;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+}
+
+/* Switch pantalla completa */
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+/* Botones personalizados */
+button.btn {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+button.btn-info {
+    background-color: #0dcaf0;
+    border-color: #0dcaf0;
+    color: #fff;
+}
+
+button.btn-info:hover {
+    background-color: #31d2f2;
+    border-color: #25c8eb;
+}
+
+button.btn-danger:hover {
+    background-color: #dc3545;
+}
+
+button.btn-dark:hover {
+    background-color: #343a40;
+}
+
+/* Select dropdowns */
+select.form-select {
+    border-radius: 8px;
+}
+
+/* Formulario */
+form {
+    padding-bottom: 20px;
+}

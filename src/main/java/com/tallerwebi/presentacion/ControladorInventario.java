@@ -31,6 +31,7 @@ public class ControladorInventario {
             Jugador jugadorActual = this.servicioJugador.getJugadorActual((Long) userId);
             List<ObjetoInventario> objetosJugadorActual = this.servicioJugador.getObjetosJugador(jugadorActual);
             ModelMap model = new ModelMap();
+            model.addAttribute("jugador", jugadorActual);
             model.addAttribute("objetos", objetosJugadorActual);
             model.addAttribute("emptySlots", Constants.MAX_INVENTORY_SLOTS - objetosJugadorActual.size());
             return new ModelAndView("inventario", model);
