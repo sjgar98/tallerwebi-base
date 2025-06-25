@@ -20,11 +20,14 @@ public class EnemigoDTO {
 
     private String imagenSrc;
 
+    private Long idEfecto;
+
+
     public EnemigoDTO(){
 
     }
 
-    public EnemigoDTO(Long id, String nombre,Integer nivel, Integer vidaActual, Integer vidaMaxima, Integer ataque, Integer defensa, String img) {
+    public EnemigoDTO(Long id, String nombre,Integer nivel, Integer vidaActual, Integer vidaMaxima, Integer ataque, Integer defensa, String img, Long idEfecto) {
 
         this.id = id;
         this.nivel = nivel;
@@ -34,5 +37,6 @@ public class EnemigoDTO {
         this.ataque = ataque;
         this.defensa = defensa;
         this.imagenSrc = img;
+        this.idEfecto = idEfecto;
     }
 }

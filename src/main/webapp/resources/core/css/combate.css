@@ -82,3 +82,20 @@ body {
     .form-check-input {
       display: none;
     }
+
+       .contenedor-scroll {
+  width: 50%;
+  height: 10em;
+  overflow-y: scroll;
+  border: 1px solid #ddd;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  scrollbar-width: none;
+ -ms-overflow-style: none;
+  text-align: justify;
+}
+
+.contenedor-scroll::-webkit-scrollbar {
+ display: none;
+}

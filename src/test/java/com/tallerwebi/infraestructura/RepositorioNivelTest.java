@@ -3,9 +3,11 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
+
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,193 +20,188 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
-
 
 @ExtendWith(SpringExtension.class)
 @WebAppConfiguration
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
 public class RepositorioNivelTest {
 
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Autowired
-    SessionFactory sessionFactory;
+    private RepositorioNivelImpl repositorioNivel;
 
-    @Autowired
-    RepositorioNivel repositorioNivel;
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlPedirTodosLosNivelesIntermedioDevuelvaLaListaCompleta() {
+        // Preparar datos
+        Nivel nivel1 = new Nivel();
+        nivel1.setNombre("Nivel Test");
+        sessionFactory.getCurrentSession().save(nivel1);
 
-    private Nivel nivelEsperado;
+        TipoObjeto tipoConsumible = new TipoObjeto();
+        tipoConsumible.setNombre("Consumible");
+        sessionFactory.getCurrentSession().save(tipoConsumible);
 
+        Objeto pocion = new Objeto();
+        pocion.setNombre("Poción");
+        pocion.setTipo(tipoConsumible);
+        sessionFactory.getCurrentSession().save(pocion);
 
-    private void givenCreoEntorno(){
+        NivelIntermedio ni1 = new NivelIntermedio();
+        ni1.setNivel(nivel1);
+        ni1.setObjeto(pocion);
+        sessionFactory.getCurrentSession().save(ni1);
 
-        Nivel n1 = new Nivel(1L,1,3,"Mazmorra",false);
-        Nivel n2 = new Nivel(2L,3,5,"Bosque",false);
-        Nivel n3 = new Nivel(3L,5,7,"Castillo",false);
+        NivelIntermedio ni2 = new NivelIntermedio();
+        ni2.setNivel(nivel1);
+        ni2.setObjeto(pocion);
+        sessionFactory.getCurrentSession().save(ni2);
 
-        TipoObjeto tipo1 = new TipoObjeto();
-        tipo1.setId(1L); tipo1.setNombre("Curacion");
-        sessionFactory.getCurrentSession().save(tipo1);
+        // Test
+        List<NivelIntermedio> listaObtenida = repositorioNivel.devolverTodosLosNivelesIntermedio();
 
-        Objeto o1 = new Objeto();
-        o1.setId(1L);
-        o1.setNombre("Pocion Curacion");
-        o1.setDescripcion("Cura un 25%");
-        o1.setTipo(tipo1);
-        o1.setRango(1);
-        o1.setValor(500L);
-        o1.setImagenSrc("potion-1");
-
-        Objeto o2 = new Objeto();
-        o2.setId(2L);
-        o2.setNombre("Pocion Curacion Mayor");
-        o2.setDescripcion("Cura un 50%");
-        o2.setTipo(tipo1);
-        o2.setRango(2);
-        o2.setValor(750L);
-        o2.setImagenSrc("potion-2");
-
-        Objeto o3 = new Objeto();
-        o3.setId(3L);
-        o3.setNombre("Pocion Curacion Legendarioa");
-        o3.setDescripcion("Cura un 100%");
-        o3.setTipo(tipo1);
-        o3.setRango(4);
-        o3.setValor(1500L);
-        o3.setImagenSrc("potion-3");
-
-        Enemigo e1 = new Enemigo();
-        e1.setId(1L);
-        e1.setNombre("Slime");
-        e1.setVidaActual(75);
-        e1.setVidaMaxima(75);
-        e1.setAtaque(5);
-        e1.setDefensa(5);
-        e1.setImagenSrc("Slime.png");
-
-        Enemigo e2 = new Enemigo();
-        e2.setId(2L);
-        e2.setNombre("Esqueleto");
-        e2.setVidaActual(100);
-        e2.setVidaMaxima(100);
-        e2.setAtaque(6);
-        e2.setDefensa(7);
-        e2.setImagenSrc("esqueleto.png");
-
-        Enemigo e3 = new Enemigo();
-        e3.setId(3L);
-        e3.setNombre("Bandido");
-        e3.setVidaActual(125);
-        e3.setVidaMaxima(125);
-        e3.setAtaque(7);
-        e3.setDefensa(10);
-        e3.setImagenSrc("bandido.png");
-
-        NivelIntermedio nivInt1= new NivelIntermedio(1L,n1,o1,e1);
-        NivelIntermedio nivInt2= new NivelIntermedio(2L,n1,o1,e1);
-        NivelIntermedio nivInt3= new NivelIntermedio(3L,n2,o2,e1);
-        NivelIntermedio nivInt4= new NivelIntermedio(4L,n2,o1,e2);
-        NivelIntermedio nivInt5= new NivelIntermedio(5L,n3,o3,e3);
-
-        sessionFactory.getCurrentSession().save(n1);
-        sessionFactory.getCurrentSession().save(n2);
-        sessionFactory.getCurrentSession().save(n3);
-        sessionFactory.getCurrentSession().save(o1);
-        sessionFactory.getCurrentSession().save(o2);
-        sessionFactory.getCurrentSession().save(o3);
-        sessionFactory.getCurrentSession().save(e1);
-        sessionFactory.getCurrentSession().save(e2);
-        sessionFactory.getCurrentSession().save(e3);
-        sessionFactory.getCurrentSession().save(nivInt1);
-        sessionFactory.getCurrentSession().save(nivInt2);
-        sessionFactory.getCurrentSession().save(nivInt3);
-        sessionFactory.getCurrentSession().save(nivInt4);
-        sessionFactory.getCurrentSession().save(nivInt5);
-
+        // Validar
+        assertThat(listaObtenida, is(not(empty())));
+        assertThat(listaObtenida, hasItems(ni1, ni2));
     }
 
-    private Nivel whenBuscoNivelPorId(Long id){
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlPedirTodosLosNivelesDevuelvaUnaListaDeNivelesUnicos() {
+        Nivel nivel1 = new Nivel();
+        nivel1.setNombre("Bosque Tenebroso");
+        sessionFactory.getCurrentSession().save(nivel1);
 
-       return  repositorioNivel.devolverNivelPorId(id);
-    }
+        Nivel nivel2 = new Nivel();
+        nivel2.setNombre("Cueva Helada");
+        sessionFactory.getCurrentSession().save(nivel2);
 
-    private List<NivelIntermedio> whenBuscoTodosLosNivelesIntermedios(){
-        return  repositorioNivel.devolverTodosLosNivelesIntermedio();
-    }
+        NivelIntermedio nivelIntermedio1 = new NivelIntermedio();
+        nivelIntermedio1.setNivel(nivel1);
+        NivelIntermedio nivelIntermedio2 = new NivelIntermedio();
+        nivelIntermedio2.setNivel(nivel2);
+        sessionFactory.getCurrentSession().save(nivelIntermedio1);
+        sessionFactory.getCurrentSession().save(nivelIntermedio2);
 
-    private  List<Nivel> whenBuscoTodosLosNiveles(){
-        return  repositorioNivel.devolverTodosLosNiveles();
-    }
+        List<Nivel> listaObtenida = repositorioNivel.devolverTodosLosNiveles();
 
-    private List<Objeto> whenBuscoTodosLosObjetosDeUnNivel(Long id){
-        return  repositorioNivel.devolverTodosLosObjetosDeUnNivel(id);
-    }
-
-    private List<Enemigo> whenBuscoTodosLosEnemigosDeUnNivel(Long id){
-        return  repositorioNivel.devolverTodosLosEnemigosDeUnNivel(id);
-    }
-
-    private void thenEncuentroNivelPorId(Nivel nivel) {
-        assertThat(nivel, is(notNullValue()));
-    }
-
-    private void thenEncuentroListaNivelesIntermedio(List<NivelIntermedio> nivelesIntermedios) {
-        assertThat(nivelesIntermedios, hasSize(5));
-    }
-    private void thenEncuentroListaNiveles(List<Nivel> niveles) {
-        assertThat(niveles, hasSize(3));
-    }
-    private void thenEncuentroTodosLosObjetosDeUnNivel(List<Objeto> objetos) {
-        Long cantidadDePocionCuracion = objetos.stream()
-                .filter(objeto -> "Pocion Curacion".equals(objeto.getNombre()))
-                .count();
-        assertThat(cantidadDePocionCuracion, equalTo(2L));
+        assertThat(listaObtenida.size(), greaterThanOrEqualTo(2));
+        assertThat(listaObtenida, hasItems(nivel1, nivel2));
     }
 
-    private void thenEncuentroTodosLosEnemigosDeUnNivel(List<Enemigo> enemigos){
-        Long cantidadDeSlimes = enemigos.stream()
-                .filter(enemigo -> "Slime".equals(enemigo.getNombre()))
-                .count();
-        assertThat(cantidadDeSlimes, equalTo(2L));
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlPedirUnNivelPorIdDevuelvaElNivelCorrecto() {
+
+        Nivel nivel = new Nivel();
+        nivel.setNombre("Nivel buscado");
+        sessionFactory.getCurrentSession().save(nivel);
+
+        NivelIntermedio nivelIntermedio1 = new NivelIntermedio();
+        nivelIntermedio1.setNivel(nivel);
+        sessionFactory.getCurrentSession().save(nivelIntermedio1);
+
+        Nivel resultado = repositorioNivel.devolverNivelPorId(nivel.getId());
+
+        assertThat(resultado, notNullValue());
+        assertThat(resultado.getId(), equalTo(nivel.getId()));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queAlPedirObjetosDeUnNivelDevuelvaLaListaDeObjetosCorrecta() {
+
+        Nivel nivel = new Nivel();
+        nivel.setNombre("Nivel Objetos");
+        sessionFactory.getCurrentSession().save(nivel);
+
+        TipoObjeto tipoConsumible = new TipoObjeto();
+        tipoConsumible.setNombre("Consumible");
+        sessionFactory.getCurrentSession().save(tipoConsumible);
+
+        TipoObjeto tipoArma = new TipoObjeto();
+        tipoArma.setNombre("Arma");
+        sessionFactory.getCurrentSession().save(tipoArma);
+
+        Objeto obj1 = new Objeto();
+        obj1.setNombre("Poción de vida");
+        obj1.setTipo(tipoConsumible);
+        obj1.setConsumible(true);
+        obj1.setRecuperacionVida(50.0);
+        sessionFactory.getCurrentSession().save(obj1);
+
+        Objeto obj2 = new Objeto();
+        obj2.setNombre("Espada de madera");
+        obj2.setTipo(tipoArma);
+        obj2.setEquipable(true);
+        sessionFactory.getCurrentSession().save(obj2);
+
+        NivelIntermedio nivelIntermedio1 = new NivelIntermedio();
+        nivelIntermedio1.setNivel(nivel);
+        nivelIntermedio1.setObjeto(obj1);
+        sessionFactory.getCurrentSession().save(nivelIntermedio1);
+
+        NivelIntermedio nivelIntermedio2 = new NivelIntermedio();
+        nivelIntermedio2.setNivel(nivel);
+        nivelIntermedio2.setObjeto(obj2);
+        sessionFactory.getCurrentSession().save(nivelIntermedio2);
+
+        List<Objeto> objetos = repositorioNivel.devolverTodosLosObjetosDeUnNivel(nivel.getId());
+
+        assertThat(objetos.size(), greaterThanOrEqualTo(2));
+        assertThat(objetos, hasItems(obj1, obj2));
     }
 
 
     @Test
     @Transactional
     @Rollback
-    void funcionesNivel(){
+    public void queAlPedirEnemigosDeUnNivelDevuelvaLaListaDeEnemigosCorrecta() {
+        Nivel nivel = new Nivel();
+        nivel.setNombre("Nivel Enemigos");
+        sessionFactory.getCurrentSession().save(nivel);
 
-        givenCreoEntorno();
+        Enemigo enemigo1 = new Enemigo();
+        enemigo1.setNombre("Goblin");
+        sessionFactory.getCurrentSession().save(enemigo1);
 
-        thenEncuentroNivelPorId(whenBuscoNivelPorId(1L));
-        thenEncuentroListaNivelesIntermedio(whenBuscoTodosLosNivelesIntermedios());
-        thenEncuentroListaNiveles(whenBuscoTodosLosNiveles());
+        Enemigo enemigo2 = new Enemigo();
+        enemigo2.setNombre("Orco");
+        sessionFactory.getCurrentSession().save(enemigo2);
+
+        NivelIntermedio nivelIntermedio1 = new NivelIntermedio();
+        nivelIntermedio1.setNivel(nivel);
+        nivelIntermedio1.setEnemigo(enemigo1);
+        sessionFactory.getCurrentSession().save(nivelIntermedio1);
+
+        NivelIntermedio nivelIntermedio2 = new NivelIntermedio();
+        nivelIntermedio2.setNivel(nivel);
+        nivelIntermedio2.setEnemigo(enemigo2);
+        sessionFactory.getCurrentSession().save(nivelIntermedio2);
+
+
+        List<Enemigo> enemigos = repositorioNivel.devolverTodosLosEnemigosDeUnNivel(nivel.getId());
+
+        assertThat(enemigos.size(), greaterThanOrEqualTo(2));
+        assertThat(enemigos, hasItems(enemigo1, enemigo2));
     }
 
-/*
     @Test
     @Transactional
     @Rollback
-    void funcionesObjeto(){
+    public void queAlPedirEnemigosDeUnNivelQueNoTieneEnemigosDevuelvaUnaListaVacia() {
+        Nivel nivel = new Nivel();
+        nivel.setNombre("Nivel Sin Enemigos");
+        sessionFactory.getCurrentSession().save(nivel);
 
-        givenCreoEntorno();
+        List<Enemigo> enemigos = repositorioNivel.devolverTodosLosEnemigosDeUnNivel(nivel.getId());
 
-        thenEncuentroTodosLosObjetosDeUnNivel(whenBuscoTodosLosObjetosDeUnNivel(1L));
+        assertThat(enemigos, is(empty()));
     }
-
-
-
-
-
-    @Test
-    @Transactional
-    @Rollback
-    void funcionesEnemigos(){
-
-        givenCreoEntorno();
-
-        thenEncuentroTodosLosEnemigosDeUnNivel(whenBuscoTodosLosEnemigosDeUnNivel(1L));
-    } */
-
-
 }

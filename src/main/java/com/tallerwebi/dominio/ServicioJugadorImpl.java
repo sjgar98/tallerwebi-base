@@ -192,6 +192,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
 
     private void recibirExperiencia(Jugador jugador, Integer experiencia) {
         jugador.setExpActual(jugador.getExpActual() + experiencia);
+
         while (jugador.getExpActual() >= jugador.getExpSigNiv()) {
             jugador.setExpActual(jugador.getExpActual() - jugador.getExpSigNiv());
             jugador.setNivel(jugador.getNivel() + 1);

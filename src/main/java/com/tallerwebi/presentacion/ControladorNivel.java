@@ -43,6 +43,10 @@ public class ControladorNivel {
 
             List<NivelDTO> nivelesDto = servicioNivel.obtenerNivelesDTO(servicioNivel.obtenerTodosLosNiveles(),null);
 
+
+            modelAndView.addObject("nivel", " ");
+            modelAndView.addObject("textoEnemigo"," ");
+            modelAndView.addObject("textoRecompensas"," ");
             modelAndView.addObject("jugador", jugadorActual);
             modelAndView.addObject("niveles", nivelesDto);
 
@@ -60,15 +64,20 @@ public class ControladorNivel {
     public ModelAndView devolverNivelSeleccionado(@PathVariable(required = false) Long opcionId, HttpServletRequest request){ // `required = false` permite que sea nulo
 
 
+
         var userId = request.getSession().getAttribute("userId");
         Jugador jugadorActual = servicioJugador.getJugadorActual((Long) userId);
 
         if(userId!= null){
+
             ModelAndView modelAndView = new ModelAndView("seleccion-nivel");
             List<NivelDTO> niveles = servicioNivel.obtenerNivelesDTO(servicioNivel.obtenerTodosLosNiveles(), opcionId);
 
             modelAndView.addObject("jugador", jugadorActual);
             modelAndView.addObject("niveles", niveles);
+            modelAndView.addObject("textoEnemigo","Enemigos a enfrentar: ");
+            modelAndView.addObject("textoRecompensas","Recompensas del Nivel: ");
+            modelAndView.addObject("nivel", servicioNivel.obtenerNivelPorId(opcionId).getDescripcion());
             modelAndView.addObject("objetos",servicioNivel.obtenerObjetosInventario(opcionId));
             modelAndView.addObject("enemigos", servicioNivel.obtenerLosEnemigosDeUnNivel(opcionId));
 
