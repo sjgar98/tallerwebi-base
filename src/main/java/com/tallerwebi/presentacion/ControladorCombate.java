@@ -44,6 +44,7 @@ public class ControladorCombate {
             servicioCombate.setCombate(request);
 
 
+            model.addAttribute("panel", "");
             model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
             model.addAttribute("jugador", servicioCombate.getJugador());
             model.addAttribute("enemigos", servicioCombate.getEnemigos());
@@ -63,7 +64,7 @@ public class ControladorCombate {
 
         servicioCombate.usarObjeto(idObjeto);
 
-
+        model.addAttribute("panel", servicioCombate.devolverTexto());
         model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
         model.addAttribute("jugador", servicioCombate.getJugador());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
@@ -72,40 +73,45 @@ public class ControladorCombate {
         return new ModelAndView("combate");
     }
     @PostMapping("/accion")
-    public ModelAndView procesarAccion(@RequestParam("enemigoIndex") int index,
+    public ModelAndView procesarAccion(@RequestParam(name = "enemigoIndex", required = false) Integer index,
                                        @RequestParam("accion") String accion,
                                        Model model, HttpServletRequest request) {
 
+        switch (accion) {
+            case "atacar":
+                if (index != null) {
+                    servicioCombate.ataqueJugador(index);
+                    servicioCombate.ataqueEnemigo();
+                }
+                break;
 
+            case "defenderse":
+                servicioCombate.defensaJugador();
+                break;
 
-        if ("atacar".equals(accion)) {
-            servicioCombate.ataqueJugador(index);
-            servicioCombate.ataqueEnemigo();
-        } else if ("defenderse".equals(accion)) {
-            servicioCombate.defensaJugador();
+            default:
+                break;
         }
 
 
-
-
-        if(servicioCombate.estaVivo().equals(false)){
+        if (!servicioCombate.estaVivo()) {
             return derrota(request);
         }
-
-        if (servicioCombate.gano().equals(true)){
+        if (servicioCombate.gano()) {
             return victoria(request);
         }
-
-
+        model.addAttribute("panel", servicioCombate.devolverTexto());
         model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
         model.addAttribute("jugador", servicioCombate.getJugador());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
         model.addAttribute("url", "personaje.png");
 
         return new ModelAndView("combate");
+
+
     }
 
-   private ModelAndView victoria(HttpServletRequest request){
+   public ModelAndView victoria(HttpServletRequest request){
 
        var userId = request.getSession().getAttribute("userId");
 
@@ -125,11 +131,11 @@ public class ControladorCombate {
 
    }
 
-    private ModelAndView derrota(HttpServletRequest request){
+    public ModelAndView derrota(HttpServletRequest request){
         var userId = request.getSession().getAttribute("userId");
 
         if (userId!=null){
-            ModelAndView mav = new ModelAndView("gameOver");
+            ModelAndView mav = new ModelAndView("derrota");
 
             return mav;
 

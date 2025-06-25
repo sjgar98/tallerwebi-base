@@ -27,8 +27,11 @@ public class Enemigo {
 
     private String imagenSrc;
 
+    private Long idEfecto;
+
     @OneToMany(mappedBy = "enemigo")
     private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
+
 
     @Override
     public String toString() {

@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +63,7 @@ public class ServicioNivelImpl implements ServicioNivel {
         List<NivelDTO> dtoList = niveles.stream()
                 .map(n -> new NivelDTO(
                         n.getId(),
+                        n.getNombre(),
                         n.getNivelMinimoPersonaje(),
                         n.getNivelMaximoEnemigo(),
                         n.getDescripcion(),
@@ -86,7 +85,8 @@ public class ServicioNivelImpl implements ServicioNivel {
                         e.getVidaMaxima(),
                         e.getAtaque(),
                         e.getDefensa(),
-                        e.getImagenSrc()
+                        e.getImagenSrc(),
+                        e.getIdEfecto()
                 ))
                 .collect(Collectors.toList());
 
@@ -119,6 +119,24 @@ public class ServicioNivelImpl implements ServicioNivel {
         repositorioNivel.devolverNivelPorId(id).setSeleccionado(true);
         this.nivelSeleccionado = repositorioNivel.devolverNivelPorId(id);
         System.out.println("Nivel seleccionado: " + repositorioNivel.devolverNivelPorId(id).getId());
+
+    }
+
+    @Override
+    public NivelDTO obtenerNivelPorId(Long id) {
+
+        Nivel nivel = repositorioNivel.devolverNivelPorId(id);
+
+        NivelDTO dto = new NivelDTO(
+                nivel.getId(),
+                nivel.getNombre(),
+                nivel.getNivelMinimoPersonaje(),
+                nivel.getNivelMaximoEnemigo(),
+                nivel.getDescripcion(),
+                id != null && nivel.getId().equals(id)
+        );
+
+        return dto;
 
     }
 
