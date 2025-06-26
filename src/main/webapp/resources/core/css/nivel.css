@@ -1,0 +1,143 @@
+body {
+margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, rgba(26, 38, 57, 0.8), rgba(26, 38, 57, 0.8)),
+              url('/css/fondos/papel-antiguo-textura2.jpg');
+  color: #BFA76F;
+ font-family: 'MedievalSharp', cursive;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.slot {
+    height: 60px;
+    width: 60px;
+    border: 2px solid black;
+    box-sizing: content-box;
+    position: relative;
+    user-select: none;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+
+.slot:not(.slot-empty) {
+    cursor: pointer;
+}
+
+.slot-tooltip {
+    text-align: left;
+}
+.slot-tooltip .slot-tooltip__nombre {
+    color: gold;
+    font-size: 1.25em;
+    margin-bottom: 0;
+}
+.slot-tooltip .slot-tooltip__tipo {
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__descripcion {
+    color: lightgray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+.slot-tooltip .slot-tooltip__valor {
+    text-align: right;
+    color: gold;
+    font-weight: bold;
+}
+
+.slot-qty {
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    color: white;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-weight: bold;
+}
+
+.rango-1 {
+    border: 2px solid green;
+}
+
+.rango-2 {
+    border: 2px solid blue;
+}
+
+.rango-3 {
+    border: 2px solid yellow;
+}
+
+.level-selector {
+      gap: 20px;
+      width: 80%;
+      max-width: 800px;
+}
+
+.boton-rpg {
+  background-color: #5D2D2D;
+  color: #BFA76F;
+  border: 2px solid #BFA76F;
+  padding: 10px 20px;
+ font-family: 'MedievalSharp', cursive;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.boton-rpg:hover {
+  background-color: #3E2C23;
+  transform: scale(1.05);
+}
+
+.level-texto {
+              font-size: 2em;
+              font-weight: bold;
+              color: #000;
+              text-shadow: 1px 1px #fff;
+}
+
+
+ .panel-medieval {
+   background-color: rgba(62, 44, 35, 0.9);
+   padding: 20px;
+   border: 2px solid #BFA76F;
+   border-radius: 8px;
+   box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+ font-family: 'MedievalSharp', cursive;
+ }
+
+ .list-group-item:first-child {
+     border-top-left-radius: inherit;
+     border-top-right-radius: inherit;
+        border-bottom-left-radius: inherit;
+                    border-bottom-right-radius: inherit;
+ }
+
+ .list-group-item+.list-group-item {
+      border-top-left-radius: inherit;
+          border-top-right-radius: inherit;
+           border-bottom-left-radius: inherit;
+               border-bottom-right-radius: inherit;
+                   border-top-width: 2px;
+ }
+
+ .boton-combate {
+   background-color: #8B0000;
+   color: #A2834C;
+   border: 2px solid #A2834C;
+   padding: 12px 24px;
+   border-radius: 6px;
+ font-family: 'MedievalSharp', cursive;
+   font-size: 1.1rem;
+   cursor: pointer;
+   transition: all 0.3s ease;
+ }
+
+ .boton-combate:hover {
+   background-color: #5C0000;
+   box-shadow: 0 0 12px rgba(139, 0, 0, 0.6);
+   transform: scale(1.05);
+ }

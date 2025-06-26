@@ -20,5 +20,6 @@ public interface ServicioNivel {
 
      Nivel devolverNivelSeleccionado();
      void seleccionarNivel(Long id);
+     NivelDTO obtenerNivelPorId(Long id);
 
 }

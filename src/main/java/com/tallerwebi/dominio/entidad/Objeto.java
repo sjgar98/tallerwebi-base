@@ -39,15 +39,15 @@ public class Objeto {
 
     public String getTooltip(Boolean withSellPrice) {
         return
-            "<div class=\"slot-tooltip\">" +
-                "<h5 class=\"slot-tooltip__nombre\">" + this.getNombre() + "</h5>" +
-                "<div class=\"slot-tooltip__tipo\">" + this.getTipo().getNombre() + "</div>" +
+            "<div class=\"inventario-tooltip\">" +
+                "<h5 class=\"inventario-tooltip__nombre\">" + this.getNombre() + "</h5>" +
+                "<div class=\"inventario-tooltip__tipo\">" + this.getTipo().getNombre() + "</div>" +
                 (
                     !this.getDescripcion().isEmpty()
-                    ? "<div class=\"slot-tooltip__descripcion\">" + this.getDescripcion() + "</div>"
+                    ? "<div class=\"inventario-tooltip__descripcion\">" + this.getDescripcion() + "</div>"
                     : ""
                 ) +
-                "<div class=\"slot-tooltip__valor\">" + (withSellPrice ? (Long) (this.getValor() / 2) : this.getValor()) + "g</div>" +
+                "<div class=\"inventario-tooltip__valor\">" + (withSellPrice ? (Long) (this.getValor() / 2) : this.getValor()) + "g</div>" +
             "</div>";
     }
 

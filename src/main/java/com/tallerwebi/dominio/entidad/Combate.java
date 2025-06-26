@@ -41,7 +41,7 @@ public class Combate {
     public void ataqueJugador(Integer index){
 
         EnemigoDTO enemigo = enemigos.get(index);
-        enemigo.setVidaActual(enemigo.getVidaActual() - (this.jugador.getAtaque() * 1000));
+        enemigo.setVidaActual(enemigo.getVidaActual() - (this.jugador.getAtaque() * 10));
         if (enemigo.getVidaActual() < 0){
             enemigo.setVidaActual(0);
         }

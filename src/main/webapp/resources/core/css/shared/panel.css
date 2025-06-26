@@ -1,0 +1,55 @@
+.panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel:before {
+    content: "";
+    background: url("/img/fondos/BoardTop.png") no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    width: 100%;
+    aspect-ratio: 15.18 / 1;
+}
+
+.panel.panel-floating-top:before {
+    background: url("/img/fondos/BoardTopFloating.png") no-repeat;
+    background-size: contain;
+    background-position: bottom;
+}
+
+.panel .panel-content {
+    background: url("/img/fondos/BoardBody.png") repeat-y;
+    background-size: 100% auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 25px;
+    gap: 25px;
+}
+
+.panel .panel-content > * {
+    width: 70%;
+    margin-left: 20%;
+}
+
+.panel:after {
+    content: "";
+    background: url("/img/fondos/BoardBottom.png") no-repeat;
+    background-size: contain;
+    width: 100%;
+    aspect-ratio: 3.66 / 1;
+}
+
+.panel.panel-floating-bottom:after {
+    background: url("/img/fondos/BoardBottomFloating.png") no-repeat;
+    background-size: contain;
+}
+
+.panel.panel-flipped:before,
+.panel.panel-flipped .panel-content,
+.panel.panel-flipped .panel-content > *,
+.panel.panel-flipped:after {
+    transform: scaleX(-1);
+}

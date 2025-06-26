@@ -11,25 +11,30 @@
 
 
 
-<div class="container-xl mt-3 bg-dark p-3">
-    <div class="container text-center pt-3 ">
+<div class="container-xl mt-3 p-3">
+    <div class="container text-center pt-3">
 
 
 
-        <div class="row d-flex flex-row">
+        <div class="row d-flex flex-row gap-3">
 
-            <div class="col d-flex align-items-center justify-content-center container">
-                <div class="d-flex flex-column bg-info rounded p-2 ">
-                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${url})}" th:attr="alt=${jugador.nombre}">
+            <div class="col combat-panel d-flex align-items-center justify-content-center container">
+
+                <div class="d-flex flex-column bg-dark rounded p-2">
+
+                    <img th:src="@{/img/personaje.png}" th:attr="alt=${jugador.nombre}">
+
                     <div>
                         <span th:text="${jugador.nombre}"></span>
                         <span th:text="' | Vida: ' + ${jugador.vidaActual}"></span>
                         <span th:text="' | Ataque: ' + ${jugador.ataque}"></span>
                     </div>
+
                 </div>
+
             </div>
 
-            <div class="col bg-light rounded p-2">
+            <div class="col combat-panel-enemigo rounded p-2">
 
                 <form class="d-inline-flex flex-column" th:action="@{/combate/accion}" method="post">
 
@@ -37,7 +42,7 @@
 
                         <input class="form-check-input" type="radio" name="enemigoIndex" th:id="'enemigo-' + ${iterStat.index}" th:value="${iterStat.index}" hidden>
                         <label class="radio-label" th:for="'enemigo-' + ${iterStat.index}">
-                            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}">
+                            <img th:src="@{/img/enemigos/{imagenSrc}(imagenSrc=${enemigo.imagenSrc})}" th:attr="alt=${enemigo.nombre}">
                         </label>
 
                         <div>
@@ -49,9 +54,9 @@
 
                     </div>
 
-                    <div class="d-flex justify-content-center">
-                        <input type="submit" name="accion" value="atacar">
-                        <input type="submit" name="accion" value="defenderse">
+                    <div class="d-flex justify-content-center gap-2">
+                        <input class="input-accion" type="submit" name="accion" value="atacar">
+                        <input class="input-accion" type="submit" name="accion" value="defenderse">
                     </div>
 
                 </form>
@@ -59,7 +64,7 @@
                 <form th:action="@{/combate/usarObjeto}" method="post">
                     <div class="container text-center pt-3">
                         <div class="input-group mb-3 d-flex justify-content-center">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Usar Objetos</button>
+                            <button class="btn boton-objeto dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Usar Objetos</button>
                             <ul class="dropdown-menu">
                                 <div th:each="objeto: ${objetos}">
                                     <li><button type="submit" name="idObjeto" th:value="${objeto.objeto.id}" class="dropdown-item">
@@ -75,6 +80,10 @@
 
             </div>
 
+        </div>
+
+        <div class="d-flex flex-column bg-warning justify-content-center align-items-center rounded p-2 container pt-3">
+                    <pre class="contenedor-scroll" th:text="${panel}"> </pre>
         </div>
     </div>
 </div>

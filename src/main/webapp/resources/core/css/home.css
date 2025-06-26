@@ -4,16 +4,17 @@ body {
     padding: 0;
 }
 
+body {
+    background: url("/img/fondos/inicio.png") no-repeat center center fixed;
+    background-size: cover;
+}
+
 main {
     height: 100%;
     padding-top: 10rem;
     padding-bottom: 10rem;
 }
 
-.panel-anuncios {
-    background: rgba(0, 0, 0, 0.25);
-}
-
-.panel-estadisticas {
-    background: rgba(0, 0, 0, 0.25);
+.home-options a {
+    width: 250px;
 }

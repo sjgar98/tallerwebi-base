@@ -1,0 +1,68 @@
+.inventario {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.inventario-slot {
+    box-sizing: border-box;
+    height: 60px;
+    width: 60px;
+    border: 2px solid black;
+    position: relative;
+    user-select: none;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.inventario-slot:not(.inventario-slot__empty) {
+    cursor: pointer;
+}
+
+.inventario-slot__cantidad {
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+    color: white;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-weight: bold;
+}
+
+.inventario-tooltip {
+    text-align: left;
+}
+
+.inventario-tooltip .inventario-tooltip__nombre {
+    color: gold;
+    font-size: 1.25em;
+    margin-bottom: 0;
+}
+
+.inventario-tooltip .inventario-tooltip__tipo {
+    margin-bottom: 0.5em;
+}
+
+.inventario-tooltip .inventario-tooltip__descripcion {
+    color: lightgray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+
+.inventario-tooltip .inventario-tooltip__valor {
+    text-align: right;
+    color: gold;
+    font-weight: bold;
+}
+
+.inventario-slot.rango-1 {
+    border: 2px solid green;
+}
+
+.inventario-slot.rango-2 {
+    border: 2px solid blue;
+}
+
+.inventario-slot.rango-3 {
+    border: 2px solid yellow;
+}

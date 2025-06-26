@@ -21,4 +21,16 @@ public interface ServicioCombate {
     Integer calcularExperiencia();
 
     void usarObjeto(Long id);
+
+    void agregarTexto(String texto);
+    String devolverTexto();
+
+    void aplicarEfectoAlJugador(Long idEfecto);
+
+    void descontarVidaJugadorPorEfecto();
+
+    Boolean probabilidad50PorCiento();
+
+    Boolean probabilidad40PorCiento();
+
 }

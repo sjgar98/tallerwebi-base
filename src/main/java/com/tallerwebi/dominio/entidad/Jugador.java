@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +20,7 @@ public class Jugador {
     private Usuario usuario;
     // Base Stats
     private String nombre;
-    private Integer nivel = 1;
+    private Integer nivel = 15;
     private Integer expActual = 0;
     private Integer expSigNiv = 100;
     private Long dinero = 0L;
@@ -33,13 +34,8 @@ public class Jugador {
     @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ObjetoInventario> objetos = new java.util.ArrayList<>();
 
-    public Jugador(double v) {
-    }
-
-    public Jugador() {
-
-    }
-
+    @OneToMany(mappedBy = "jugador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Efecto> efectosActivos = new ArrayList<>();
 
     public boolean puedeComprar(Long precio) {
         return dinero >= precio;
@@ -51,25 +47,5 @@ public class Jugador {
         } else {
             throw new IllegalArgumentException("Saldo insuficiente");
         }
-    }
-
-    public void agregarObjeto(ObjetoInventario objeto) {
-        objetos.add(objeto);
-    }
-
-    public void recibirExperiencia(Integer experiencia){
-        this.expActual += experiencia;
-
-        while (expActual >= expSigNiv) {
-            expActual -= expSigNiv;
-            nivel += 1;
-            ataque+= 1;
-            defensa+=1;
-            expSigNiv = calcularExpProximoNivel(nivel);
-        }
-    }
-
-    private Integer calcularExpProximoNivel(Integer nivel) {
-        return (int)(100 * Math.pow(nivel, 1.5));
     }
 }

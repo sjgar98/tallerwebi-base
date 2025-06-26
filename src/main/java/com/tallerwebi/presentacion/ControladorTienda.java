@@ -2,113 +2,86 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioTienda;
-import com.tallerwebi.dominio.entidad.Jugador;
-import com.tallerwebi.dominio.entidad.Objeto;
-import com.tallerwebi.dominio.entidad.ObjetoInventario;
-import com.tallerwebi.dominio.entidad.Producto;
-import com.tallerwebi.infraestructura.RepositorioObjetos;
+import com.tallerwebi.dominio.entidad.*;
+import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@SessionAttributes("jugador")
+@RequestMapping("/tienda")
 public class ControladorTienda {
-
     private final ServicioTienda servicioTienda;
     private final ServicioJugador servicioJugador;
-    private final RepositorioObjetos repositorioObjetos;
 
-    public ControladorTienda(ServicioTienda servicioTienda, ServicioJugador servicioJugador, RepositorioObjetos repositorioObjetos) {
+    @Autowired
+    public ControladorTienda(ServicioTienda servicioTienda, ServicioJugador servicioJugador) {
         this.servicioTienda = servicioTienda;
         this.servicioJugador = servicioJugador;
-        this.repositorioObjetos = repositorioObjetos;
     }
 
-    @ModelAttribute("jugador")
-    public Jugador crearJugador() {
-        Jugador jugador = new Jugador();
-        jugador.setDinero(500L);
-        jugador.setNombre("Jugador1");
-        return jugador;
-    }
-
-    @RequestMapping("/tienda")
-    public ModelAndView mostrarTienda(@ModelAttribute("jugador") Jugador jugador) {
-        List<Producto> productos = servicioTienda.obtenerProductosDisponibles();
-        List<ObjetoInventario> inventario = servicioJugador.getObjetosJugador(jugador);
-        List<Objeto> objetos = repositorioObjetos.getObjetosIniciales();
-
-        ModelAndView mav = new ModelAndView("tienda");
-        mav.addObject("productos", productos);
-        mav.addObject("saldo", jugador.getDinero());
-        mav.addObject("inventario", inventario);
-        mav.addObject("emptySlots", 40 - inventario.size());
-        mav.addObject("objetos", objetos);
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/comprar", method = RequestMethod.GET)
-    public ModelAndView comprarProducto(@RequestParam String nombreProducto,
-                                        @ModelAttribute("jugador") Jugador jugador) {
-        Producto producto = servicioTienda.buscarProductoPorNombre(nombreProducto);
-        ModelAndView mav = new ModelAndView("tienda");
-
-
-        List<Producto> productos = servicioTienda.obtenerProductosDisponibles();
-        List<ObjetoInventario> inventario = servicioJugador.getObjetosJugador(jugador);
-
-        mav.addObject("productos", productos);
-        mav.addObject("inventario", inventario);
-        mav.addObject("emptySlots", 40 - inventario.size());
-
-        if (jugador.puedeComprar(producto.getPrecio())) {
-            jugador.debitar(producto.getPrecio());
-            // Agregar objeto al inventario del jugador
-            Objeto objetoComprado = repositorioObjetos.getAllObjetos().stream()
-                .filter(o -> o.getId().equals(producto.getId()))
-                .findFirst()
-                .orElse(null);
-
-            if (objetoComprado != null) {
-                servicioJugador.agregarObjeto(jugador, objetoComprado);
-                inventario = servicioJugador.getObjetosJugador(jugador); // refrescar
-                mav.addObject("inventario", inventario);
-                mav.addObject("emptySlots", 40 - inventario.size());
-            }
-            mav.addObject("mensaje", "Compra exitosa de: " + producto.getNombre());
+    @GetMapping()
+    public ModelAndView mostrarTienda(HttpServletRequest request) {
+        var userId = request.getSession().getAttribute("userId");
+        if (userId != null) {
+            Jugador jugador = servicioJugador.getJugadorActual((Long) userId);
+            List<Objeto> productos = servicioTienda.obtenerProductosDisponibles();
+            List<ObjetoInventario> inventario = servicioJugador.getObjetosJugador(jugador);
+            ModelMap model = new ModelMap();
+            model.addAttribute("productos", productos);
+            model.addAttribute("saldo", jugador.getDinero());
+            model.addAttribute("inventario", inventario);
+            model.addAttribute("emptySlots", Constants.MAX_INVENTORY_SLOTS - inventario.size());
+            return new ModelAndView("tienda", model);
         } else {
-            mav.addObject("mensaje", "Saldo insuficiente para comprar: " + producto.getNombre());
+            return new ModelAndView("redirect:/login");
         }
-
-        mav.addObject("saldo", jugador.getDinero());
-
-        return mav;
     }
 
-    @RequestMapping(value = "/vender", method = RequestMethod.GET)
-    public ModelAndView venderObjeto(@RequestParam Long objetoId,
-                                     @ModelAttribute("jugador") Jugador jugador) {
-
-        servicioJugador.venderObjeto(jugador, objetoId);
-
-        List<Producto> productos = servicioTienda.obtenerProductosDisponibles();
-        List<ObjetoInventario> inventario = servicioJugador.getObjetosJugador(jugador);
-
-        ModelAndView mav = new ModelAndView("tienda");
-        mav.addObject("productos", productos);
-        mav.addObject("inventario", inventario);
-        mav.addObject("emptySlots", 40 - inventario.size());
-        mav.addObject("saldo", jugador.getDinero());
-        mav.addObject("mensaje", "Objeto vendido");
-
-        // actualizar jugador en sesión
-        mav.addObject("jugador", jugador);
-
-        return mav;
+    @GetMapping("comprar")
+    public ModelAndView comprarProducto(@RequestParam Long objetoId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        var userId = request.getSession().getAttribute("userId");
+        if (userId != null) {
+            try {
+                Jugador jugador = servicioJugador.getJugadorActual((Long) userId);
+                Objeto objetoAComprar = servicioTienda.buscarObjetoPorId(objetoId);
+                servicioJugador.removerDinero(jugador, objetoAComprar.getValor());
+                servicioJugador.agregarObjeto(jugador, objetoAComprar);
+            } catch (DineroInsuficienteException e) {
+                redirectAttributes.addFlashAttribute("error", "No tienes suficiente dinero para comprar este objeto.");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Ocurrió un error inesperado.");
+            }
+            return new ModelAndView("redirect:/tienda");
+        } else {
+            return new ModelAndView("redirect:/login");
+        }
     }
 
+    @GetMapping("vender")
+    public ModelAndView venderObjeto(@RequestParam Long objetoInventarioId, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        var userId = request.getSession().getAttribute("userId");
+        if (userId != null) {
+            try {
+                Jugador jugador = servicioJugador.getJugadorActual((Long) userId);
+                ObjetoInventario objetoAVender = servicioJugador.getObjetoInventarioPorId(objetoInventarioId);
+                Long oroARecibir = objetoAVender.getObjeto().getValor() / 2;
+                servicioJugador.removerObjeto(jugador, objetoAVender);
+                servicioJugador.agregarDinero(jugador, oroARecibir);
+            } catch (DineroInsuficienteException e) {
+                redirectAttributes.addFlashAttribute("error", "No tienes suficiente dinero para vender este objeto.");
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("error", "Ocurrió un error inesperado.");
+            }
+            return new ModelAndView("redirect:/tienda");
+        } else {
+            return new ModelAndView("redirect:/login");
+        }
+    }
 }
