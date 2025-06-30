@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/inventario.css}" />
+    <link rel="stylesheet" th:href="@{/css/shared/inventario.css}" />
     <link rel="stylesheet" th:href="@{/css/tienda.css}" />
 </head>
 <body>
@@ -36,18 +36,21 @@
 
 
 
-    <div class="panel-inventario">
-        <a th:each="objeto: ${inventario}"
-           th:href="@{/tienda/vender(objetoInventarioId=${objeto.id})}"
-           class="slot" th:classappend="${'rango-'+objeto.objeto.rango}"
-           data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-           th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
-           tabindex="0"
-        >
-            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
-            <span class="slot-qty" th:text="${objeto.cantidad}"></span>
-        </a>
-        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="slot slot-empty"></div>
+    <div class="inventario pt-5">
+        <div th:each="objeto: ${inventario}">
+            <a th:href="@{/tienda/vender(objetoInventarioId=${objeto.id})}">
+                <div th:class="'inventario-slot inventario-slot__equipable ' + ${'rango-'+objeto.objeto.rango}"
+                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                     th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+                >
+                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+                    <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
+                </div>
+            </a>
+        </div>
+        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}">
+            <div class="inventario-slot"></div>
+        </div>
     </div>
 
 </div>

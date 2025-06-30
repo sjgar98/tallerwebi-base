@@ -20,33 +20,49 @@
         <div class="col-3 ps-0">
             <div class="panel panel-floating-bottom text-white">
                 <div class="panel-content">
-                    <div class="d-flex flex-column text-center">
+                    <div class="d-flex flex-column text-center fs-4" th:with="ataqueTotal=(${jugador.ataque} + ${ataqueAdicional})">
                         <strong>Ataque</strong>
-                        <span th:text="${jugador.ataque}"></span>
+                        <span th:text="${ataqueTotal + ' (' + jugador.ataque + '+' + ataqueAdicional + ')'}"></span>
                     </div>
-                    <div class="d-flex flex-column text-center">
+                    <div class="d-flex flex-column text-center fs-4" th:with="defensaTotal=(${jugador.defensa} + ${defensaAdicional})">
                         <strong>Defensa</strong>
-                        <span th:text="${jugador.defensa}"></span>
+                        <span th:text="${defensaTotal + ' (' + jugador.defensa + '+' + defensaAdicional + ')'}"></span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-4 offset-5 pe-0">
+        <div class="col-6 offset-3 pe-0">
             <div class="panel panel-floating-bottom panel-flipped">
                 <div class="panel-content">
                     <div class="inventario">
-                        <div th:each="objeto: ${objetos}"
-                             class="inventario-slot" th:classappend="${'rango-'+objeto.objeto.rango}"
-                             data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
-                             th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
-                             tabindex="0"
-                        >
-                            <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
-                            <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
+                        <div th:each="objeto: ${objetos}">
+                            <a th:href="@{/inventario/equipar(objetoInventarioId=${objeto.id})}" th:if="${objeto.objeto.equipable}">
+                                <div th:class="'inventario-slot ' + ${'rango-'+objeto.objeto.rango} + ${objeto.objeto.equipable ? ' inventario-slot__equipable' : ''}"
+                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                     th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+                                >
+                                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+                                    <span class="inventario-slot__equipado" th:if="${objeto.equipado}">E</span>
+                                    <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
+                                </div>
+                            </a>
+                            <div th:if="${!objeto.objeto.equipable}"
+                                 class="inventario-slot"
+                                 th:class="'inventario-slot ' + ${'rango-'+objeto.objeto.rango} + ${objeto.objeto.equipable ? ' inventario-slot__equipable' : ''}"
+                                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                 th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
+                                 tabindex="0"
+                            >
+                                <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
+                                <span class="inventario-slot__equipado" th:if="${objeto.equipado}">E</span>
+                                <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
+                            </div>
                         </div>
-                        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}" class="inventario-slot inventario-slot__empty"></div>
+                        <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}">
+                            <div class="inventario-slot"></div>
+                        </div>
                     </div>
-                    <div class="text-gold text-center fw-bold" th:text="${jugador.dinero} + 'g'"></div>
+                    <div class="text-gold text-center fw-bold fs-4" th:text="${jugador.dinero} + 'g'"></div>
                 </div>
             </div>
         </div>

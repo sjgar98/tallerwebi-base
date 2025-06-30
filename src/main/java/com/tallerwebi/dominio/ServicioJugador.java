@@ -12,6 +12,12 @@ public interface ServicioJugador {
     List<ObjetoInventario> getObjetosJugador(Jugador jugador);
     ObjetoInventario getObjetoInventarioPorId(Long objetoInventarioId);
 
+    Integer getAtaqueAdicional(Jugador jugador);
+    Integer getAtaqueTotal(Jugador jugador);
+    Integer getDefensaAdicional(Jugador jugador);
+    Integer getDefensaTotal(Jugador jugador);
+    void equiparObjeto(Jugador jugador, Long objetoInventarioId);
+
     void agregarObjeto(Jugador jugador, Objeto objeto);
     void agregarObjeto(Jugador jugador, Objeto objeto, Integer cantidad);
     void removerObjeto(Jugador jugador, ObjetoInventario objeto);

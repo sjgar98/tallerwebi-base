@@ -1,3 +1,7 @@
+.tooltip {
+    --bs-tooltip-max-width: 250px;
+}
+
 .inventario {
     display: flex;
     gap: 4px;
@@ -15,8 +19,18 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
-.inventario-slot:not(.inventario-slot__empty) {
+.inventario-slot.inventario-slot__equipable {
     cursor: pointer;
+}
+
+.inventario-slot__equipado {
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    color: white;
+    font-size: 20px;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    font-weight: bold;
 }
 
 .inventario-slot__cantidad {
@@ -30,6 +44,7 @@
 }
 
 .inventario-tooltip {
+    width: calc(var(--bs-tooltip-max-width) - (var(--bs-tooltip-padding-x) * 2));
     text-align: left;
 }
 
