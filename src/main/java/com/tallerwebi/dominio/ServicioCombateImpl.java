@@ -2,14 +2,18 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.infraestructura.RepositorioEfectos;
+import com.tallerwebi.infraestructura.RepositorioHabilidades;
+import com.tallerwebi.infraestructura.RepositorioJugador;
 import com.tallerwebi.infraestructura.RepositorioObjetos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,17 +26,19 @@ public class ServicioCombateImpl implements ServicioCombate {
     private final ServicioJugador servicioJugador;
     private final RepositorioObjetos repositorioObjetos;
     private final RepositorioEfectos repositorioEfectos;
+    private final RepositorioHabilidades repositorioHabilidades;
 
     private String panel = "";
     Combate combate;
 
 
     @Autowired
-    public ServicioCombateImpl(RepositorioEfectos repositorioEfectos, ServicioNivel servicioNivel, ServicioJugador servicioJugador, RepositorioObjetos repositorioObjetos){
+    public ServicioCombateImpl(RepositorioEfectos repositorioEfectos, ServicioNivel servicioNivel, ServicioJugador servicioJugador, RepositorioObjetos repositorioObjetos, RepositorioHabilidades repositorioHabilidades){
         this.repositorioEfectos = repositorioEfectos;
         this.servicioNivel = servicioNivel;
         this.servicioJugador = servicioJugador;
         this.repositorioObjetos = repositorioObjetos;
+        this.repositorioHabilidades = repositorioHabilidades;
         combate = new Combate();
 
 
@@ -43,7 +49,7 @@ public class ServicioCombateImpl implements ServicioCombate {
         var userId =request.getSession().getAttribute("userId");
 
         if(userId!= null){
-            combate.setJugador(this.servicioJugador.getJugadorActual((Long) userId));
+            combate.setJugador(crearJugadorCombate(servicioJugador.getJugadorActual((Long) userId)));
             combate.setEnemigos(servicioNivel.obtenerEnemigosDto(servicioNivel.obtenerLosEnemigosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId())));
             combate.setRecompensaOro(100L);
         }
@@ -52,10 +58,9 @@ public class ServicioCombateImpl implements ServicioCombate {
 
     @Override
     public Boolean estaVivo() {
-       if (!combate.estaVivo()){
-           if (combate.gano()){
-               repositorioEfectos.vaciarListaEfectos(servicioJugador.getJugadorActual(combate.getJugador().getId()));
-           }
+
+       if (!combate.estaVivo()) {
+           panel = "";
        }
         return combate.estaVivo();
     }
@@ -63,17 +68,35 @@ public class ServicioCombateImpl implements ServicioCombate {
     @Override
     public Boolean gano() {
         if (combate.gano()){
-            repositorioEfectos.vaciarListaEfectos(servicioJugador.getJugadorActual(combate.getJugador().getId()));
+            panel = "";
         }
 
         return combate.gano();
     }
 
     @Override
-    public void ataqueJugador(Integer index) {
+    public void ataqueJugador(Integer index, Long idHabilidad) {
 
-        combate.ataqueJugador(index);
-        agregarTexto("Jugador: " + combate.getJugador().getNombre() + " realizo ATAQUE sobre: " + combate.getEnemigos().get(index).getNombre());
+        if (idHabilidad == null){
+            combate.ataqueJugador(index);
+            agregarTexto("Jugador: " + combate.getJugador().getNombre() + " realizo ATAQUE sobre: " + combate.getEnemigos().get(index).getNombre());
+        } else {
+            combate.usarHabilidad(index, idHabilidad);
+            combate.aplicarEfectoAlEnemigo(index,idHabilidad);
+
+            System.out.println("Enemigo recicibo" + combate.getEnemigos().get(index).getEfectosRecibidos().get(0).getNombre());
+            agregarTexto("Jugador: " + combate.getJugador().getNombre() + " realizo " + combate.buscarHabilidadPorId(idHabilidad).getNombre() + " sobre: " + combate.getEnemigos().get(index).getNombre());
+        }
+
+        if (combate.descontarVidaEnemigosPorEfecto().equals("norecibioefecto")){
+
+        } else {
+            agregarTexto(combate.descontarVidaEnemigosPorEfecto());
+        }
+
+        gano();
+        estaVivo();
+
 
     }
 
@@ -84,9 +107,24 @@ public class ServicioCombateImpl implements ServicioCombate {
         for (int i = 0; i < combate.getEnemigos().size(); i++){
 
             agregarTexto("Enemigo: " + combate.getEnemigos().get(i).getNombre() + " realizo ATAQUE al jugador");
-        }
+            if (probabilidadAplicarEfecto(combate.getEnemigos().get(i))){
 
+                if (combate.getEnemigos().get(i).getEfecto() != null && combate.getEnemigos().get(i).getVidaActual() > 0){
+
+                    if (combate.getJugador().getEfectos().contains(combate.getEnemigos().get(i).getEfecto())){
+
+                    } else {
+                        aplicarEfectoAlJugador(combate.getEnemigos().get(i).getEfecto().getId());
+                        agregarTexto("Enemigo: " + combate.getEnemigos().get(i).getNombre() + " le aplico el efecto " + combate.getEnemigos().get(i).getEfecto().getNombre() + " al jugador");
+                    }
+                }
+
+
+
+            }
+        }
         descontarVidaJugadorPorEfecto();
+
 
     }
 
@@ -100,7 +138,7 @@ public class ServicioCombateImpl implements ServicioCombate {
     }
 
     @Override
-    public Jugador getJugador() {
+    public JugadorDTO getJugador() {
        return combate.getJugador();
     }
 
@@ -127,7 +165,7 @@ public class ServicioCombateImpl implements ServicioCombate {
     @Override
     public void usarObjeto(Long id) {
 
-        Jugador jugador  = combate.getJugador();
+        JugadorDTO jugador  = combate.getJugador();
         Objeto objetoAUsar = repositorioObjetos.getObjetoById(id);
 
 
@@ -146,7 +184,7 @@ public class ServicioCombateImpl implements ServicioCombate {
 
     @Override
     public void agregarTexto(String texto) {
-        this.panel += texto +"\n";
+        this.panel += "-------------------------------------------------------" + "\n"+ texto +"\n";
         System.out.println(panel);
     }
 
@@ -158,45 +196,85 @@ public class ServicioCombateImpl implements ServicioCombate {
 
     @Override
     public void aplicarEfectoAlJugador(Long idEfecto) {
-        Efecto efectoAAplicar = repositorioEfectos.obtenerEfectoPorId(idEfecto);
-        repositorioEfectos.aplicarEfectoAlJugador(combate.getJugador(), efectoAAplicar);
+       JugadorDTO jugador = combate.getJugador();
+       EfectoDTO efecto = new EfectoDTO(repositorioEfectos.obtenerEfectoPorId(idEfecto));
+
+       jugador.getEfectos().add(efecto);
+
 
     }
 
     @Override
     public void descontarVidaJugadorPorEfecto() {
 
-        Jugador jugador = servicioJugador.getJugadorActual(combate.getJugador().getId());
+        JugadorDTO jugador = combate.getJugador();
 
-        for (int i = 0; i < jugador.getEfectosActivos().size(); i++){
-            if (jugador.getEfectosActivos().get(i).getNombre().equals("Veneno")){
+        for (int i = 0; i < jugador.getEfectos().size(); i++){
+            if (jugador.getEfectos().get(i).getNombre().equals("Veneno")){
 
-                combate.getJugador().setVidaActual(combate.getJugador().getVidaActual() - repositorioEfectos.obtenerEfectoPorId(1L).getDanioPorTurno());
-                jugador.getEfectosActivos().get(i).setDuracionActual( jugador.getEfectosActivos().get(i).getDuracionActual() - 1);
-                agregarTexto("El jugador recibio el efecto de Veneno: Le hizo " + repositorioEfectos.obtenerEfectoPorId(1L).getDanioPorTurno());
-            } else if (jugador.getEfectosActivos().get(i).getNombre().equals("Sangrado")){
-                combate.getJugador().setVidaActual(combate.getJugador().getVidaActual() - repositorioEfectos.obtenerEfectoPorId(2L).getDanioPorTurno());
-                jugador.getEfectosActivos().get(i).setDuracionActual( jugador.getEfectosActivos().get(i).getDuracionActual() - 1);
-                agregarTexto("El jugador recibio el efecto de Sangrado: Le hizo " + repositorioEfectos.obtenerEfectoPorId(2L).getDanioPorTurno());
+                combate.getJugador().setVidaActual(combate.getJugador().getVidaActual() - jugador.getEfectos().get(i).getDanioPorTurno());
+                jugador.getEfectos().get(i).setDuracionActual( jugador.getEfectos().get(i).getDuracionActual() - 1);
+                agregarTexto("El jugador recibio el efecto de Veneno: Le hizo " + repositorioEfectos.obtenerEfectoPorId(jugador.getEfectos().get(i).getId()).getDanioPorTurno());
+            } else if (jugador.getEfectos().get(i).getNombre().equals("Sangrado")){
+                combate.getJugador().setVidaActual(combate.getJugador().getVidaActual() - repositorioEfectos.obtenerEfectoPorId(jugador.getEfectos().get(i).getId()).getDanioPorTurno());
+                jugador.getEfectos().get(i).setDuracionActual( jugador.getEfectos().get(i).getDuracionActual() - 1);
+                agregarTexto("El jugador recibio el efecto de Sangrado: Le hizo " + repositorioEfectos.obtenerEfectoPorId(jugador.getEfectos().get(i).getId()).getDanioPorTurno());
             }
 
-            if (jugador.getEfectosActivos().get(i).getDuracionActual() <= 0){
-                repositorioEfectos.removerEfectoDeJugador(jugador, jugador.getEfectosActivos().get(i));
+            if (jugador.getEfectos().get(i).getDuracionActual() <= 0){
+                jugador.getEfectos().remove(i);
             }
         }
     }
 
     @Override
-    public Boolean probabilidad50PorCiento() {
+    public Boolean probabilidadAplicarEfecto(EnemigoDTO enemigoDTO) {
         Random random = new Random();
-        return random.nextDouble() < 0.5;
+        return random.nextDouble() < enemigoDTO.getProbabilidadAplicarEfecto();
+    }
+
+
+    @Override
+    public JugadorDTO crearJugadorCombate(Jugador jugador) {
+
+        JugadorDTO jugadorDTO = new JugadorDTO(jugador);
+
+        List<Habilidad> habilidades = repositorioHabilidades.buscarHabilidadesDelJugador(jugador.getId());
+
+        List<HabilidadDTO> habilidadDTOS = crearHabilidadesDTO(habilidades);
+        System.out.println("Cantidad de habilidades" + habilidadDTOS.size());
+        jugadorDTO.setHabilidades(habilidadDTOS);
+
+        return jugadorDTO;
     }
 
     @Override
-    public Boolean probabilidad40PorCiento() {
-        Random random = new Random();
-        return random.nextDouble() < 0.4;
+    public List<HabilidadDTO> crearHabilidadesDTO(List<Habilidad> habilidades) {
+
+        List<HabilidadDTO> habilidadDTOList = habilidades.stream()
+                .map(habilidad -> {
+                    HabilidadDTO habilidadDTO = new HabilidadDTO(
+                            habilidad.getId(),
+                            habilidad.getNombre(),
+                            habilidad.getTipo(),
+                            habilidad.getNivel(),
+                            habilidad.getConsumoMana(),
+                            habilidad.getDanio()
+                    );
+
+
+                    if (habilidad.getEfectos() != null && !habilidad.getEfectos().isEmpty()) {
+                        habilidad.getEfectos().forEach(efecto -> {
+                            habilidadDTO.getEfectos().add(new EfectoDTO(efecto));
+                        });
+                    }
+                    return habilidadDTO;
+                })
+                .collect(Collectors.toList());
+
+        return habilidadDTOList;
     }
+
 
 
 }

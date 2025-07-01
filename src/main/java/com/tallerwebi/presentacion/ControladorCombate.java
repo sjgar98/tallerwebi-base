@@ -48,6 +48,7 @@ public class ControladorCombate {
             model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
             model.addAttribute("jugador", servicioCombate.getJugador());
             model.addAttribute("enemigos", servicioCombate.getEnemigos());
+            model.addAttribute("habilidades", servicioCombate.getJugador().getHabilidades());
 
             return new ModelAndView("combate");
         } else {
@@ -68,19 +69,25 @@ public class ControladorCombate {
         model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
         model.addAttribute("jugador", servicioCombate.getJugador());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
+        model.addAttribute("habilidades", servicioCombate.getJugador().getHabilidades());
         model.addAttribute("url", "personaje.png");
 
         return new ModelAndView("combate");
     }
+
+
     @PostMapping("/accion")
     public ModelAndView procesarAccion(@RequestParam(name = "enemigoIndex", required = false) Integer index,
                                        @RequestParam("accion") String accion,
+                                       @RequestParam(name = "idHabilidad", required = false) Long idHabilidad,
                                        Model model, HttpServletRequest request) {
 
-        switch (accion) {
+
+        String accionToLowerCase = accion.toLowerCase();
+        switch (accionToLowerCase) {
             case "atacar":
                 if (index != null) {
-                    servicioCombate.ataqueJugador(index);
+                    servicioCombate.ataqueJugador(index, null);
                     servicioCombate.ataqueEnemigo();
                 }
                 break;
@@ -89,10 +96,16 @@ public class ControladorCombate {
                 servicioCombate.defensaJugador();
                 break;
 
+            case "usarhabilidad":
+                if (index != null && idHabilidad != null) {
+                    servicioCombate.ataqueJugador(index, idHabilidad);
+                    servicioCombate.ataqueEnemigo();
+                }
+                break;
+
             default:
                 break;
         }
-
 
         if (!servicioCombate.estaVivo()) {
             return derrota(request);
@@ -100,15 +113,15 @@ public class ControladorCombate {
         if (servicioCombate.gano()) {
             return victoria(request);
         }
+
         model.addAttribute("panel", servicioCombate.devolverTexto());
         model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
         model.addAttribute("jugador", servicioCombate.getJugador());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
+        model.addAttribute("habilidades", servicioCombate.getJugador().getHabilidades());
         model.addAttribute("url", "personaje.png");
 
         return new ModelAndView("combate");
-
-
     }
 
    public ModelAndView victoria(HttpServletRequest request){
@@ -154,11 +167,9 @@ public class ControladorCombate {
 
        servicioJugador.agregarObjetosAlJugador(servicioNivel.obtenerObjetosDeUnNivel(servicioNivel.devolverNivelSeleccionado().getId()),(Long) userId);
        servicioJugador.agregarOroAlJugador((Long) userId,servicioCombate.getRecompensaOro());
-        servicioJugador.subirDeNivel(servicioCombate.calcularExperiencia(), (Long) userId);
+       servicioJugador.subirDeNivel(servicioCombate.calcularExperiencia(), (Long) userId);
 
        ModelAndView mav = new ModelAndView("redirect:/home");
-
-
 
        return mav;
 

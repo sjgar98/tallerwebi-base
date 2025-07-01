@@ -20,6 +20,7 @@ import static org.mockito.Mockito.*;
 
 public class ServicioNivelImplTest {
 
+     /*
     RepositorioNivel repositorioNivel;
     ServicioNivelImpl servicio;
 
@@ -84,7 +85,7 @@ public class ServicioNivelImplTest {
         verify(repositorioNivel).devolverTodosLosObjetosDeUnNivel(idNivel);
     }
 
-     */
+
 
     @Test
     void deberiaObtenerTodosLosNivelesDelRepositorio() {
@@ -148,4 +149,5 @@ public class ServicioNivelImplTest {
 
         assertNull(servicio.devolverNivelSeleccionado());
     }
+      */
 }

@@ -34,6 +34,10 @@ public class Jugador {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ObjetoInventario> objetos = List.of();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Efecto> efectosActivos = List.of();
+
+    @OneToMany(mappedBy = "jugador")
+    private List<Efecto> efectosActivos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "jugador")
+    private List<Habilidad> habilidades = new ArrayList<>();
 }

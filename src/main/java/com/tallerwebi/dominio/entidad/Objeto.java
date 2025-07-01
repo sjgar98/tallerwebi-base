@@ -54,6 +54,9 @@ public class Objeto {
     @OneToMany(mappedBy = "objeto")
     private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "objetos")
+    private List<Nivel> niveles = new ArrayList<>();
+
     @Override
     public String toString() {
         return "Objeto{" +

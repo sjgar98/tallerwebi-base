@@ -4,10 +4,8 @@ import com.tallerwebi.dominio.entidad.Enemigo;
 import com.tallerwebi.dominio.entidad.Nivel;
 import com.tallerwebi.dominio.entidad.NivelIntermedio;
 import com.tallerwebi.dominio.entidad.Objeto;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -42,58 +40,45 @@ public class RepositorioNivelImpl implements RepositorioNivel {
     public List<Nivel> devolverTodosLosNiveles() {
 
         Session session = sessionFactory.getCurrentSession();
-        List<Nivel> niveles;
-
-        niveles = session.createCriteria(NivelIntermedio.class)
-                .setProjection(Projections.property("nivel"))
-                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
-                .list();
-
-
-        return niveles;
+        return session.createCriteria(Nivel.class).list();
     }
 
     @Override
     public Nivel devolverNivelPorId(Long id) {
+
         Session session = sessionFactory.getCurrentSession();
-        Nivel nivel;
+        Criteria criteria = session.createCriteria(Nivel.class);
+        criteria.add(Restrictions.eq("id", id));
 
-        nivel = (Nivel) session.createCriteria(NivelIntermedio.class).add(Restrictions.eq("nivel.id",id))
-                .setProjection(Projections.property("nivel")).uniqueResult();
-
-        System.out.println(nivel.toString());
-
-        return nivel;
+        return (Nivel) criteria.uniqueResult();
     }
 
     @Override
     public List<Objeto> devolverTodosLosObjetosDeUnNivel(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        List<Objeto> objetos;
+        Criteria criteria = session.createCriteria(Nivel.class, "nivel");
+        criteria.add(Restrictions.eq("nivel.id", id));
+        criteria.setFetchMode("nivel.objetos", FetchMode.JOIN);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-        objetos = session.createCriteria(NivelIntermedio.class)
-                .add(Restrictions.eq("nivel.id", id))
-                .add(Restrictions.isNotNull("objeto"))
-                .setProjection(Projections.property("objeto"))
-                .list();
-
-
-        return objetos;
+        Nivel nivel = (Nivel) criteria.uniqueResult();
+        return (nivel != null) ? nivel.getObjetos() : null;
     }
 
     @Override
     public List<Enemigo> devolverTodosLosEnemigosDeUnNivel(Long id) {
+
         Session session = sessionFactory.getCurrentSession();
-        List<Enemigo> enemigos;
-
-        enemigos = session.createCriteria(NivelIntermedio.class)
-                .add(Restrictions.eq("nivel.id", id))
-                .add(Restrictions.isNotNull("enemigo"))
-                .setProjection(Projections.property("enemigo"))
-                .list();
+        Criteria criteria = session.createCriteria(Nivel.class, "nivel");
+        criteria.add(Restrictions.eq("nivel.id", id));
+        criteria.setFetchMode("nivel.enemigos", FetchMode.JOIN);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 
-        return enemigos;
+        Nivel nivel = (Nivel) criteria.uniqueResult();
+        return (nivel != null) ? nivel.getEnemigos() : null;
+
+
     }
 
 
