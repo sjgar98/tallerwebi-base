@@ -12,6 +12,19 @@ INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, c
     (4, 'Daga', 'Ataque: <strong>2</strong>', 1, 1, 1, 1000, TRUE, 'daga.jpg', TRUE, 0, 2, 0, FALSE, 0),
     (5, 'Espada', 'Ataque: <strong>6</strong>', 1, 1, 1, 4000, FALSE, 'espada.jpg', TRUE, 0, 6, 0, FALSE, 0);
 
+
+INSERT INTO TipoHabilidad(id, nombre) VALUES
+    (1,'Contundente'),
+    (2,'Arcana'),
+    (3,'Hielo'),
+    (4,'Veneno'),
+    (5,'Corte');
+
+INSERT INTO Habilidad(id, nombre, tipo_id, consumoMana, danio, nivel) VALUES
+    (1, 'Golpe Fuerte', 1, 10, 15, 2),
+    (2, 'Puñalada Trapera', 5, 25, 20, 1),
+    (3, 'Daga Venenosa', 4, 25, 20, 1);
+
 INSERT INTO Efecto(id, nombre, duracionTotal,duracionActual, danioPorTurno) VALUES
     (1, 'Veneno', 3, 0,10),
     (2, 'Sangrado', 3,0, 15);
@@ -28,10 +41,10 @@ INSERT INTO Nivel(id, nombre,nivelMinimoPersonaje, nivelMaximoEnemigo, descripci
     (9,'Desierto',18,20,'Infinito y abrasador, el desierto oculta ruinas milenarias bajo su arena. El calor distorsiona la realidad, y las alucinaciones no siempre son sólo espejismos. Algunos oasis esconden más que agua.', FALSE),
     (10,'Fortaleza',20,25,'Una estructura imponente, construida para resistir el paso del tiempo y las guerras. Ahora, sus torres están vacías… o eso parece. Algo observa desde las almenas, esperando que te acerques un poco más.', FALSE);
 
-INSERT INTO Enemigo(id, nombre, nivel, vidaActual, vidaMaxima, ataque, defensa,imagenSrc, idEfecto) VALUES
-    (1,'Slime', 1, 75, 75, 5, 5,'Slime.jpg',1),
-    (2,'Esqueleto', 2, 115, 115, 7, 5,'esqueleto.png',0),
-    (3,'Bandido',3, 120, 120, 8, 6,'bandido.png',2);
+INSERT INTO Enemigo(id, nombre, nivel, vidaActual, vidaMaxima, ataque, defensa,imagenSrc, probabilidadAplicarEfecto,efecto_id) VALUES
+ (1,'Slime', 1, 75, 75, 5, 5,'Slime.jpg',1,1),
+ (2,'Esqueleto', 2, 115, 115, 7, 5,'esqueleto.png',0.5,2),
+ (3,'Bandido',3, 120, 120, 8, 6,'bandido.png',0.6,2);
 
 INSERT INTO Anuncio(id, title, content) VALUES
     (1, 'Release 0.0.1-ALPHA', 'Anuncio inicial mockeado'),
@@ -51,3 +64,40 @@ INSERT INTO nivel_intermedio(id,nivel_id, objeto_id, enemigo_id) VALUES
     (11,8,1,2),
     (12,9,1,2),
     (13,10,1,2);
+
+    INSERT INTO nivel_enemigo(nivel_id, enemigo_id) VALUES
+     (1, 1),
+     (1, 1),
+     (2, 1),
+     (2, 2),
+     (3, 3),
+     (3, 2),
+     (4, 2),
+     (5, 2),
+     (6, 2),
+     (7, 2),
+     (8, 2),
+     (9, 2),
+     (10, 2);
+
+    --objetos
+    INSERT INTO nivel_objeto(nivel_id, objeto_id) VALUES
+    (1, 1),
+    (1, 4),
+    (2, 3),
+    (2, 1),
+    (3, 4),
+    (3, 1),
+    (4, 1),
+    (5, 1),
+    (6, 1),
+    (7, 1),
+    (8, 1),
+    (9, 1),
+    (10, 1);
+
+
+    --Efectos
+    INSERT INTO habilidad_efecto (habilidad_id, efecto_id) VALUES
+    (2,2),
+    (3,1);

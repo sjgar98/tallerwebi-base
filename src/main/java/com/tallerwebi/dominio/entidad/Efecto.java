@@ -29,7 +29,17 @@ public class Efecto {
     @JoinColumn(name = "jugador_id", nullable = true)
     private Jugador jugador;
 
+    @OneToMany(mappedBy = "efecto")
+    private List<Enemigo> enemigosConEfectos = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "efectos")
+    private List<Habilidad> habilidades = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "efectosRecibidos")
+    private List<Enemigo> enemigos = new ArrayList<>();
+
     public  Efecto (){}
+
 
     public Efecto(Long id, String nombre, Integer duracionTotal,Integer duracionActual, Integer danioPorTurno){
         this.id = id;
@@ -39,7 +49,7 @@ public class Efecto {
         this.danioPorTurno = danioPorTurno;
     }
 
-    // --- Implementación de equals y hashCode ---
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

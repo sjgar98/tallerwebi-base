@@ -44,18 +44,28 @@ public class RepositorioEfectosImpl implements RepositorioEfectos{
     }
 
     @Override
-    public void aplicarEfectoAlJugador(Jugador jugador, Efecto efecto) {
+    public void aplicarEfectoAlJugador(Long idJugador, Long idEfecto) {
+
         Session session = sessionFactory.getCurrentSession();
 
-        jugador = (Jugador) session.merge(jugador);
+        Efecto efecto = (Efecto) session.createCriteria(Efecto.class)
+                .add(Restrictions.eq("id", idEfecto))
+                .uniqueResult();
 
+        Jugador jugador = (Jugador) session.createCriteria(Jugador.class)
+                .add(Restrictions.eq("id", idJugador))
+                .uniqueResult();
+
+        efecto.setJugador(jugador);
+
+        if (jugador.getEfectosActivos() == null) {
+            jugador.setEfectosActivos(new java.util.ArrayList<>());
+        }
         if (!jugador.getEfectosActivos().contains(efecto)) {
             jugador.getEfectosActivos().add(efecto);
         }
 
-        efecto.setJugador(jugador);
-
-        System.out.println("Se aplico " + efecto.getNombre() + " a " + jugador.getNombre());
+        System.out.println("Efecto '" + efecto.getNombre() + "' asignado al jugador '" + jugador.getNombre() + "' correctamente.");
 
     }
 

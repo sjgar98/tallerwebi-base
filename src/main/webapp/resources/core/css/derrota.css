@@ -1,0 +1,53 @@
+body.derrota-body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(40, 0, 0, 0.95)),
+                url('/img/fondos/fondo-derrota.png');
+    background-size: cover;
+    background-position: center;
+    font-family: 'Cinzel', serif;
+    color: #D8C28E;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.derrota-panel {
+    background-color: rgba(28, 0, 0, 0.85);
+    border: 2px solid #B8860B;
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    max-width: 600px;
+}
+
+.derrota-titulo {
+    font-size: 3rem;
+    color: #C62828;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 5px #000;
+}
+
+.derrota-texto {
+    font-size: 1.2rem;
+    color: #E0D6B9;
+    margin-bottom: 2rem;
+}
+
+.btn-volver {
+    background-color: #6A1B1B;
+    color: #D4AF37;
+    border: 2px solid #D4AF37;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-volver:hover {
+    background-color: #E65100;
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #E65100;
+}

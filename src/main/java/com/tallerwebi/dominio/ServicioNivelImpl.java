@@ -86,10 +86,20 @@ public class ServicioNivelImpl implements ServicioNivel {
                         e.getAtaque(),
                         e.getDefensa(),
                         e.getImagenSrc(),
-                        e.getIdEfecto()
+                        e.getProbabilidadAplicarEfecto()
+
+
                 ))
                 .collect(Collectors.toList());
 
+        for (int i = 0; i < enemigoDTOList.size(); i ++){
+            enemigoDTOList.get(i).setHabilidades(crearHabilidadesDTO(enemigos.get(i).getHabilidades()));
+        }
+
+        for (int i = 0; i < enemigoDTOList.size(); i ++){
+            EfectoDTO efectoDto = new EfectoDTO(enemigos.get(i).getEfecto());
+            enemigoDTOList.get(i).setEfecto(efectoDto);
+        }
         return  enemigoDTOList;
     }
 
@@ -139,6 +149,37 @@ public class ServicioNivelImpl implements ServicioNivel {
         return dto;
 
     }
+
+    @Override
+    public List<HabilidadDTO> crearHabilidadesDTO(List<Habilidad> habilidades) {
+
+        List<HabilidadDTO> habilidadDTOList = habilidades.stream()
+                .map(habilidad -> {
+                    HabilidadDTO habilidadDTO = new HabilidadDTO(
+                            habilidad.getId(),
+                            habilidad.getNombre(),
+                            habilidad.getTipo(),
+                            habilidad.getNivel(),
+                            habilidad.getConsumoMana(),
+                            habilidad.getDanio()
+                    );
+
+
+                    if (habilidad.getEfectos() != null && !habilidad.getEfectos().isEmpty()) {
+                        habilidad.getEfectos().forEach(efecto -> {
+                            habilidadDTO.getEfectos().add(new EfectoDTO(efecto));
+                        });
+                    }
+                    return habilidadDTO;
+                })
+                .collect(Collectors.toList());
+
+        return habilidadDTOList;
+
+
+    }
+
+
 
 
 }

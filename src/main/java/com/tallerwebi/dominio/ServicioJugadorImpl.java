@@ -1,12 +1,10 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.dominio.entidad.Jugador;
-import com.tallerwebi.dominio.entidad.Objeto;
-import com.tallerwebi.dominio.entidad.ObjetoInventario;
-import com.tallerwebi.dominio.entidad.Usuario;
+import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
 import com.tallerwebi.dominio.excepcion.ObjetoNoEncontrado;
 import com.tallerwebi.dominio.excepcion.ObjetoNoEquipable;
+import com.tallerwebi.infraestructura.RepositorioHabilidades;
 import com.tallerwebi.infraestructura.RepositorioJugador;
 import com.tallerwebi.infraestructura.RepositorioObjetos;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
@@ -24,13 +22,15 @@ public class ServicioJugadorImpl implements ServicioJugador {
     private final RepositorioUsuario repositorioUsuario;
     private final RepositorioJugador repositorioJugador;
     private final RepositorioObjetos repositorioObjetos;
+    private final RepositorioHabilidades repositorioHabilidades;
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public ServicioJugadorImpl(RepositorioUsuario repositorioUsuario, RepositorioJugador repositorioJugador, RepositorioObjetos repositorioObjetos, SessionFactory sessionFactory) {
+    public ServicioJugadorImpl(RepositorioUsuario repositorioUsuario, RepositorioJugador repositorioJugador, RepositorioObjetos repositorioObjetos, RepositorioHabilidades repositorioHabilidades, SessionFactory sessionFactory) {
         this.repositorioUsuario = repositorioUsuario;
         this.repositorioJugador = repositorioJugador;
         this.repositorioObjetos = repositorioObjetos;
+        this.repositorioHabilidades = repositorioHabilidades;
         this.sessionFactory = sessionFactory;
     }
 
@@ -43,6 +43,13 @@ public class ServicioJugadorImpl implements ServicioJugador {
                 .map(o -> new ObjetoInventario().setObjeto(o).setJugador(nuevoJugador))
                 .collect(Collectors.toList());
         nuevoJugador.setObjetos(objetosIniciales);
+        //habilidades iniciales
+        List<Habilidad> habilidadesIniciales = repositorioHabilidades.obtenerHabilidadesNivel1();
+
+        for (Habilidad h : habilidadesIniciales) {
+            h.setJugador(nuevoJugador);
+        }
+        nuevoJugador.setHabilidades(habilidadesIniciales);
         this.repositorioJugador.modificar(nuevoJugador);
     }
 

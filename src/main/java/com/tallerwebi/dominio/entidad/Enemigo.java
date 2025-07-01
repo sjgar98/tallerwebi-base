@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Accessors(chain = true)
@@ -27,11 +28,39 @@ public class Enemigo {
 
     private String imagenSrc;
 
-    private Long idEfecto;
+    private Integer probabilidadAplicarEfecto;
 
     @OneToMany(mappedBy = "enemigo")
     private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "enemigos")
+    private List<Nivel> niveles = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "efecto_id", nullable = true)
+    private Efecto efecto;
+
+    @ManyToMany
+    @JoinTable(
+            name = "enemigo_habilidad",
+            joinColumns = @JoinColumn(name = "enemigo_id"),
+            inverseJoinColumns = @JoinColumn(name = "habilidad_id")
+    )
+    private List<Habilidad> habilidades = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "enemigo_efecto",
+            joinColumns = @JoinColumn(name = "enemigo_id"),
+            inverseJoinColumns = @JoinColumn(name = "efecto_id")
+    )
+    private List<Efecto> efectosRecibidos = new ArrayList<>();
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, nivel);
+    }
 
     @Override
     public String toString() {

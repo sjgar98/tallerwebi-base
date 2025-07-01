@@ -12,7 +12,10 @@ public interface RepositorioEfectos {
     List<Efecto> obtenerTodosLosEfectos();
     Efecto obtenerEfectoPorId(Long id);
 
-    void aplicarEfectoAlJugador(Jugador jugador, Efecto efecto);
+    void aplicarEfectoAlJugador(Long idJugador, Long idEfecto);
+
     void removerEfectoDeJugador(Jugador jugador, Efecto efecto);
+
     void vaciarListaEfectos(Jugador jugador);
+
 }
