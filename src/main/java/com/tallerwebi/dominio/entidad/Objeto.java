@@ -24,18 +24,18 @@ public class Objeto {
     private Integer rango = 1;
     private Integer maxPorSlot = 99;
     private Long valor = 0L;
-    private Boolean comprable;
+    private Boolean comprable = false;
     private String imagenSrc;
 
     // Equipables
-    private Boolean equipable;
-    private Integer vidaMaxima;
-    private Integer ataque;
-    private Integer defensa;
+    private Boolean equipable = false;
+    private Integer vidaMaxima = 0;
+    private Integer ataque = 0;
+    private Integer defensa = 0;
 
     // Consumibles
-    private Boolean consumible;
-    private Double recuperacionVida;
+    private Boolean consumible = false;
+    private Double recuperacionVida = 0.0;
 
     public String getTooltip(Boolean withSellPrice) {
         return

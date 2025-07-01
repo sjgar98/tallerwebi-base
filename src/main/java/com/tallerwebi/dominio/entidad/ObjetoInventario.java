@@ -5,8 +5,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -22,8 +20,7 @@ public class ObjetoInventario {
     @ManyToOne
     private Jugador jugador;
     private Integer cantidad = 1;
-    private Boolean equipado;
-
+    private Boolean equipado = false;
 
     @Override
     public boolean equals(Object o) {

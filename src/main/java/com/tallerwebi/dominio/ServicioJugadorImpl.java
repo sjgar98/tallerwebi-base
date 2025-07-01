@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.entidad.Objeto;
 import com.tallerwebi.dominio.entidad.ObjetoInventario;
 import com.tallerwebi.dominio.entidad.Usuario;
 import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
+import com.tallerwebi.dominio.excepcion.ObjetoNoEncontrado;
+import com.tallerwebi.dominio.excepcion.ObjetoNoEquipable;
 import com.tallerwebi.infraestructura.RepositorioJugador;
 import com.tallerwebi.infraestructura.RepositorioObjetos;
 import com.tallerwebi.infraestructura.RepositorioUsuario;
@@ -57,6 +59,49 @@ public class ServicioJugadorImpl implements ServicioJugador {
     @Override
     public ObjetoInventario getObjetoInventarioPorId(Long objetoInventarioId) {
         return this.repositorioJugador.buscarObjetoInventarioPorId(objetoInventarioId);
+    }
+
+    @Override
+    public Integer getAtaqueAdicional(Jugador jugador) {
+        return this.getObjetosJugador(jugador)
+                .stream()
+                .filter(ObjetoInventario::getEquipado)
+                .map(o -> o.getObjeto().getAtaque() != null ? o.getObjeto().getAtaque() : 0)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
+    @Override
+    public Integer getAtaqueTotal(Jugador jugador) {
+        return jugador.getAtaque() + this.getAtaqueAdicional(jugador);
+    }
+
+    @Override
+    public Integer getDefensaAdicional(Jugador jugador) {
+        return this.getObjetosJugador(jugador)
+                .stream()
+                .filter(ObjetoInventario::getEquipado)
+                .map(o -> o.getObjeto().getDefensa() != null ? o.getObjeto().getDefensa() : 0)
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
+
+    @Override
+    public Integer getDefensaTotal(Jugador jugador) {
+        return jugador.getDefensa() + this.getDefensaAdicional(jugador);
+    }
+
+    @Override
+    public void equiparObjeto(Jugador jugador, Long objetoInventarioId) {
+        ObjetoInventario objeto = this.repositorioJugador.buscarObjetoInventarioPorId(objetoInventarioId);
+        if (objeto == null || !objeto.getJugador().getId().equals(jugador.getId())) {
+            throw new ObjetoNoEncontrado("Objeto no encontrado o no pertenece al jugador");
+        }
+        if (!objeto.getObjeto().getEquipable()) {
+            throw new ObjetoNoEquipable("El objeto no es equipable");
+        }
+        objeto.setEquipado(!objeto.getEquipado());
+        this.repositorioJugador.modificarObjeto(objeto);
     }
 
     @Override
