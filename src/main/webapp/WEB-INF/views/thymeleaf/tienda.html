@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -15,9 +16,24 @@
     <h2>Saldo actual: <span th:text="${saldo} + 'g'">500</span></h2>
 
 
-    <div th:if="${mensaje}" class="alert alert-success" role="alert" th:text="${mensaje}"></div>
+    <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${info}" class="alert alert-warning" th:text="${info}"></div>
 
-    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+
+    <h2>Comprar oro</h2>
+    <form th:action="@{/tienda/comprar-oro}" method="get" class="mb-4">
+        <div class="row align-items-end">
+            <div class="col-md-4">
+                <label for="monto" class="form-label">Cantidad de oro:</label>
+                <input type="number" id="monto" class="form-control" name="monto" min="1"
+                       th:value="${monto != null ? monto : ''}" required>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Comprar con MercadoPago</button>
+            </div>
+        </div>
+    </form>
 
 
     <h2>Productos</h2>
@@ -33,42 +49,44 @@
     </div>
 
 
-
-
-
     <div class="inventario pt-5">
         <div th:each="objeto: ${inventario}">
-            <a th:href="@{/tienda/vender(objetoInventarioId=${objeto.id})}">
+            <form th:action="@{/tienda/vender}" method="get" th:id="'form-vender-' + ${objeto.id}">
+                <input type="hidden" name="objetoInventarioId" th:value="${objeto.id}">
                 <div th:class="'inventario-slot inventario-slot__equipable ' + ${'rango-'+objeto.objeto.rango}"
                      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
                      th:attr="data-bs-title=${objeto.objeto.getTooltip(true)}"
-                >
+                     th:onclick="'confirmarVenta(' + ${objeto.id} + ')'"
+                     style="cursor: pointer;">
                     <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${objeto.objeto.imagenSrc})}" th:attr="alt=${objeto.objeto.nombre}">
                     <span class="inventario-slot__cantidad" th:text="${objeto.cantidad}"></span>
                 </div>
-            </a>
+            </form>
         </div>
+
+
         <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}">
             <div class="inventario-slot"></div>
         </div>
     </div>
-
 </div>
 
-
+<!-- JS y tooltips -->
 <script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script> <!-- bundle incluye tooltip -->
+<script th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.bundle.min.js}"></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
     });
+
+    function confirmarVenta(id) {
+        if (confirm("¿Estás seguro de que querés vender este objeto?")) {
+            document.getElementById('form-vender-' + id).submit();
+        }
+    }
 </script>
 
-<script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-</script>
 </body>
 </html>
-

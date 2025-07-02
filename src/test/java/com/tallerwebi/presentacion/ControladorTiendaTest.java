@@ -65,7 +65,7 @@ public class ControladorTiendaTest {
         when(servicioTiendaMock.buscarObjetoPorId(1L)).thenReturn(productosDisponiblesMock.get(0));
     }
     private ModelAndView whenAccedoAPantallaTienda() {
-        return controlador.mostrarTienda(requestMock);
+        return controlador.mostrarTienda(requestMock,10);
     }
     private void thenDebieraVerTienda(ModelAndView resultado) {
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
@@ -73,6 +73,7 @@ public class ControladorTiendaTest {
         assertThat(resultado.getModel().get("saldo"), equalTo(jugadorMock.getDinero()));
         assertThat(((List<Objeto>) resultado.getModel().get("inventario")).size(), equalTo(0));
         assertThat(resultado.getModel().get("emptySlots"), equalTo(40));
+        assertThat(resultado.getModel().get("monto"), equalTo(10));
     }
 
     @Test
@@ -114,7 +115,7 @@ public class ControladorTiendaTest {
     @Test
     public void debieraRedirigirALoginSiUsuarioNoEstaLoggeado() {
         when(sessionMock.getAttribute("userId")).thenReturn(null);
-        ModelAndView resultado = controlador.mostrarTienda(requestMock);
+        ModelAndView resultado = controlador.mostrarTienda(requestMock,10);
         assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
 
@@ -157,14 +158,31 @@ public class ControladorTiendaTest {
         givenUsuarioEstaLoggeado();
         when(servicioTiendaMock.obtenerProductosDisponibles()).thenReturn(List.of());
 
-        ModelAndView resultado = controlador.mostrarTienda(requestMock);
+        ModelAndView resultado = controlador.mostrarTienda(requestMock,10);
 
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
         assertThat(((List<?>) resultado.getModel().get("productos")).size(), equalTo(0));
     }
 
+    @Test
+    public void comprarOrosinUserIdredirigeALogin() {
+        ModelAndView mv = controlador.comprarOro(5, requestMock, redirectAttributesMock);
+        assertThat(mv.getViewName(), equalToIgnoringCase("redirect:/login"));
+    }
 
 
+    @Test
+    public void comprarOroconMontoInvalido() {
+        when(sessionMock.getAttribute("userId")).thenReturn(1L);
+
+        ModelAndView mv1 = controlador.comprarOro(null, requestMock, redirectAttributesMock);
+        ModelAndView mv2 = controlador.comprarOro(0,    requestMock, redirectAttributesMock);
+
+        assertThat(mv1.getViewName(), equalToIgnoringCase("redirect:/tienda"));
+        assertThat(mv2.getViewName(), equalToIgnoringCase("redirect:/tienda"));
+        verify(redirectAttributesMock, times(2))
+                .addFlashAttribute("error", "Por favor ingresa una cantidad válida de oro.");
+    }
 
 
 }
