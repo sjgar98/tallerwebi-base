@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.InterfaceServicioPago;
 import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioTienda;
 import com.tallerwebi.dominio.entidad.Jugador;
@@ -30,6 +31,7 @@ public class ControladorTiendaTest {
     private List<Objeto> productosDisponiblesMock;
     private List<ObjetoInventario> objetosInventarioMock;
     private RedirectAttributes redirectAttributesMock;
+    private InterfaceServicioPago servicioPagoMock;
 
     @BeforeEach
     public void init() {
@@ -45,7 +47,8 @@ public class ControladorTiendaTest {
         when(requestMock.getSession()).thenReturn(sessionMock);
         servicioTiendaMock = mock(ServicioTienda.class);
         servicioJugadorMock = mock(ServicioJugador.class);
-        controlador = new ControladorTienda(servicioTiendaMock, servicioJugadorMock);
+        servicioPagoMock = mock(InterfaceServicioPago.class);
+        controlador = new ControladorTienda(servicioTiendaMock, servicioJugadorMock, servicioPagoMock);
         redirectAttributesMock = mock(RedirectAttributes.class);
     }
 
@@ -65,7 +68,7 @@ public class ControladorTiendaTest {
         when(servicioTiendaMock.buscarObjetoPorId(1L)).thenReturn(productosDisponiblesMock.get(0));
     }
     private ModelAndView whenAccedoAPantallaTienda() {
-        return controlador.mostrarTienda(requestMock,10);
+        return controlador.mostrarTienda(requestMock, 10, null, null);
     }
     private void thenDebieraVerTienda(ModelAndView resultado) {
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
@@ -115,7 +118,7 @@ public class ControladorTiendaTest {
     @Test
     public void debieraRedirigirALoginSiUsuarioNoEstaLoggeado() {
         when(sessionMock.getAttribute("userId")).thenReturn(null);
-        ModelAndView resultado = controlador.mostrarTienda(requestMock,10);
+        ModelAndView resultado = controlador.mostrarTienda(requestMock,10,null,null);
         assertThat(resultado.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
 
@@ -158,7 +161,7 @@ public class ControladorTiendaTest {
         givenUsuarioEstaLoggeado();
         when(servicioTiendaMock.obtenerProductosDisponibles()).thenReturn(List.of());
 
-        ModelAndView resultado = controlador.mostrarTienda(requestMock,10);
+        ModelAndView resultado = controlador.mostrarTienda(requestMock,10,null,null);
 
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
         assertThat(((List<?>) resultado.getModel().get("productos")).size(), equalTo(0));
@@ -171,18 +174,7 @@ public class ControladorTiendaTest {
     }
 
 
-    @Test
-    public void comprarOroconMontoInvalido() {
-        when(sessionMock.getAttribute("userId")).thenReturn(1L);
 
-        ModelAndView mv1 = controlador.comprarOro(null, requestMock, redirectAttributesMock);
-        ModelAndView mv2 = controlador.comprarOro(0,    requestMock, redirectAttributesMock);
-
-        assertThat(mv1.getViewName(), equalToIgnoringCase("redirect:/tienda"));
-        assertThat(mv2.getViewName(), equalToIgnoringCase("redirect:/tienda"));
-        verify(redirectAttributesMock, times(2))
-                .addFlashAttribute("error", "Por favor ingresa una cantidad válida de oro.");
-    }
 
 
 }
