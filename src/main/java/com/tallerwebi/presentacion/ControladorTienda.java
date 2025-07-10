@@ -2,9 +2,10 @@ package com.tallerwebi.presentacion;
 
 
 import com.mercadopago.resources.Preference;
+import com.tallerwebi.dominio.InterfaceServicioPago;
+import com.mercadopago.resources.Preference;
 import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioTienda;
-import com.tallerwebi.dominio.ServicioPago;
 import com.tallerwebi.dominio.entidad.*;
 import com.tallerwebi.dominio.excepcion.DineroInsuficienteException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +27,40 @@ import java.util.Collections;
 public class ControladorTienda {
     private final ServicioTienda servicioTienda;
     private final ServicioJugador servicioJugador;
-    private final ServicioPago servicioPago;
+    private final InterfaceServicioPago servicioPago;
+
 
     @Autowired
-    public ControladorTienda(ServicioTienda servicioTienda, ServicioJugador servicioJugador) {
+    public ControladorTienda(ServicioTienda servicioTienda, ServicioJugador servicioJugador, InterfaceServicioPago servicioPago) {
         this.servicioTienda = servicioTienda;
         this.servicioJugador = servicioJugador;
-        this.servicioPago = new ServicioPago();
+        this.servicioPago = servicioPago;
     }
 
     @GetMapping()
-    public ModelAndView mostrarTienda(HttpServletRequest request, @RequestParam(value = "monto", required = false) Integer monto) {
+    public ModelAndView mostrarTienda(HttpServletRequest request,
+                                       @RequestParam(value = "monto", required = false) Integer monto,
+                                       @RequestParam(value = "quantity", required = false) Integer quantity,
+                                       @RequestParam(value = "error", required = false) Boolean error) {
         var userId = request.getSession().getAttribute("userId");
         if (userId != null) {
             Jugador jugador = servicioJugador.getJugadorActual((Long) userId);
             List<Objeto> productos = servicioTienda.obtenerProductosDisponibles();
             List<ObjetoInventario> inventario = servicioJugador.getObjetosJugador(jugador);
             ModelMap model = new ModelMap();
+            if (quantity != null) {
+                if (error == null || !error) {
+                    servicioPago.procesarCompraExitosa(quantity, (Long) userId);
+                    jugador = servicioJugador.getJugadorActual((Long) userId);
+                    model.addAttribute("compraExitosa", true);
+                    model.addAttribute("cantidadComprada", quantity);
+                } else {
+                    model.addAttribute("compraExitosa", false);
+                }
+            }
+            if (Boolean.TRUE.equals(error) && !model.containsAttribute("compraExitosa")) {
+                model.addAttribute("compraExitosa", false);
+            }
             model.addAttribute("productos", productos);
             model.addAttribute("saldo", jugador.getDinero());
             model.addAttribute("inventario", inventario);
@@ -97,18 +115,14 @@ public class ControladorTienda {
         }
     }
 
-
-    @GetMapping("/comprar-oro")
-    public ModelAndView comprarOro(
-            @RequestParam(value = "monto", required = false) Integer cantidadOro,
-            HttpServletRequest request,
-            RedirectAttributes redirectAttributes
-    ) {
+ @GetMapping("/comprar-oro")
+    public ModelAndView comprarOro(@RequestParam(value = "monto", required = false) Integer cantidadOro,
+                                   HttpServletRequest request,
+                                   RedirectAttributes redirectAttributes) {
         if (cantidadOro == null || cantidadOro < 1) {
-            redirectAttributes.addFlashAttribute("error", "Por favor ingresa una cantidad válida de oro.");
+            redirectAttributes.addFlashAttribute("error", "Cantidad de oro inválida.");
             return new ModelAndView("redirect:/tienda");
         }
-
         Object userId = request.getSession().getAttribute("userId");
         if (userId == null) {
             return new ModelAndView("redirect:/login");
@@ -117,12 +131,10 @@ public class ControladorTienda {
         try {
             Preference preferencia = servicioPago.generarPreferencia(cantidadOro, (Long) userId);
             String initPoint = preferencia.getInitPoint();
-
             if (initPoint == null || initPoint.isEmpty()) {
                 redirectAttributes.addFlashAttribute("error", "No se pudo generar el link de pago.");
                 return new ModelAndView("redirect:/tienda");
             }
-
             return new ModelAndView("redirect:" + initPoint);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al procesar el pago: " + e.getMessage());

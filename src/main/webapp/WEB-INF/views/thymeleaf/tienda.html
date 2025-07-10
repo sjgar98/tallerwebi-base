@@ -15,11 +15,12 @@
 
     <h2>Saldo actual: <span th:text="${saldo} + 'g'">500</span></h2>
 
-
+    <div th:if="${compraExitosa}" class="alert alert-success"
+         th:text="'¡Compra exitosa! Se acreditaron ' + ${cantidadComprada} + ' de oro.'"></div>
+    <div th:if="${compraExitosa == false}" class="alert alert-danger">No se pudo completar la compra.</div>
     <div th:if="${exito}" class="alert alert-success" th:text="${exito}"></div>
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
     <div th:if="${info}" class="alert alert-warning" th:text="${info}"></div>
-
 
     <h2>Comprar oro</h2>
     <form th:action="@{/tienda/comprar-oro}" method="get" class="mb-4">
@@ -35,7 +36,6 @@
         </div>
     </form>
 
-
     <h2>Productos</h2>
     <div class="grid">
         <div class="producto" th:each="producto : ${productos}">
@@ -47,7 +47,6 @@
             <a th:href="@{/tienda/comprar(objetoId=${producto.id})}" class="btn">Comprar</a>
         </div>
     </div>
-
 
     <div class="inventario pt-5">
         <div th:each="objeto: ${inventario}">
@@ -63,7 +62,6 @@
                 </div>
             </form>
         </div>
-
 
         <div th:each="emptySlot: ${#numbers.sequence(1,emptySlots)}">
             <div class="inventario-slot"></div>
