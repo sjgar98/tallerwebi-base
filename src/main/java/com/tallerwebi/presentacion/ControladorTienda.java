@@ -1,7 +1,9 @@
 package com.tallerwebi.presentacion;
 
+
 import com.mercadopago.resources.Preference;
 import com.tallerwebi.dominio.InterfaceServicioPago;
+import com.mercadopago.resources.Preference;
 import com.tallerwebi.dominio.ServicioJugador;
 import com.tallerwebi.dominio.ServicioTienda;
 import com.tallerwebi.dominio.entidad.*;
@@ -15,6 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/tienda")
@@ -22,6 +28,7 @@ public class ControladorTienda {
     private final ServicioTienda servicioTienda;
     private final ServicioJugador servicioJugador;
     private final InterfaceServicioPago servicioPago;
+
 
     @Autowired
     public ControladorTienda(ServicioTienda servicioTienda, ServicioJugador servicioJugador, InterfaceServicioPago servicioPago) {
@@ -108,7 +115,7 @@ public class ControladorTienda {
         }
     }
 
-    @GetMapping("/comprar-oro")
+ @GetMapping("/comprar-oro")
     public ModelAndView comprarOro(@RequestParam(value = "monto", required = false) Integer cantidadOro,
                                    HttpServletRequest request,
                                    RedirectAttributes redirectAttributes) {
@@ -135,3 +142,68 @@ public class ControladorTienda {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* @GetMapping("/compra-exitosa")
+    public ModelAndView compraExitosa(@RequestParam("oro") int oro, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Object userId = request.getSession().getAttribute("userId");
+        if (userId != null) {
+            Jugador jugador = servicioJugador.getJugadorActual((Long) userId);
+            servicioJugador.agregarDinero(jugador, (long) oro);
+            redirectAttributes.addFlashAttribute("exito", "¡Compra exitosa! Recibiste " + oro + " de oro.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "No se pudo confirmar la compra.");
+        }
+        return new ModelAndView("redirect:/tienda");
+    }
+
+
+    @GetMapping("/compra-fallida")
+    public ModelAndView compraFallida(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("error", "La compra fue cancelada o falló.");
+        return new ModelAndView("redirect:/tienda");
+    }
+
+    @GetMapping("/compra-pendiente")
+    public ModelAndView compraPendiente(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("info", "El pago está pendiente. Verificá tu cuenta de MercadoPago.");
+        return new ModelAndView("redirect:/tienda");
+    }
+
+
+}*/

@@ -69,6 +69,7 @@ public class ControladorTiendaTest {
     }
     private ModelAndView whenAccedoAPantallaTienda() {
         return controlador.mostrarTienda(requestMock, 10, null, null);
+
     }
     private void thenDebieraVerTienda(ModelAndView resultado) {
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
@@ -160,8 +161,8 @@ public class ControladorTiendaTest {
     public void debeMostrarTiendaVaciaSiNoHayProductos() {
         givenUsuarioEstaLoggeado();
         when(servicioTiendaMock.obtenerProductosDisponibles()).thenReturn(List.of());
-
         ModelAndView resultado = controlador.mostrarTienda(requestMock,10,null,null);
+
 
         assertThat(resultado.getViewName(), equalToIgnoringCase("tienda"));
         assertThat(((List<?>) resultado.getModel().get("productos")).size(), equalTo(0));
@@ -172,9 +173,5 @@ public class ControladorTiendaTest {
         ModelAndView mv = controlador.comprarOro(5, requestMock, redirectAttributesMock);
         assertThat(mv.getViewName(), equalToIgnoringCase("redirect:/login"));
     }
-
-
-
-
 
 }
