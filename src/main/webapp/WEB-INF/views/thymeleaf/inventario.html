@@ -28,6 +28,41 @@
                         <strong>Defensa</strong>
                         <span th:text="${defensaTotal + ' (' + jugador.defensa + '+' + defensaAdicional + ')'}"></span>
                     </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <div th:if="${equipoArma}">
+                            <a th:href="@{/inventario/equipar(objetoInventarioId=${equipoArma.id})}">
+                                <div th:class="'inventario-slot ' + ${'rango-'+equipoArma.objeto.rango} + ${equipoArma.objeto.equipable ? ' inventario-slot__equipable' : ''}"
+                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                     th:attr="data-bs-title=${equipoArma.objeto.getTooltip(true)}"
+                                >
+                                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${equipoArma.objeto.imagenSrc})}" th:attr="alt=${equipoArma.objeto.nombre}">
+                                </div>
+                            </a>
+                        </div>
+                        <div th:unless="${equipoArma}"><div class="inventario-slot"></div></div>
+                        <div th:if="${equipoArmadura}">
+                            <a th:href="@{/inventario/equipar(objetoInventarioId=${equipoArmadura.id})}">
+                                <div th:class="'inventario-slot ' + ${'rango-'+equipoArmadura.objeto.rango} + ${equipoArmadura.objeto.equipable ? ' inventario-slot__equipable' : ''}"
+                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                     th:attr="data-bs-title=${equipoArmadura.objeto.getTooltip(true)}"
+                                >
+                                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${equipoArmadura.objeto.imagenSrc})}" th:attr="alt=${equipoArmadura.objeto.nombre}">
+                                </div>
+                            </a>
+                        </div>
+                        <div th:unless="${equipoArmadura}"><div class="inventario-slot"></div></div>
+                        <div th:if="${equipoAccesorio}">
+                            <a th:href="@{/inventario/equipar(objetoInventarioId=${equipoAccesorio.id})}">
+                                <div th:class="'inventario-slot ' + ${'rango-'+equipoAccesorio.objeto.rango} + ${equipoAccesorio.objeto.equipable ? ' inventario-slot__equipable' : ''}"
+                                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+                                     th:attr="data-bs-title=${equipoAccesorio.objeto.getTooltip(true)}"
+                                >
+                                    <img th:src="@{/img/items/{imagenSrc}(imagenSrc=${equipoAccesorio.objeto.imagenSrc})}" th:attr="alt=${equipoAccesorio.objeto.nombre}">
+                                </div>
+                            </a>
+                        </div>
+                        <div th:unless="${equipoAccesorio}"><div class="inventario-slot"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,7 +103,7 @@
         </div>
     </div>
 </main>
-<a th:href="@{/home}" class="btn btn-primary btn-volver px-4 py-3 fs-2">Volver</a>
+<a th:href="@{/home}" class="btn boton-rpg btn-volver px-4 py-3 fs-2">Volver</a>
 
 <script type="text/javascript" th:src="@{webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
 <script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

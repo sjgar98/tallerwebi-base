@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background-image: url('/img/fondos/fondoimagen.png');
+    background-image: url('/img/fondos/login.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -71,4 +71,13 @@ body {
 
 .btn-primary:hover {
     text-decoration: underline;
+}
+
+a {
+    font-weight: bold;
+    color: white;
+}
+
+a:hover {
+    color: gold;
 }

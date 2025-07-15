@@ -54,6 +54,16 @@ public class RepositorioJugadorImpl implements RepositorioJugador {
     }
 
     @Override
+    public ObjetoInventario buscarObjetoInventarioPorTipo(Jugador jugador, String nombreTipoObjeto) {
+        return (ObjetoInventario) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
+                .createAlias("objeto", "o")
+                .createAlias("o.tipo", "t")
+                .add(Restrictions.eq("t.nombre", nombreTipoObjeto))
+                .add(Restrictions.eq("equipado", true))
+                .uniqueResult();
+    }
+
+    @Override
     public ObjetoInventario buscarObjetoInventarioPorId(Long objetoInventarioId) {
         return (ObjetoInventario) sessionFactory.getCurrentSession().createCriteria(ObjetoInventario.class)
                 .add(Restrictions.eq("id", objetoInventarioId))

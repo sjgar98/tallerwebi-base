@@ -17,6 +17,7 @@ public interface ServicioJugador {
     Integer getDefensaAdicional(Jugador jugador);
     Integer getDefensaTotal(Jugador jugador);
     void equiparObjeto(Jugador jugador, Long objetoInventarioId);
+    ObjetoInventario getObjetoEquipadoPorTipo(Jugador jugador, String nombreTipoObjeto);
 
     void agregarObjeto(Jugador jugador, Objeto objeto);
     void agregarObjeto(Jugador jugador, Objeto objeto, Integer cantidad);

@@ -2,7 +2,7 @@ body {
 margin: 0;
   padding: 0;
   background: linear-gradient(to right, rgba(26, 38, 57, 0.8), rgba(26, 38, 57, 0.8)),
-              url('/css/fondos/papel-antiguo-textura2.jpg');
+              url('/img/fondos/papel-antiguo-textura2.jpg');
   color: #BFA76F;
  font-family: 'MedievalSharp', cursive;
   background-size: cover;

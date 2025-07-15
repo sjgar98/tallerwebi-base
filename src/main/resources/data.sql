@@ -9,9 +9,9 @@ INSERT INTO Objeto(id, nombre, descripcion, tipo_id, rango, maxPorSlot, valor, c
     (1, 'Pocion de Curacion Menor', 'Recupera <strong>25%</strong> vida', 4, 1, 3, 100, TRUE, 'potion-1.jpg', FALSE, 0, 0, 0, TRUE, 0.25),
     (2, 'Pocion de Curacion', 'Recupera <strong>60%</strong> vida', 4, 2, 3, 200, TRUE, 'potion-2.jpg', FALSE, 0, 0, 0, TRUE, 0.6),
     (3, 'Pocion de Curacion Mayor', 'Recupera <strong>100%</strong> vida', 4, 3, 3, 500, TRUE, 'potion-3.jpg', FALSE, 0, 0, 0, TRUE, 1),
-    (4, 'Daga', 'Ataque: <strong>2</strong>', 1, 1, 1, 1000, TRUE, 'daga.jpg', TRUE, 0, 2, 0, FALSE, 0),
-    (5, 'Espada', 'Ataque: <strong>6</strong>', 1, 1, 1, 4000, FALSE, 'espada.jpg', TRUE, 0, 6, 0, FALSE, 0);
-
+    (4, 'Daga', 'Ataque: <strong>2</strong>', 1, 1, 1, 500, FALSE, 'daga.jpg', TRUE, 0, 2, 0, FALSE, 0),
+    (5, 'Espada', 'Ataque: <strong>6</strong>', 1, 2, 1, 1000, TRUE, 'espada.jpg', TRUE, 0, 6, 0, FALSE, 0),
+    (6, 'Casco', 'Defensa: <strong>2</strong>', 2, 1, 1, 500, TRUE, 'casco-1.jpg', TRUE, 0, 0, 2, FALSE, 0);
 
 INSERT INTO TipoHabilidad(id, nombre) VALUES
     (1,'Contundente'),
