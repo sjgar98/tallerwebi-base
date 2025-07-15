@@ -31,7 +31,7 @@
                        th:value="${monto != null ? monto : ''}" required>
             </div>
             <div class="col-md-4">
-                <button type="submit" class="btn btn-primary">Comprar con MercadoPago</button>
+                <button type="submit" class="btn boton-rpg">Comprar con MercadoPago</button>
             </div>
         </div>
     </form>
@@ -44,7 +44,7 @@
             </div>
             <h3 th:text="${producto.nombre}">Nombre</h3>
             <p>Precio: <span class="precio" th:text="${producto.valor} + 'g'">0.00</span></p>
-            <a th:href="@{/tienda/comprar(objetoId=${producto.id})}" class="btn">Comprar</a>
+            <a th:href="@{/tienda/comprar(objetoId=${producto.id})}" class="btn boton-rpg">Comprar</a>
         </div>
     </div>
 
@@ -68,6 +68,7 @@
         </div>
     </div>
 </div>
+<a th:href="@{/home}" class="btn boton-rpg btn-volver px-4 py-3 fs-2">Volver</a>
 
 <!-- JS y tooltips -->
 <script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>

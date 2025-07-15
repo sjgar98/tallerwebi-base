@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +38,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
     @Override
     public void crearNuevoJugador(Long userId, String nombre) {
         Usuario usuario = this.repositorioUsuario.buscarPorId(userId);
-        Jugador nuevoJugador = new Jugador().setUsuario(usuario).setNombre(nombre).setDinero(500L);
+        Jugador nuevoJugador = new Jugador().setUsuario(usuario).setNombre(nombre).setDinero(2000L);
         this.repositorioJugador.guardar(nuevoJugador);
         List<ObjetoInventario> objetosIniciales = this.repositorioObjetos.getObjetosIniciales().stream()
                 .map(o -> new ObjetoInventario().setObjeto(o).setJugador(nuevoJugador))
@@ -107,8 +108,22 @@ public class ServicioJugadorImpl implements ServicioJugador {
         if (!objeto.getObjeto().getEquipable()) {
             throw new ObjetoNoEquipable("El objeto no es equipable");
         }
+        if (!objeto.getEquipado()) {
+            List<ObjetoInventario> objetos = this.repositorioJugador.buscarObjetosInventario(jugador.getId());
+            for (ObjetoInventario obj : objetos) {
+                if (Objects.equals(obj.getObjeto().getTipo().getId(), objeto.getObjeto().getTipo().getId())) {
+                    obj.setEquipado(false);
+                    this.repositorioJugador.modificarObjeto(obj);
+                }
+            }
+        }
         objeto.setEquipado(!objeto.getEquipado());
         this.repositorioJugador.modificarObjeto(objeto);
+    }
+
+    @Override
+    public ObjetoInventario getObjetoEquipadoPorTipo(Jugador jugador, String nombreTipoObjeto) {
+        return this.repositorioJugador.buscarObjetoInventarioPorTipo(jugador, nombreTipoObjeto);
     }
 
     @Override

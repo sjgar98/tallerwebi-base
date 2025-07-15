@@ -10,8 +10,7 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
     <!-- Custom style -->
 
-    <!--   <link rel="stylesheet" th:href="@{/css/main.css}" /> -->
-
+    <link rel="stylesheet" th:href="@{/css/main.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
 
 
@@ -27,7 +26,7 @@
             <input th:field="*{email}" id="email" type="email" placeholder="Email" class="form-control" required />
             <input th:field="*{password}" id="password" type="password" placeholder="Contraseña" class="form-control" required />
 
-            <button id="btn-login" class="btn btn-primary w-100" type="submit">Ingresar</button>
+            <button id="btn-login" class="btn boton-rpg w-100" type="submit">Ingresar</button>
 
             <p th:if="${error != null}" class="alert alert-danger mt-3" th:text="'Error: ' + ${error}"></p>
         </form>

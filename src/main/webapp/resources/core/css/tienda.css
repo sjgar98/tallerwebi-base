@@ -77,20 +77,3 @@ h3 {
     font-weight: bold;
     font-size: 1rem;
 }
-
-.btn {
-    background-color: #28a745;
-    border: none;
-    padding: 10px 15px;
-    color: white;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.btn:hover {
-    background-color: #1e7e34;
-    transform: scale(1.05);
-}

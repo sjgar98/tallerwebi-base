@@ -12,6 +12,7 @@ public interface RepositorioJugador {
     void modificar(Jugador jugador);
     List<ObjetoInventario> buscarObjetosInventario(Long jugadorId);
     List<ObjetoInventario> buscarObjetosInventarioPorObjeto(Jugador jugador, Objeto objeto);
+    ObjetoInventario buscarObjetoInventarioPorTipo(Jugador jugador, String nombreTipoObjeto);
     ObjetoInventario buscarObjetoInventarioPorId(Long objetoInventarioId);
     void agregarObjeto(ObjetoInventario objeto);
     void modificarObjeto(ObjetoInventario objeto);

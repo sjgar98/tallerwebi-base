@@ -39,6 +39,9 @@ public class ControladorInventario {
             model.addAttribute("ataqueAdicional", servicioJugador.getAtaqueAdicional(jugadorActual));
             model.addAttribute("defensaAdicional", servicioJugador.getDefensaAdicional(jugadorActual));
             model.addAttribute("emptySlots", Constants.MAX_INVENTORY_SLOTS - objetosJugadorActual.size());
+            model.addAttribute("equipoArma", servicioJugador.getObjetoEquipadoPorTipo(jugadorActual, "Arma"));
+            model.addAttribute("equipoArmadura", servicioJugador.getObjetoEquipadoPorTipo(jugadorActual, "Armadura"));
+            model.addAttribute("equipoAccesorio", servicioJugador.getObjetoEquipadoPorTipo(jugadorActual, "Accesorio"));
             return new ModelAndView("inventario", model);
         } else {
             return new ModelAndView("redirect:/login");

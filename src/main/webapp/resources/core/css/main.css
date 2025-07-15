@@ -1,5 +1,6 @@
 @import url("/css/shared/panel.css");
 @import url("/css/shared/inventario.css");
+@import url("https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap");
 
 body {
   padding-top: 5rem;
@@ -20,4 +21,27 @@ body {
     position: fixed;
     bottom: 2rem;
     left: 2rem;
+}
+
+.boton-rpg {
+  background-color: #5D2D2D;
+  color: #BFA76F;
+  border: 2px solid #BFA76F;
+  padding: 10px 20px;
+  font-family: 'MedievalSharp', cursive;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.boton-rpg:focus,
+.boton-rpg:hover {
+  background-color: #3E2C23;
+  color: rgb(255,200,100);
+  transform: scale(1.05);
+}
+
+.boton-rpg:active:not(:hover) {
+  background-color: #5D2D2D;
+  color: #BFA76F;
+  border: 2px solid #BFA76F;
 }
