@@ -23,6 +23,7 @@ public interface ServicioCombate {
     List<Habilidad> habilidadesJugador();
 
     Jugador getJugador();
+    Integer getAtaqueTotal();
 
     List<EfectoAplicado> obtenerEfectosDelJugador();
 

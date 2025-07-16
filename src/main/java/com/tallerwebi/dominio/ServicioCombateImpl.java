@@ -159,6 +159,11 @@ public class ServicioCombateImpl implements ServicioCombate {
     }
 
     @Override
+    public Integer getAtaqueTotal() {
+        return servicioJugador.getAtaqueTotal(combate.getJugador());
+    }
+
+    @Override
     public List<EfectoAplicado> obtenerEfectosDelJugador() {
         return repositorioEfectos.obtenerEfectosAplicadosDelJguador(combate.getJugador());
     }
@@ -195,6 +200,7 @@ public class ServicioCombateImpl implements ServicioCombate {
         Objeto objetoAUsar = repositorioObjetos.getObjetoById(id);
 
         agregarTexto("Jugador: " + combate.getJugador().getNombre() + " consumio: " + objetoAUsar.getNombre());
+
         jugador.setVidaActual((int) (jugador.getVidaActual() + (jugador.getVidaActual() * objetoAUsar.getRecuperacionVida())));
 
         if (jugador.getVidaActual() > jugador.getVidaMaxima()){

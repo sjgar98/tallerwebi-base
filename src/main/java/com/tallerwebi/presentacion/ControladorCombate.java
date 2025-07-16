@@ -49,6 +49,7 @@ public class ControladorCombate {
             model.addAttribute("jugador", servicioCombate.getJugador());
             model.addAttribute("enemigos", servicioCombate.getEnemigos());
             model.addAttribute("efectos", servicioCombate.obtenerEfectosDelJugador());
+            model.addAttribute("ataqueTotal", servicioCombate.getAtaqueTotal());
             model.addAttribute("habilidades", servicioCombate.habilidadesJugador());
 
             return new ModelAndView("combate");
@@ -71,6 +72,7 @@ public class ControladorCombate {
         model.addAttribute("jugador", servicioCombate.getJugador());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
         model.addAttribute("efectos", servicioCombate.obtenerEfectosDelJugador());
+        model.addAttribute("ataqueTotal", servicioCombate.getAtaqueTotal());
         model.addAttribute("habilidades", servicioCombate.habilidadesJugador());
         model.addAttribute("url", "personaje.png");
 
@@ -124,6 +126,7 @@ public class ControladorCombate {
         model.addAttribute("panel", servicioCombate.devolverTexto());
         model.addAttribute("objetos", servicioJugador.getObjetosConsumibles(servicioCombate.getJugador().getId()));
         model.addAttribute("jugador", servicioCombate.getJugador());
+        model.addAttribute("ataqueTotal", servicioCombate.getAtaqueTotal());
         model.addAttribute("enemigos", servicioCombate.getEnemigos());
         model.addAttribute("efectos", servicioCombate.obtenerEfectosDelJugador());
         model.addAttribute("habilidades", servicioCombate.habilidadesJugador());
