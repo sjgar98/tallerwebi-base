@@ -25,8 +25,8 @@ public class Jugador {
     private Integer expSigNiv = 100;
     private Long dinero = 0L;
     // Combat Stats
-    private Integer vidaActual = 100;
-    private Integer vidaMaxima = 100;
+    private Integer vidaActual = 200;
+    private Integer vidaMaxima = 200;
     // Attributes
     private Integer ataque = 15;
     private Integer defensa = 5;
