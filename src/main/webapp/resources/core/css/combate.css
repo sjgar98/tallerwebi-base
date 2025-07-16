@@ -93,7 +93,11 @@ body {
   scrollbar-width: none;
  -ms-overflow-style: none;
   text-align: justify;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }
+
+
 
 .contenedor-scroll::-webkit-scrollbar {
  display: none;
@@ -178,11 +182,16 @@ body {
     margin-bottom: 2px;
 }
 
-/* Color por defecto si querés definir uno general */
+
 .efectos-cuadro li {
     padding: 2px 4px;
     margin: 2px 0;
     border-radius: 4px;
+}
+
+.enemigo-muerto {
+    opacity: 0.5;
+    filter: grayscale(100%);
 }
 
 .efectos-cuadro {
@@ -197,4 +206,28 @@ body {
   padding-left: 1rem;
   font-size: 0.75rem;
   list-style: disc;
+}
+
+.efecto-congelado {
+    background-color: #00BCD4;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 2px;
+}
+
+.efecto-cancelado {
+    background-color: #607D8B;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 2px;
+}
+
+.efecto-inmovilizado {
+    background-color: #FF9800;
+    color: white;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-bottom: 2px;
 }

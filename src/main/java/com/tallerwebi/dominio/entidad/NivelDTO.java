@@ -16,8 +16,9 @@ public class NivelDTO {
     private  Integer nivelMaximoEnemigo;
     private String descripcion;
     private Boolean seleccionado;
+    private  Long oro;
 
-    public NivelDTO(Long id,String nombre, Integer nivMin, Integer nivMax, String desc, Boolean bool){
+    public NivelDTO(Long id,String nombre, Integer nivMin, Integer nivMax, String desc, Boolean bool, Long oro){
 
         this.id = id;
         this.nombre = nombre;
@@ -25,6 +26,7 @@ public class NivelDTO {
         this.nivelMinimoPersonaje = nivMin;
         this.descripcion = desc;
         this.seleccionado = bool;
+        this.oro = oro;
 
     }
 }

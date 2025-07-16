@@ -25,8 +25,6 @@ public interface ServicioJugador {
     void agregarDinero(Jugador jugador, Long dinero);
     void removerDinero(Jugador jugador, Long dinero);
 
-    void agregarObjetosAlJugador(List<Objeto> objetos, Long userId);
-    void agregarOroAlJugador(Long userId, Long oro);
     void sacarObjetosAlJugador(Objeto objetoAUsar, Long userId);
     List<ObjetoInventario> getObjetosConsumibles(Long userId);
     void subirDeNivel(Integer experiencia, Long userId);
