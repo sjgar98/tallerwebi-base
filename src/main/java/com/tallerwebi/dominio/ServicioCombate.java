@@ -24,6 +24,8 @@ public interface ServicioCombate {
 
     Jugador getJugador();
 
+    Integer getAtaqueTotalJugador();
+
     List<EfectoAplicado> obtenerEfectosDelJugador();
 
     List<EnemigoDTO> getEnemigos();

@@ -159,6 +159,11 @@ public class ServicioCombateImpl implements ServicioCombate {
     }
 
     @Override
+    public Integer getAtaqueTotalJugador() {
+        return  servicioJugador.getAtaqueTotal(combate.getJugador());
+    }
+
+    @Override
     public List<EfectoAplicado> obtenerEfectosDelJugador() {
         return repositorioEfectos.obtenerEfectosAplicadosDelJguador(combate.getJugador());
     }

@@ -53,7 +53,7 @@ INSERT INTO Enemigo(
 VALUES
  (1,'Slime', 1, 75, 75, 5, 5,'Slime.jpg', 1, 0.4, 0, NULL),
  (2,'Esqueleto', 2, 105, 105, 6, 5,'esqueleto.png', 0.5, 0.5, 0, 2),
- (3,'Bandido',3, 100, 100, 7, 6,'bandido.png', 0.6, 1, 3, 2),
+ (3,'Bandido',3, 100, 100, 7, 6,'bandido.png', 0.6, 0.5, 3, 2),
  (4,'Arquero',4, 90, 90, 9, 4,'arquero.png', 0.6, 0.4, 0, NULL),
  (5,'Vampiro',10, 300, 300, 18, 12,'vampiro.png', 0.4, 0.2, 3, 2),
  (6,'Asesina',5, 110, 110, 12, 6,'arquera.png', 0.5, 0.2, 0, 4),
@@ -70,7 +70,6 @@ INSERT INTO Anuncio(id, title, content) VALUES
     INSERT INTO nivel_enemigo(nivel_id, enemigo_id) VALUES
      (1, 1),
      (1, 1),
-     (2, 3),
      (2, 3),
      (2, 4),
      (3, 5),
