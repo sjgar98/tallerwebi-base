@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 public class ServicioPagoImpl implements InterfaceServicioPago {
     private static final Float PRECIO_UNITARIO = 10.0F;
-    private static final String BASE_URL = "https://03a06bf244d4.ngrok-free.app";
+    private static final String BASE_URL = "https://00922d7e134d.ngrok-free.app";
     private final ServicioJugador servicioJugador;
 
     @Autowired
