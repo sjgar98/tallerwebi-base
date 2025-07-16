@@ -29,9 +29,9 @@ public class Enemigo {
     private String imagenSrc;
 
     private Integer probabilidadAplicarEfecto;
+    private Integer probabilidadUsarHabilidad;
+    private Integer cantidadDeVecesParaUsarHabilidad;
 
-    @OneToMany(mappedBy = "enemigo")
-    private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
 
     @ManyToMany(mappedBy = "enemigos")
     private List<Nivel> niveles = new ArrayList<>();
@@ -47,14 +47,6 @@ public class Enemigo {
             inverseJoinColumns = @JoinColumn(name = "habilidad_id")
     )
     private List<Habilidad> habilidades = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "enemigo_efecto",
-            joinColumns = @JoinColumn(name = "enemigo_id"),
-            inverseJoinColumns = @JoinColumn(name = "efecto_id")
-    )
-    private List<Efecto> efectosRecibidos = new ArrayList<>();
 
 
     @Override

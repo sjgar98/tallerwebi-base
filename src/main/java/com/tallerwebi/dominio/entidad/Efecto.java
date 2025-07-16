@@ -25,9 +25,8 @@ public class Efecto {
     private Integer danioPorTurno;
 
 
-    @ManyToOne
-    @JoinColumn(name = "jugador_id", nullable = true)
-    private Jugador jugador;
+    @OneToMany(mappedBy = "efectoBase")
+    private List<EfectoAplicado> aplicaciones = new ArrayList<>();
 
     @OneToMany(mappedBy = "efecto")
     private List<Enemigo> enemigosConEfectos = new ArrayList<>();
@@ -35,8 +34,6 @@ public class Efecto {
     @ManyToMany(mappedBy = "efectos")
     private List<Habilidad> habilidades = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "efectosRecibidos")
-    private List<Enemigo> enemigos = new ArrayList<>();
 
     public  Efecto (){}
 

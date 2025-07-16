@@ -27,7 +27,7 @@ public class Habilidad {
     @JoinTable(
             name = "habilidad_efecto",
             joinColumns = @JoinColumn(name = "habilidad_id"),
-            inverseJoinColumns = @JoinColumn(name = "efecto_id")
+            inverseJoinColumns = @JoinColumn(name = "efecto_id", nullable = true)
     )
     private List<Efecto> efectos = new ArrayList<>();
 

@@ -44,6 +44,7 @@ public class ServicioJugadorImpl implements ServicioJugador {
                 .map(o -> new ObjetoInventario().setObjeto(o).setJugador(nuevoJugador))
                 .collect(Collectors.toList());
         nuevoJugador.setObjetos(objetosIniciales);
+
         //habilidades iniciales
         List<Habilidad> habilidadesIniciales = repositorioHabilidades.obtenerHabilidadesNivel1();
 
@@ -175,37 +176,6 @@ public class ServicioJugadorImpl implements ServicioJugador {
         repositorioJugador.modificar(jugador);
     }
 
-    @Override
-    public void agregarObjetosAlJugador(List<Objeto> objetos, Long userId) {
-
-        Jugador jugadorActual = this.repositorioJugador.buscar(userId);
-
-        List<ObjetoInventario> objetoRecompensa = objetos.stream()
-                .map(o -> new ObjetoInventario().setObjeto(o).setJugador(jugadorActual))
-                .collect(Collectors.toList());
-
-
-        for(int i = 0; i < objetos.size(); i++){
-
-            ObjetoInventario nuevoObjeto = objetoRecompensa.get(i);
-            if (jugadorActual.getObjetos().contains(nuevoObjeto)){
-                Integer index = jugadorActual.getObjetos().indexOf(nuevoObjeto);
-
-                jugadorActual.getObjetos().get(index).setCantidad(jugadorActual.getObjetos().get(index).getCantidad() + 1);
-            } else{
-                jugadorActual.getObjetos().add(nuevoObjeto);
-            }
-
-        }
-        this.repositorioJugador.modificar(jugadorActual);
-
-    }
-
-    @Override
-    public void agregarOroAlJugador(Long userId, Long oro) {
-        Jugador jugadorActual = this.getJugadorActual(userId);
-        jugadorActual.setDinero(jugadorActual.getDinero() + oro);
-    }
 
     @Override
     public void sacarObjetosAlJugador(Objeto objetoAUsar, Long userId) {

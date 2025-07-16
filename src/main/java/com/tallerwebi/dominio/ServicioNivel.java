@@ -10,7 +10,6 @@ public interface ServicioNivel {
 
 
 
-     List<NivelIntermedio> obtenerNivelesIntermedios();
 
      List<Objeto> obtenerObjetosDeUnNivel(Long id);
 
@@ -29,7 +28,5 @@ public interface ServicioNivel {
      void seleccionarNivel(Long id);
 
      NivelDTO obtenerNivelPorId(Long id);
-
-     List<HabilidadDTO> crearHabilidadesDTO(List<Habilidad> habilidades);
 
 }

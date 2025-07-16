@@ -13,4 +13,6 @@ public interface RepositorioHabilidades {
     List<Habilidad> obtenerHabilidadesNivel1();
 
     List<Habilidad> buscarHabilidadesDelJugador(Long jugadorId);
+
+    public List<Habilidad> obtenerHabilidadesPorEnemigoId(Long idEnemigo);
 }

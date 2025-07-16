@@ -2,12 +2,8 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Enemigo;
 import com.tallerwebi.dominio.entidad.Nivel;
-import com.tallerwebi.dominio.entidad.NivelIntermedio;
 import com.tallerwebi.dominio.entidad.Objeto;
 import org.hibernate.*;
-import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.Projection;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,16 +21,6 @@ public class RepositorioNivelImpl implements RepositorioNivel {
         this.sessionFactory = sessionFactory;
     }
 
-
-    @Override
-    public List<NivelIntermedio> devolverTodosLosNivelesIntermedio() {
-        Session session = sessionFactory.getCurrentSession();
-        List<NivelIntermedio> niveles;
-        niveles = session.createCriteria(NivelIntermedio.class).list();
-
-
-        return niveles;
-    }
 
     @Override
     public List<Nivel> devolverTodosLosNiveles() {

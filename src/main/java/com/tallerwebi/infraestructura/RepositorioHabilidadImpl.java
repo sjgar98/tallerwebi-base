@@ -56,4 +56,21 @@ public class RepositorioHabilidadImpl implements RepositorioHabilidades{
 
         return criteria.list();
     }
+
+    @Override
+    public List<Habilidad> obtenerHabilidadesPorEnemigoId(Long idEnemigo) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Habilidad.class, "habilidad");
+
+        // Join con enemigos
+        criteria.createAlias("enemigos", "enemigo");
+
+        // Filtro por el ID del enemigo
+        criteria.add(Restrictions.eq("enemigo.id", idEnemigo));
+
+        // Elimina duplicados si una habilidad está en más de un enemigo
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        return criteria.list();
+    }
 }

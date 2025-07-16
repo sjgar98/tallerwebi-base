@@ -1,107 +1,106 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.entidad.Efecto;
+import com.tallerwebi.dominio.entidad.EfectoAplicado;
 import com.tallerwebi.dominio.entidad.Jugador;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
-public class RepositorioEfectosImpl implements RepositorioEfectos{
+public class RepositorioEfectosImpl implements RepositorioEfectos {
 
-    @Autowired
-    SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public RepositorioEfectosImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
+    private Session session() {
+        return sessionFactory.getCurrentSession();
+    }
+
     @Override
     public List<Efecto> obtenerTodosLosEfectos() {
-        Session session = sessionFactory.getCurrentSession();
-        List<Efecto> efectos;
-        efectos = session.createCriteria(Efecto.class).list();
-        return efectos;
+        return session().createCriteria(Efecto.class).list();
     }
 
     @Override
     public Efecto obtenerEfectoPorId(Long id) {
-        Session session = sessionFactory.getCurrentSession();
-        Efecto efecto;
-
-        efecto = (Efecto) session.createCriteria(Efecto.class)
+        return (Efecto) session().createCriteria(Efecto.class)
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
-
-        return efecto;
     }
 
     @Override
-    public void aplicarEfectoAlJugador(Long idJugador, Long idEfecto) {
+    public List<Efecto> obtenerEfectosDelJugador(Jugador jugador) {
+        return session().createCriteria(Efecto.class)
+                .add(Restrictions.eq("jugador", jugador))
+                .list();
+    }
 
-        Session session = sessionFactory.getCurrentSession();
+    @Override
+    public List<EfectoAplicado> obtenerEfectosAplicadosDelJguador(Jugador jugador) {
+        return session().createCriteria(EfectoAplicado.class)
+                .add(Restrictions.eq("jugador", jugador))
+                .list();
+    }
 
-        Efecto efecto = (Efecto) session.createCriteria(Efecto.class)
-                .add(Restrictions.eq("id", idEfecto))
+    @Override
+    public EfectoAplicado obtenerEfectoAplicadoPorId(Long id) {
+        return (EfectoAplicado) session().createCriteria(EfectoAplicado.class)
+                .add(Restrictions.eq("id", id))
                 .uniqueResult();
+    }
 
-        Jugador jugador = (Jugador) session.createCriteria(Jugador.class)
-                .add(Restrictions.eq("id", idJugador))
+    @Override
+    public void crearInstanciaEfectoAplicado(EfectoAplicado efectoAplicado) {
+        session().save(efectoAplicado);
+    }
+
+    @Override
+    public List<EfectoAplicado> efectosAplicadosAsociadosAlJugador(Jugador jugador) {
+        return session().createCriteria(EfectoAplicado.class)
+                .add(Restrictions.eq("jugador", jugador))
+                .list();
+    }
+
+    @Override
+    public void eliminarEfectoAplicado(EfectoAplicado efectoAplicado) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(efectoAplicado);
+    }
+
+    @Override
+    public EfectoAplicado obtenerEfectoAplicadoPorJugadorYEfectoBase(Jugador jugador, Efecto efectoBase) {
+        Session session = sessionFactory.getCurrentSession();
+        return (EfectoAplicado) session.createCriteria(EfectoAplicado.class)
+                .add(Restrictions.eq("jugador", jugador))
+                .add(Restrictions.eq("efectoBase", efectoBase))
                 .uniqueResult();
-
-        efecto.setJugador(jugador);
-
-        if (jugador.getEfectosActivos() == null) {
-            jugador.setEfectosActivos(new java.util.ArrayList<>());
-        }
-        if (!jugador.getEfectosActivos().contains(efecto)) {
-            jugador.getEfectosActivos().add(efecto);
-        }
-
-        System.out.println("Efecto '" + efecto.getNombre() + "' asignado al jugador '" + jugador.getNombre() + "' correctamente.");
-
     }
 
     @Override
-    public void removerEfectoDeJugador(Jugador jugador, Efecto efecto) {
-
+    public void eliminarTodosLosEfectosAplicadosDeJugador(Jugador jugador) {
         Session session = sessionFactory.getCurrentSession();
+        List<EfectoAplicado> efectosAplicados = session.createCriteria(EfectoAplicado.class)
+                .add(Restrictions.eq("jugador", jugador))
+                .list();
 
-        jugador = (Jugador) session.merge(jugador);
-        efecto = (Efecto) session.merge(efecto);
-
-        boolean removed = jugador.getEfectosActivos().remove(efecto);
-
-        if (removed) {
-            efecto.setJugador(null);
+        for (EfectoAplicado efecto : efectosAplicados) {
+            session.delete(efecto);
         }
-
-        System.out.println("Se Elimino " + efecto.getNombre() + " a " + jugador.getNombre());
-
     }
+
 
     @Override
-    public void vaciarListaEfectos(Jugador jugador) {
-        Session session = sessionFactory.getCurrentSession();
-        jugador = (Jugador) session.merge(jugador);
-
-
-        List<Efecto> efectosARemover = new ArrayList<>(jugador.getEfectosActivos());
-
-        for (Efecto efecto : efectosARemover) {
-            efecto.setJugador(null);
-        }
-
-        jugador.getEfectosActivos().clear();
-
+    public void eliminarTodosLosEfectosAplicados() {
+        session().createQuery("DELETE FROM EfectoAplicado").executeUpdate();
     }
-
-
 }

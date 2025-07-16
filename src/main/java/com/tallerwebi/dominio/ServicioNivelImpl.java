@@ -27,11 +27,6 @@ public class ServicioNivelImpl implements ServicioNivel {
     }
 
     @Override
-    public List<NivelIntermedio> obtenerNivelesIntermedios() {
-        return repositorioNivel.devolverTodosLosNivelesIntermedio();
-    }
-
-    @Override
     public List<Objeto> obtenerObjetosDeUnNivel(Long id) {
 
         return repositorioNivel.devolverTodosLosObjetosDeUnNivel(id);
@@ -67,7 +62,8 @@ public class ServicioNivelImpl implements ServicioNivel {
                         n.getNivelMinimoPersonaje(),
                         n.getNivelMaximoEnemigo(),
                         n.getDescripcion(),
-                        opcionId != null && n.getId().equals(opcionId)
+                        opcionId != null && n.getId().equals(opcionId),
+                        n.getOro()
                 ))
                 .collect(Collectors.toList());
 
@@ -76,31 +72,29 @@ public class ServicioNivelImpl implements ServicioNivel {
 
     @Override
     public List<EnemigoDTO> obtenerEnemigosDto(List<Enemigo> enemigos) {
-        List<EnemigoDTO> enemigoDTOList = enemigos.stream()
-                .map(e -> new EnemigoDTO(
-                        e.getId(),
-                        e.getNombre(),
-                        e.getNivel(),
-                        e.getVidaActual(),
-                        e.getVidaMaxima(),
-                        e.getAtaque(),
-                        e.getDefensa(),
-                        e.getImagenSrc(),
-                        e.getProbabilidadAplicarEfecto()
+        return enemigos.stream().map(enemigo -> {
+            EnemigoDTO dto = new EnemigoDTO(
+                    enemigo.getId(),
+                    enemigo.getNombre(),
+                    enemigo.getNivel(),
+                    enemigo.getVidaActual(),
+                    enemigo.getVidaMaxima(),
+                    enemigo.getAtaque(),
+                    enemigo.getDefensa(),
+                    enemigo.getImagenSrc(),
+                    enemigo.getProbabilidadAplicarEfecto(),
+                    enemigo.getProbabilidadUsarHabilidad(),
+                    enemigo.getCantidadDeVecesParaUsarHabilidad()
+            );
 
+            dto.setHabilidades((enemigo.getHabilidades()));
 
-                ))
-                .collect(Collectors.toList());
+            if (enemigo.getEfecto() != null) {
+                dto.setEfecto(new EfectoDTO(enemigo.getEfecto()));
+            }
 
-        for (int i = 0; i < enemigoDTOList.size(); i ++){
-            enemigoDTOList.get(i).setHabilidades(crearHabilidadesDTO(enemigos.get(i).getHabilidades()));
-        }
-
-        for (int i = 0; i < enemigoDTOList.size(); i ++){
-            EfectoDTO efectoDto = new EfectoDTO(enemigos.get(i).getEfecto());
-            enemigoDTOList.get(i).setEfecto(efectoDto);
-        }
-        return  enemigoDTOList;
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -143,43 +137,12 @@ public class ServicioNivelImpl implements ServicioNivel {
                 nivel.getNivelMinimoPersonaje(),
                 nivel.getNivelMaximoEnemigo(),
                 nivel.getDescripcion(),
-                id != null && nivel.getId().equals(id)
+                id != null && nivel.getId().equals(id),
+                nivel.getOro()
         );
 
         return dto;
 
     }
-
-    @Override
-    public List<HabilidadDTO> crearHabilidadesDTO(List<Habilidad> habilidades) {
-
-        List<HabilidadDTO> habilidadDTOList = habilidades.stream()
-                .map(habilidad -> {
-                    HabilidadDTO habilidadDTO = new HabilidadDTO(
-                            habilidad.getId(),
-                            habilidad.getNombre(),
-                            habilidad.getTipo(),
-                            habilidad.getNivel(),
-                            habilidad.getConsumoMana(),
-                            habilidad.getDanio()
-                    );
-
-
-                    if (habilidad.getEfectos() != null && !habilidad.getEfectos().isEmpty()) {
-                        habilidad.getEfectos().forEach(efecto -> {
-                            habilidadDTO.getEfectos().add(new EfectoDTO(efecto));
-                        });
-                    }
-                    return habilidadDTO;
-                })
-                .collect(Collectors.toList());
-
-        return habilidadDTOList;
-
-
-    }
-
-
-
 
 }

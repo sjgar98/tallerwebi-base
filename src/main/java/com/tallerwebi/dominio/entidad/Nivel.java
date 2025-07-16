@@ -22,9 +22,8 @@ public class Nivel {
     private Integer nivelMaximoEnemigo;
     private String descripcion;
     private Boolean seleccionado;
+    private Long oro;
 
-    @OneToMany(mappedBy = "nivel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<NivelIntermedio> nivelIntermedios = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(

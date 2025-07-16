@@ -20,8 +20,11 @@ public interface ServicioCombate {
 
     void defensaJugador();
 
+    List<Habilidad> habilidadesJugador();
 
-    JugadorDTO getJugador();
+    Jugador getJugador();
+
+    List<EfectoAplicado> obtenerEfectosDelJugador();
 
     List<EnemigoDTO> getEnemigos();
 
@@ -35,15 +38,23 @@ public interface ServicioCombate {
 
     String devolverTexto();
 
-    void aplicarEfectoAlJugador(Long idEfecto);
+    void aplicarEfectoAlJugador(Long idEfecto, EnemigoDTO enemigoDTO);
 
     void descontarVidaJugadorPorEfecto();
 
     Boolean probabilidadAplicarEfecto(EnemigoDTO enemigoDTO);
 
-    JugadorDTO crearJugadorCombate(Jugador jugador);
+    void aplicarEfectoAlEnemigo(Integer index,Long idHabilidad);
 
-    List<HabilidadDTO> crearHabilidadesDTO(List<Habilidad> habilidades);
+    List<Efecto> buscarEfectoPorHabilidad(Long idHabilidad);
 
+    void descontarVidaEnemigosPorEfecto();
+
+    void usarHabilidad(Integer index, Long idHabilidad);
+
+    void agregarRecompensasAlJugador(Jugador jugador, List<Objeto> objetos);
+
+    Boolean probabilidadUsarHabilidad(EnemigoDTO enemigoDTO);
+    void usarHabilidadEnemigo(EnemigoDTO enemigoDTO);
 
 }
